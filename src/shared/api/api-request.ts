@@ -55,34 +55,34 @@ export const apiRequest = async ({
       return;
     }
 
-    if (!response.ok && response.status !== 406) {
-      const errorText = resJson.data ? String(resJson.data) : '';
-      const errorMessage = `Ошибка HTTP: ${response.status} ${errorText}`;
-
-      if (process.env.DEV) {
-        // showToast({
-        //   errorMessage: errorMessage,
-        //   message: 'Ошибка API запроса ' + url,
-        //   options: { duration: 6000 },
-        //   type: 'error',
-        // });
-      }
-    }
+    // if (!response.ok && response.status !== 406) {
+    //   const errorText = resJson.data ? String(resJson.data) : '';
+    //   const errorMessage = `Ошибка HTTP: ${response.status} ${errorText}`;
+    //
+    //   if (process.env.DEV) {
+    //     showToast({
+    //       errorMessage: errorMessage,
+    //       message: 'Ошибка API запроса ' + url,
+    //       options: { duration: 6000 },
+    //       type: 'error',
+    //     });
+    //   }
+    // }
 
     return resJson;
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.error(error);
-
-    const errorMessage = String(error);
-
-    if (process.env.DEV) {
-      // showToast({
-      //   errorMessage: errorMessage,
-      //   message: 'Ошибка API запроса' + url,
-      //   options: { duration: 6000 },
-      //   type: 'error',
-      // });
-    }
+    // console.error(error);
+    //
+    // const errorMessage = String(error);
+    //
+    // if (process.env.DEV) {
+    //   showToast({
+    //     errorMessage: errorMessage,
+    //     message: 'Ошибка API запроса' + url,
+    //     options: { duration: 6000 },
+    //     type: 'error',
+    //   });
+    // }
   }
 };
