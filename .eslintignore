@@ -1,0 +1,14 @@
+# common
+node_modules
+package.json
+.idea
+.husky
+
+
+# prod
+.build
+/vite.config.ts
+/src/shared/types/icon.ts
+/src/sprite.gen.ts
+
+*.js
