@@ -1,7 +1,6 @@
 import { LOGOUT_STORAGE_KEYS } from '../constants/logout-storage-keys.ts';
 import { AnyObjectType } from '../types/global.ts';
 import { parseApiUrl } from '../utils/parse-api-url.ts';
-import { showToast } from '../utils/show-toast.tsx';
 
 export interface ApiRequestProps extends Omit<RequestInit, 'body'> {
   url: string;
@@ -61,12 +60,12 @@ export const apiRequest = async ({
       const errorMessage = `Ошибка HTTP: ${response.status} ${errorText}`;
 
       if (process.env.DEV) {
-        showToast({
-          errorMessage: errorMessage,
-          message: 'Ошибка API запроса ' + url,
-          options: { duration: 6000 },
-          type: 'error',
-        });
+        // showToast({
+        //   errorMessage: errorMessage,
+        //   message: 'Ошибка API запроса ' + url,
+        //   options: { duration: 6000 },
+        //   type: 'error',
+        // });
       }
     }
 
@@ -78,12 +77,12 @@ export const apiRequest = async ({
     const errorMessage = String(error);
 
     if (process.env.DEV) {
-      showToast({
-        errorMessage: errorMessage,
-        message: 'Ошибка API запроса' + url,
-        options: { duration: 6000 },
-        type: 'error',
-      });
+      // showToast({
+      //   errorMessage: errorMessage,
+      //   message: 'Ошибка API запроса' + url,
+      //   options: { duration: 6000 },
+      //   type: 'error',
+      // });
     }
   }
 };
