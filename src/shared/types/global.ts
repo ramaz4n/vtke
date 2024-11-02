@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+// eslint-disable-next-line import/named
 import { FieldPath, FieldValues, RegisterOptions } from 'react-hook-form';
 
 import { FormValidator } from '../utils/form-validator.ts';

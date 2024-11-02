@@ -72,7 +72,7 @@ export const apiRequest = async ({
     return resJson;
   } catch (error) {
     // eslint-disable-next-line no-console
-    // console.error(error);
+    console.error(error);
     //
     // const errorMessage = String(error);
     //
