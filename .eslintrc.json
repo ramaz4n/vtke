@@ -18,7 +18,7 @@
     "@typescript-eslint",
     "react-refresh",
     "unused-imports",
-    "dirs",
+//    "dirs",
     "sort-keys-fix",
     "typescript-sort-keys",
     "simple-import-sort",
@@ -127,9 +127,9 @@
     "unicorn/prefer-node-protocol": "off",
     "unicorn/prefer-string-replace-all": "off",
     // dirs
-    "dirs/dirnames": [
-      2
-    ],
+//    "dirs/dirnames": [
+//      2
+//    ],
     // typescript
     "typescript-sort-keys/interface": [
       "error",
