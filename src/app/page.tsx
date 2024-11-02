@@ -11,7 +11,7 @@ export default function Home() {
   const router = useRouter();
 
   const onMouseEnterHandler = (target: EventTarget) => {
-    const videoSrc = target.dataset.videoSrc;
+    const videoSrc = (target as HTMLElement).dataset.videoSrc;
 
     setBackgroundVideo(videoSrc);
   };
