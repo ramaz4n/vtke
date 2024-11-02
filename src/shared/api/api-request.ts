@@ -10,7 +10,7 @@ export interface ApiRequestProps extends Omit<RequestInit, 'body'> {
   slug?: string;
 }
 
-export const BASE_URL = import.meta.env.VTKE_API_URL;
+export const BASE_URL = process.env.VTKE_API_URL;
 
 export const apiRequest = async ({
   url,
