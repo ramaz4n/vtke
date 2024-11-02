@@ -7,7 +7,7 @@ import {useRouter} from 'next/navigation';
 
 export default function Home() {
   const [backgroundVideo, setBackgroundVideo] = useState('videos/1.mp4');
-  const videoRef = useRef(null);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
   const router = useRouter();
 
   const onMouseEnterHandler = (target: EventTarget) => {
@@ -18,8 +18,8 @@ export default function Home() {
 
   useEffect(() => {
     if (videoRef.current) {
-      videoRef.current.load();
-      videoRef.current.play();
+      videoRef.current!.load();
+      videoRef.current!.play();
     }
   }, [backgroundVideo]);
 
