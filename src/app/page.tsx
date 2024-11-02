@@ -17,8 +17,10 @@ export default function Home() {
   };
 
   useEffect(() => {
-    videoRef.current.load();
-    videoRef.current.play();
+    if (videoRef.current) {
+      videoRef.current.load();
+      videoRef.current.play();
+    }
   }, [backgroundVideo]);
 
   return (
