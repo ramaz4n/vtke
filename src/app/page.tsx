@@ -10,7 +10,7 @@ export default function Home() {
   const videoRef = useRef(null);
   const router = useRouter();
 
-  const onMouseEnterHandler = (target) => {
+  const onMouseEnterHandler = (target: HTMLVideoElement) => {
     const videoSrc = target.dataset.videoSrc;
 
     setBackgroundVideo(videoSrc);
