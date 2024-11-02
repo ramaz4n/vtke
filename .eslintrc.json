@@ -128,10 +128,7 @@
     "unicorn/prefer-string-replace-all": "off",
     // dirs
     "dirs/dirnames": [
-      2,
-      {
-        "pattern": "^[a-z-]+$"
-      }
+      2
     ],
     // typescript
     "typescript-sort-keys/interface": [
