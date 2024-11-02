@@ -77,7 +77,7 @@ export const apiRequest = async ({
 
     const errorMessage = String(error);
 
-    if (import.meta.env.DEV) {
+    if (process.env.DEV) {
       showToast({
         errorMessage: errorMessage,
         message: 'Ошибка API запроса' + url,
