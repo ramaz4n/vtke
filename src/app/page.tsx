@@ -1,6 +1,6 @@
 'use client';
 
-import {useEffect, useRef, useState} from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import Link from 'next/link';
 import {useRouter} from 'next/navigation';
@@ -10,7 +10,7 @@ export default function Home() {
   const videoRef = useRef(null);
   const router = useRouter();
 
-  const onMouseEnterHandler = (target: HTMLVideoElement) => {
+  const onMouseEnterHandler = (target: EventTarget) => {
     const videoSrc = target.dataset.videoSrc;
 
     setBackgroundVideo(videoSrc);
