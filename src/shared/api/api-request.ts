@@ -60,7 +60,7 @@ export const apiRequest = async ({
       const errorText = resJson.data ? String(resJson.data) : '';
       const errorMessage = `Ошибка HTTP: ${response.status} ${errorText}`;
 
-      if (import.meta.env.DEV) {
+      if (process.env.DEV) {
         showToast({
           errorMessage: errorMessage,
           message: 'Ошибка API запроса ' + url,
