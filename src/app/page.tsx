@@ -2,31 +2,57 @@
 
 import { useEffect, useRef, useState } from 'react';
 
+import cc from 'classcat';
 import Link from 'next/link';
 import {useRouter} from 'next/navigation';
 
 export default function Home() {
-  const [backgroundVideo, setBackgroundVideo] = useState('videos/1.mp4');
-  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const [currentVideo, setCurrentVideo] = useState('videos/1.mp4');
+  const [nextVideo, setNextVideo] = useState('');
+  const currentVideoRef = useRef<HTMLVideoElement | null>(null);
+  const nextVideoRef = useRef<HTMLVideoElement | null>(null);
+
+  const [isFadingOut, setIsFadingOut] = useState(false);
   const router = useRouter();
 
   const onMouseEnterHandler = (target: EventTarget) => {
     const videoSrc = (target as HTMLElement).dataset.videoSrc || 'videos/1.mp4';
 
-    setBackgroundVideo(videoSrc);
+    if (videoSrc !== currentVideo) {
+      setIsFadingOut(true);
+      setTimeout(() => {
+        setNextVideo(videoSrc);
+      }, 200);
+    }
   };
 
   useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current!.load();
-      videoRef.current!.play();
+    const nextRef = nextVideoRef.current;
+
+    if (nextRef && nextVideo !== '') {
+      const handleLoadedData = () => {
+        setCurrentVideo(nextVideo);
+        setIsFadingOut(false);
+      };
+
+      nextRef.addEventListener('loadeddata', handleLoadedData);
+      nextRef.load();
+
+      return () => {
+        nextRef.removeEventListener('loadeddata', handleLoadedData);
+      };
     }
-  }, [backgroundVideo]);
+  }, [nextVideo]);
 
   return (
     <>
-      <video ref={videoRef} autoPlay loop muted className="absolute left-0 top-0 z-0 size-full object-cover">
-        <source src={backgroundVideo} type="video/mp4"/>
+      <video ref={currentVideoRef} autoPlay loop muted
+        className={cc([{ 'opacity-0 -z-1': isFadingOut }, 'absolute left-0 top-0 z-0 size-full object-cover transition-opacity duration-200 ease'])}>
+        <source src={currentVideo} type="video/mp4" />
+      </video>
+      <video ref={nextVideoRef} autoPlay loop muted
+        className={cc([{ 'opacity-1 z-0': isFadingOut }, 'absolute left-0 top-0 -z-1 size-full object-cover transition-opacity duration-200 ease'])}>
+        <source src={nextVideo} type="video/mp4" />
       </video>
       <div className="fixed flex size-full">
         <div

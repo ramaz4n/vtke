@@ -16,6 +16,20 @@ module.exports = {
       colors: {
         background: 'var(--background)',
         foreground: 'var(--foreground)',
+      },
+      keyframes: {
+        fadeIn: {
+          '0%': {'opacity': '0'},
+          '100%': {'opacity': '1'},
+        },
+        fadeOut: {
+          '0%': { opacity: '1' },
+          '100%': { opacity: '0' },
+        },
+      },
+      animations: {
+        fadeIn: 'fadeIn 0.5s ease',
+        fadeOut: 'fadeOut 0.3s ease',
       }
     },
     screens: {
