@@ -1,48 +1,50 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 
 import cc from 'classcat';
 import Link from 'next/link';
 import {useRouter} from 'next/navigation';
 
 export default function Home() {
-  const [currentVideo, setCurrentVideo] = useState('videos/1.mp4');
-  const [nextVideo, setNextVideo] = useState('');
-  const currentVideoRef = useRef<HTMLVideoElement | null>(null);
-  const nextVideoRef = useRef<HTMLVideoElement | null>(null);
+  const firstVideoRef = useRef<HTMLVideoElement | null>(null);
+  const secondVideoRef = useRef<HTMLVideoElement | null>(null);
+  const thirdVideoRef= useRef<HTMLVideoElement | null>(null);
+  const fourthVideoRef = useRef<HTMLVideoElement | null>(null);
+  const [activeVideo, setActiveVideo] = useState<number>(1);
 
-  const [isFadingOut, setIsFadingOut] = useState(false);
   const router = useRouter();
 
   const onMouseEnterHandler = (target: EventTarget) => {
-    const videoSrc = (target as HTMLElement).dataset.videoSrc || 'videos/1.mp4';
+    const videoType = (target as HTMLElement).dataset.video || '1';
 
-    if (videoSrc !== currentVideo) {
-      setIsFadingOut(true);
-      setTimeout(() => {
-        setNextVideo(videoSrc);
-      }, 200);
+    const isVideoHAve = firstVideoRef.current && secondVideoRef.current && thirdVideoRef.current && fourthVideoRef.current;
+
+    if (isVideoHAve) {
+      switch (videoType) {
+        case '1': {
+          firstVideoRef.current?.play();
+          setActiveVideo(1);
+          break;
+        }
+        case '2': {
+          secondVideoRef.current?.play();
+          setActiveVideo(2);
+          break;
+        }
+        case '3': {
+          thirdVideoRef.current?.play();
+          setActiveVideo(3);
+          break;
+        }
+        case '4': {
+          fourthVideoRef.current?.play();
+          setActiveVideo(4);
+          break;
+        }
+      }
     }
   };
-
-  useEffect(() => {
-    const nextRef = nextVideoRef.current;
-
-    if (nextRef && nextVideo !== '') {
-      const handleLoadedData = () => {
-        setCurrentVideo(nextVideo);
-        setIsFadingOut(false);
-      };
-
-      nextRef.addEventListener('loadeddata', handleLoadedData);
-      nextRef.load();
-
-      return () => {
-        nextRef.removeEventListener('loadeddata', handleLoadedData);
-      };
-    }
-  }, [nextVideo]);
 
   const mainRouteItems = [
     {
@@ -71,7 +73,7 @@ export default function Home() {
         },
       ],
       title: 'Компания',
-      videoSrc: 'videos/1.mp4'
+      video: '1'
     },
     {
       href: '/products',
@@ -99,7 +101,7 @@ export default function Home() {
         },
       ],
       title: 'Продукты',
-      videoSrc: 'videos/2.mp4'
+      video: '2'
     },
     {
       href: '/services',
@@ -127,7 +129,7 @@ export default function Home() {
         },
       ],
       title: 'Услуги',
-      videoSrc: 'videos/3.mp4'
+      video: '3'
     },
     {
       href: '/news',
@@ -155,20 +157,28 @@ export default function Home() {
         },
       ],
       title: 'Новости',
-      videoSrc: 'videos/4.mp4'
+      video: '4'
     },
   ];
 
   return (
     <>
       <div className="absolute left-0 top-0 -z-10 size-full bg-black"></div>
-      <video ref={currentVideoRef} autoPlay loop muted
-        className={cc([{ 'opacity-0 -z-1': isFadingOut }, 'absolute left-0 top-0 z-0 size-full object-cover transition-opacity duration-200 ease'])}>
-        <source src={currentVideo} type="video/mp4" />
+      <video ref={firstVideoRef} autoPlay loop muted
+        className={cc([{ 'opacity-100': activeVideo === 1 }, 'absolute left-0 top-0 opacity-0 size-full object-cover transition-opacity duration-300 ease'])}>
+        <source src="videos/1.mp4" type="video/mp4" />
       </video>
-      <video ref={nextVideoRef} autoPlay loop muted
-        className={cc([{ 'opacity-1 z-0': isFadingOut }, 'absolute left-0 top-0 -z-1 size-full object-cover transition-opacity duration-200 ease'])}>
-        <source src={nextVideo} type="video/mp4" />
+      <video ref={secondVideoRef} loop muted
+        className={cc([{ 'opacity-100': activeVideo === 2 }, 'absolute left-0 top-0 opacity-0 size-full object-cover transition-opacity duration-300 ease'])}>
+        <source src="videos/2.mp4" type="video/mp4" />
+      </video>
+      <video ref={thirdVideoRef} loop muted
+        className={cc([{ 'opacity-100': activeVideo === 3 }, 'absolute left-0 top-0 opacity-0 size-full object-cover transition-opacity duration-300 ease'])}>
+        <source src="videos/3.mp4" type="video/mp4" />
+      </video>
+      <video ref={fourthVideoRef} loop muted
+        className={cc([ { 'opacity-100': activeVideo === 4 },'absolute left-0 top-0 opacity-0 size-full object-cover transition-opacity duration-300 ease'])}>
+        <source src="videos/4.mp4" type="video/mp4" />
       </video>
       <div className="fixed flex size-full">
         {
@@ -176,7 +186,7 @@ export default function Home() {
             <div
               key={index}
               className="group flex h-full w-1/4 cursor-pointer items-center justify-center border-x-2 border-transparent hover:border-white"
-              data-video-src={item.videoSrc}
+              data-video={item.video}
               onClick={() => router.push(item.href)}
               onMouseEnter={(event) => onMouseEnterHandler(event.target)}
             >
