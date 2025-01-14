@@ -13,7 +13,7 @@ export function Layout({ children }:PropsWithChildren) {
   return (
     <>
       {pathname === '/'? <MainHeader/> : <Header/>}
-      {children}
+      {pathname === '/'? children: <div className="mt-compact-menu-padding min-h-[77vh]">{children}</div>}
       {pathname !== '/' && <Footer/>}
     </>
   );

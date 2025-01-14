@@ -16,6 +16,8 @@ module.exports = {
       colors: {
         background: 'var(--background)',
         foreground: 'var(--foreground)',
+        textColor: 'rgba(7, 7, 7, 1);',
+        hoverColor: '#4b71d6'
       },
       keyframes: {
         fadeIn: {
@@ -26,10 +28,18 @@ module.exports = {
           '0%': { opacity: '1' },
           '100%': { opacity: '0' },
         },
+        textScale: {
+          '0%': {transform: 'scale(1)'},
+          '100%': {transform: 'scale(1.2)'},
+        }
       },
       animations: {
         fadeIn: 'fadeIn 0.5s ease',
         fadeOut: 'fadeOut 0.3s ease',
+        textScale: 'textScale 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+      },
+      boxShadow: {
+        'header-shadow': '0px 4px 4px rgba(0, 0, 0, 0.1)',
       }
     },
     screens: {
