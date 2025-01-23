@@ -1,4 +1,4 @@
-import MainContainer from '@/components/container/main-container.tsx';
+import MainContainer from '@/containers/main-container/main-container.tsx';
 
 export default function Footer() {
 

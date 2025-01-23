@@ -1,29 +1,18 @@
-import { FetchResponse } from '../global.ts';
+import { UserProps } from '@/shared/types/api/user.ts';
 
-export interface SignIn {
-  postData: SignInRequestProps;
-  response: FetchResponse<SignInResponseProps>;
-}
-
-export interface SignInConfirm {
-  postData: SignInConfirmProps;
-  response: FetchResponse<SignInConfirmResponseProps>;
-}
-
-interface SignInRequestProps {
+export interface AuthLoginProps {
+  email: string;
   password: string;
-  phone: string;
 }
 
-interface SignInResponseProps {
-  access_token: string | null;
-  seconds: string[];
-  sendCode: boolean;
+export interface AuthRegisterProps {
+  code: string;
+  email: string;
 }
-interface SignInConfirmProps {
-  code: number;
-  phone: string;
-}
-interface SignInConfirmResponseProps {
+
+export interface AuthLoginResponse {
   access_token: string;
+  expires_in: number;
+  refresh_token: string;
+  user: UserProps;
 }

@@ -2,7 +2,7 @@ import Link from 'next/link';
 import {FaRegUser} from 'react-icons/fa6';
 import {FiShoppingCart} from 'react-icons/fi';
 
-import MainContainer from '@/components/container/main-container.tsx';
+import MainContainer from '@/containers/main-container/main-container.tsx';
 
 export default function MainHeader() {
 

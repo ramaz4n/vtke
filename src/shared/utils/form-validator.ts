@@ -1,7 +1,7 @@
 import plural from 'plural-ru';
 import { type RegisterOptions } from 'react-hook-form';
 
-export class FormValidator {
+export class Vld {
   private readonly errors: RegisterOptions;
 
   constructor() {
@@ -10,8 +10,8 @@ export class FormValidator {
 
   required(name?: string) {
     this.errors.required = name
-      ? `Необходимо заполнить поле "${name}"`
-      : 'Поле обязательно к заполнению';
+      ? `Необходимо заполнить "${name}"`
+      : 'Поле обзательно к заполению';
 
     return this;
   }
@@ -26,7 +26,7 @@ export class FormValidator {
   }
 
   min(value: number, errorMessage?: string) {
-    this.errors.min = {
+    this.errors.max = {
       message: errorMessage ?? `Минимальное значение ${value}`,
       value,
     };
@@ -69,3 +69,5 @@ export class FormValidator {
     return this.errors;
   }
 }
+
+export const vld = () => new Vld();

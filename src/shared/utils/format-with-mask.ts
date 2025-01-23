@@ -1,15 +1,21 @@
-import { MASKS } from '../constants/masks.ts';
-import { FormatWithMaskProps, FormatWithMaskResult } from '../types/mask.ts';
+import {
+  FormatWithMaskProps,
+  FormatWithMaskResult,
+  ParseMaskProps,
+} from '../types/mask.ts';
 
-export const formatWithMask = (
+export default function formatWithMask(
   props: FormatWithMaskProps,
-): FormatWithMaskResult => {
-  const text = props?.text ? props.text.toString() : undefined;
+): FormatWithMaskResult {
+  const {
+    text,
+    mask,
+    obfuscationCharacter = '*',
+    maskAutoComplete = false,
+  } = props;
 
-  const { mask, obfuscationCharacter = '*', maskAutoComplete = false } = props;
-
+  // make sure it'll not break with null or undefined inputs
   if (!text) return { masked: '', obfuscated: '', unmasked: '' };
-
   if (!mask)
     return {
       masked: text || '',
@@ -28,6 +34,7 @@ export const formatWithMask = (
 
   // eslint-disable-next-line no-constant-condition
   while (true) {
+    // if mask is ended, break.
     if (maskCharIndex === maskArray.length) {
       break;
     }
@@ -35,6 +42,7 @@ export const formatWithMask = (
     const maskChar = maskArray[maskCharIndex];
     const valueChar = text[valueCharIndex] as string;
 
+    // if value is ended, break.
     if (valueCharIndex === text.length) {
       if (typeof maskChar === 'string' && maskAutoComplete) {
         masked += maskChar;
@@ -46,6 +54,7 @@ export const formatWithMask = (
       break;
     }
 
+    // value equals mask: add to masked result and advance on both mask and value indexes
     if (maskChar === valueChar) {
       masked += maskChar;
       obfuscated += maskChar;
@@ -57,7 +66,9 @@ export const formatWithMask = (
 
     const unmaskedValueChar = text[valueCharIndex];
 
+    // it's a regex maskChar: let's advance on value index and validate the value within the regex
     if (typeof maskChar === 'object') {
+      // advance on value index
       valueCharIndex += 1;
 
       const shouldObsfucateChar = Array.isArray(maskChar);
@@ -66,6 +77,7 @@ export const formatWithMask = (
 
       const matchRegex = new RegExp(maskCharRegex).test(valueChar);
 
+      // value match regex: add to masked and unmasked result and advance on mask index too
       if (matchRegex) {
         masked += valueChar;
         obfuscated += shouldObsfucateChar ? obfuscationCharacter : valueChar;
@@ -76,6 +88,7 @@ export const formatWithMask = (
 
       continue;
     } else {
+      // it's a fixed maskChar: add to maskedResult and advance on mask index
       masked += maskChar;
       obfuscated += maskChar;
 
@@ -85,10 +98,10 @@ export const formatWithMask = (
   }
 
   return { masked, obfuscated, unmasked };
-};
+}
 
-export const getPhoneWithMask = (phone?: number | string): string => {
-  if (!phone) return '';
+export const parseMask = (props: ParseMaskProps): string => {
+  if (!props.text || !props.pattern) return '';
 
-  return formatWithMask({ mask: MASKS.phone, text: phone.toString() }).masked;
+  return props.text.replace(new RegExp(props.pattern, 'g'), '');
 };

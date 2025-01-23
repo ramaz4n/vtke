@@ -1,43 +1,31 @@
-// eslint-disable-next-line import/named
-import { FieldPath, FieldValues, UseFormSetError } from 'react-hook-form';
-
-import { ApiValidationError } from '../types/global';
+import type { FieldPath, FieldValues, UseFormSetError } from 'react-hook-form';
 
 interface ApiErrorParseProps<T extends FieldValues> {
-  error: ApiValidationError;
   setError: UseFormSetError<T>;
-  fieldArrayName?: string;
   name?: string;
 }
 
-export const apiErrorParse = <T extends FieldValues>({
-  fieldArrayName,
-  setError,
-  error,
-  name,
-}: ApiErrorParseProps<T>) => {
-  if (typeof error === 'string') {
+export const apiErrorParse = <E extends object | string, T extends FieldValues>(
+  errors: E,
+  { setError, name }: ApiErrorParseProps<T>,
+) => {
+  if (typeof errors === 'string') {
     setError(name as FieldPath<T>, {
-      message: error,
+      message: errors,
     });
 
     return;
   }
-  if (fieldArrayName) {
-    for (const [index, item] of Object.entries(error)) {
-      for (const key in item) {
-        setError(`${fieldArrayName}.${index}.${key}` as FieldPath<T>, {
-          message: item[key][0],
-        });
-      }
+
+  for (const [k, v] of Object.entries(errors)) {
+    if (Array.isArray(v)) {
+      setError(k as FieldPath<T>, {
+        message: v.join(', '),
+      });
+    } else {
+      setError(k as FieldPath<T>, {
+        message: v,
+      });
     }
-
-    return;
-  }
-
-  for (const [k, v] of Object.entries(error)) {
-    setError(k as FieldPath<T>, {
-      message: v.length > 1 ? v.join(',') : v[0],
-    });
   }
 };

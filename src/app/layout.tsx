@@ -1,9 +1,12 @@
+import { PropsWithChildren } from 'react';
+
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import type { Metadata } from 'next';
-import type {PropsWithChildren} from 'react';
 
 import './globals.css';
 
 import {Layout} from '@/components/layout/layout';
+import { Provider } from '@/components/provider/provider.tsx';
 
 export const metadata: Metadata = {
   description: '«VTKE»',
@@ -13,13 +16,17 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
 }: PropsWithChildren) {
+
   return (
-    <html lang="en">
+
+    <html lang='en'>
       <body>
-        <Layout>
-          {children}
-        </Layout>
+        <Provider>
+          <Layout>{children}</Layout>
+          <ReactQueryDevtools />
+        </Provider>
       </body>
     </html>
+
   );
 }
