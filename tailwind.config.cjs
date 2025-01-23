@@ -9,6 +9,7 @@ module.exports = {
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/containers/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
     extend: {
@@ -42,14 +43,7 @@ module.exports = {
         'auth-shadow': '0px 0px 8px 0px rgba(34, 60, 80, 0.2)',
       },
     },
-    screens: {
-      xs: '450px',
-      sm: '640px',
-      md: '768px',
-      lg: '1024px',
-      xl: '1280px',
-      '2xl': '1536px',
-    },
+
     borderRadius: {
       ...defaultTheme.borderRadius,
       default: '14px',

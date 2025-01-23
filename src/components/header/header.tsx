@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { Modal } from '@gravity-ui/uikit';
+import { Modal, Text } from '@gravity-ui/uikit';
 import cc from 'classcat';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -25,7 +25,7 @@ export default function Header() {
         <div className='flex h-compact-menu-padding items-center justify-between'>
           <div className='flex items-center gap-24'>
             <Link href={LINKS.home}>
-              <span className='text-2xl text-blue-900'>VTKE</span>
+              <img alt='logo' className='h-16' src='/images/logo.svg' />
             </Link>
 
             <nav>
@@ -35,10 +35,10 @@ export default function Header() {
                     href={LINKS.about}
                     className={cc([
                       { 'text-hoverColor': pathname === '/about' },
-                      'px-3.5 py-1 text-xl text-textColor hover:text-hoverColor',
+                      'px-3.5 py-1 text-textColor hover:text-hoverColor',
                     ])}
                   >
-                    Компания
+                    <Text variant='header-1'>Компания</Text>
                   </Link>
                 </li>
                 <li>
@@ -49,7 +49,7 @@ export default function Header() {
                       'px-3.5 py-1 text-xl text-textColor hover:text-hoverColor',
                     ])}
                   >
-                    Продукты
+                    <Text variant='header-1'>Продукты</Text>
                   </Link>
                 </li>
                 <li>
@@ -60,7 +60,7 @@ export default function Header() {
                       'px-3.5 py-1 text-xl text-textColor hover:text-hoverColor',
                     ])}
                   >
-                    Услуги
+                    <Text variant='header-1'>Услуги</Text>
                   </Link>
                 </li>
                 <li>
@@ -71,7 +71,7 @@ export default function Header() {
                       'px-3.5 py-1 text-xl text-textColor hover:text-hoverColor',
                     ])}
                   >
-                    Новости
+                    <Text variant='header-1'>Новости</Text>
                   </Link>
                 </li>
               </ul>
@@ -96,13 +96,13 @@ export default function Header() {
                   Корзина
                 </span>
               </Link>
-              <span className='absolute -right-1.5 -top-3 rounded-full bg-textColor p-1 text-[8px] text-white'>
+              <span className='absolute -right-1.5 -top-3 size-5 rounded-full bg-textColor text-xs text-white flex-center'>
                 111
               </span>
             </div>
             <Link
               className='flex flex-col items-center justify-between'
-              href='/user'
+              href='/login'
               rel='stylesheet'
             >
               <FaRegUser color='textColor' size='1.5em' />

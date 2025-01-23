@@ -1,5 +1,10 @@
 import { apiRequest } from '@/shared/api/api-request.ts';
-import { AuthLoginProps, AuthLoginResponse } from '@/shared/types/api/auth.ts';
+import {
+  AuthLoginProps,
+  AuthLoginResponse,
+  AuthRegisterProps,
+  AuthRegisterResponse,
+} from '@/shared/types/api/auth.ts';
 
 export const authApi = {
   login: (data: AuthLoginProps): Promise<AuthLoginResponse> =>
@@ -11,6 +16,6 @@ export const authApi = {
   refresh: (): Promise<AuthLoginResponse> =>
     apiRequest({ method: 'POST', url: '/api/auth/refresh' }),
 
-  register: (data: AuthLoginProps): Promise<AuthLoginResponse> =>
+  register: (data: AuthRegisterProps): Promise<AuthRegisterResponse> =>
     apiRequest({ data, method: 'POST', url: '/api/auth/register' }),
 };

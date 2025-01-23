@@ -6,8 +6,10 @@ export interface AuthLoginProps {
 }
 
 export interface AuthRegisterProps {
-  code: string;
   email: string;
+  name: string;
+  password: string;
+  password_confirmation: string;
 }
 
 export interface AuthLoginResponse {
@@ -15,4 +17,18 @@ export interface AuthLoginResponse {
   expires_in: number;
   refresh_token: string;
   user: UserProps;
+}
+
+export interface AuthRegisterResponse {
+  message: string;
+  user: {
+    created_at: string;
+    email: string;
+    first_name: string;
+    last_name: string;
+    password: string;
+    phone: string;
+    updated_at: string;
+    username: string;
+  };
 }
