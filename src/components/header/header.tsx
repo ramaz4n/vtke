@@ -34,30 +34,32 @@ export default function Header() {
                   <Link
                     href={LINKS.about}
                     className={cc([
-                      { 'text-hoverColor': pathname === '/about' },
-                      'px-3.5 py-1 text-textColor hover:text-hoverColor',
+                      { 'text-blueColor': pathname === '/about' },
+                      'hover:text-blueColor px-3.5 py-1 text-textColor',
                     ])}
                   >
                     <Text variant='header-1'>Компания</Text>
                   </Link>
                 </li>
                 <li>
-                  <Link
-                    href={LINKS.products()}
-                    className={cc([
-                      { 'text-hoverColor': pathname === '/products' },
-                      'px-3.5 py-1 text-xl text-textColor hover:text-hoverColor',
-                    ])}
-                  >
-                    <Text variant='header-1'>Продукты</Text>
+                  <Link href={LINKS.products()}>
+                    <Text
+                      variant='header-1'
+                      className={cc([
+                        { 'text-blueColor': pathname === '/products' },
+                        'hover:text-blueColor px-3.5 py-1 text-textColor',
+                      ])}
+                    >
+                      Продукты
+                    </Text>
                   </Link>
                 </li>
                 <li>
                   <Link
                     href={LINKS.services()}
                     className={cc([
-                      { 'text-hoverColor': pathname === '/services' },
-                      'px-3.5 py-1 text-xl text-textColor hover:text-hoverColor',
+                      { 'text-blueColor': pathname === '/services' },
+                      'hover:text-blueColor px-3.5 py-1 text-xl text-textColor',
                     ])}
                   >
                     <Text variant='header-1'>Услуги</Text>
@@ -67,8 +69,8 @@ export default function Header() {
                   <Link
                     href={LINKS.news()}
                     className={cc([
-                      { 'text-hoverColor': pathname === '/news' },
-                      'px-3.5 py-1 text-xl text-textColor hover:text-hoverColor',
+                      { 'text-blueColor': pathname === '/news' },
+                      'hover:text-blueColor px-3.5 py-1 text-xl text-textColor',
                     ])}
                   >
                     <Text variant='header-1'>Новости</Text>
@@ -90,23 +92,28 @@ export default function Header() {
                 <FiShoppingCart
                   className='cursor-pointer'
                   color='textColor'
-                  size='1.5em'
+                  size='1.7em'
                 />
-                <span className='group-hover:animate-Scale text-sm'>
+                <Text className='group-hover:animate-Scale' variant='body-1'>
                   Корзина
-                </span>
+                </Text>
               </Link>
-              <span className='absolute -right-1.5 -top-3 size-5 rounded-full bg-textColor text-xs text-white flex-center'>
+              <Text
+                className='absolute -right-1.5 -top-3 size-5 rounded-full bg-textColor text-white flex-center'
+                variant='caption-2'
+              >
                 111
-              </span>
+              </Text>
             </div>
             <Link
               className='flex flex-col items-center justify-between'
               href='/login'
               rel='stylesheet'
             >
-              <FaRegUser color='textColor' size='1.5em' />
-              <span className='text-sm'>Войти</span>
+              <FaRegUser color='textColor' size='1.7em' />
+              <Text className='text-sm' variant='body-1'>
+                Войти
+              </Text>
             </Link>
           </div>
         </div>

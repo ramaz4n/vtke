@@ -2,14 +2,15 @@
 
 import { useRef, useState } from 'react';
 
+import { Text } from '@gravity-ui/uikit';
 import cc from 'classcat';
 import Link from 'next/link';
-import {useRouter} from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
   const firstVideoRef = useRef<HTMLVideoElement | null>(null);
   const secondVideoRef = useRef<HTMLVideoElement | null>(null);
-  const thirdVideoRef= useRef<HTMLVideoElement | null>(null);
+  const thirdVideoRef = useRef<HTMLVideoElement | null>(null);
   const fourthVideoRef = useRef<HTMLVideoElement | null>(null);
   const [activeVideo, setActiveVideo] = useState<number>(1);
 
@@ -18,9 +19,13 @@ export default function Home() {
   const onMouseEnterHandler = (target: EventTarget) => {
     const videoType = (target as HTMLElement).dataset.video || '1';
 
-    const isVideoHAve = firstVideoRef.current && secondVideoRef.current && thirdVideoRef.current && fourthVideoRef.current;
+    const isVideoHave =
+      firstVideoRef.current &&
+      secondVideoRef.current &&
+      thirdVideoRef.current &&
+      fourthVideoRef.current;
 
-    if (isVideoHAve) {
+    if (isVideoHave) {
       switch (videoType) {
         case '1': {
           firstVideoRef.current?.play();
@@ -54,26 +59,26 @@ export default function Home() {
         {
           href: '/about',
           id: 1,
-          text: 'О нас'
+          text: 'О нас',
         },
         {
           href: '/about',
           id: 2,
-          text: 'Видео'
+          text: 'Видео',
         },
         {
           href: '/about',
           id: 3,
-          text: 'Команда'
+          text: 'Команда',
         },
         {
           href: '/about',
           id: 4,
-          text: 'Цели'
+          text: 'Цели',
         },
       ],
       title: 'Компания',
-      video: '1'
+      video: '1',
     },
     {
       href: '/products',
@@ -82,26 +87,26 @@ export default function Home() {
         {
           href: '/about',
           id: 1,
-          text: 'О нас'
+          text: 'О нас',
         },
         {
           href: '/about',
           id: 2,
-          text: 'Видео'
+          text: 'Видео',
         },
         {
           href: '/about',
           id: 3,
-          text: 'Команда'
+          text: 'Команда',
         },
         {
           href: '/about',
           id: 4,
-          text: 'Цели'
+          text: 'Цели',
         },
       ],
       title: 'Продукты',
-      video: '2'
+      video: '2',
     },
     {
       href: '/services',
@@ -110,26 +115,26 @@ export default function Home() {
         {
           href: '/about',
           id: 1,
-          text: 'О нас'
+          text: 'О нас',
         },
         {
           href: '/about',
           id: 2,
-          text: 'Видео'
+          text: 'Видео',
         },
         {
           href: '/about',
           id: 3,
-          text: 'Команда'
+          text: 'Команда',
         },
         {
           href: '/about',
           id: 4,
-          text: 'Цели'
+          text: 'Цели',
         },
       ],
       title: 'Услуги',
-      video: '3'
+      video: '3',
     },
     {
       href: '/news',
@@ -138,72 +143,108 @@ export default function Home() {
         {
           href: '/about',
           id: 1,
-          text: 'О нас'
+          text: 'О нас',
         },
         {
           href: '/about',
           id: 2,
-          text: 'Видео'
+          text: 'Видео',
         },
         {
           href: '/about',
           id: 3,
-          text: 'Команда'
+          text: 'Команда',
         },
         {
           href: '/about',
           id: 4,
-          text: 'Цели'
+          text: 'Цели',
         },
       ],
       title: 'Новости',
-      video: '4'
+      video: '4',
     },
   ];
 
   return (
     <>
-      <div className="absolute left-0 top-0 -z-10 size-full bg-black"></div>
-      <video ref={firstVideoRef} autoPlay loop muted
-        className={cc([{ 'opacity-100': activeVideo === 1 }, 'absolute left-0 top-0 opacity-0 size-full object-cover transition-opacity duration-300 ease'])}>
-        <source src="videos/1.mp4" type="video/mp4" />
+      <div className='absolute left-0 top-0 -z-10 size-full bg-black'></div>
+      <video
+        ref={firstVideoRef}
+        autoPlay
+        loop
+        muted
+        className={cc([
+          { 'opacity-100': activeVideo === 1 },
+          'ease absolute left-0 top-0 size-full object-cover opacity-0 transition-opacity duration-300',
+        ])}
+      >
+        <source src='videos/1.mp4' type='video/mp4' />
       </video>
-      <video ref={secondVideoRef} loop muted
-        className={cc([{ 'opacity-100': activeVideo === 2 }, 'absolute left-0 top-0 opacity-0 size-full object-cover transition-opacity duration-300 ease'])}>
-        <source src="videos/2.mp4" type="video/mp4" />
+      <video
+        ref={secondVideoRef}
+        loop
+        muted
+        className={cc([
+          { 'opacity-100': activeVideo === 2 },
+          'ease absolute left-0 top-0 size-full object-cover opacity-0 transition-opacity duration-300',
+        ])}
+      >
+        <source src='videos/2.mp4' type='video/mp4' />
       </video>
-      <video ref={thirdVideoRef} loop muted
-        className={cc([{ 'opacity-100': activeVideo === 3 }, 'absolute left-0 top-0 opacity-0 size-full object-cover transition-opacity duration-300 ease'])}>
-        <source src="videos/3.mp4" type="video/mp4" />
+      <video
+        ref={thirdVideoRef}
+        loop
+        muted
+        className={cc([
+          { 'opacity-100': activeVideo === 3 },
+          'ease absolute left-0 top-0 size-full object-cover opacity-0 transition-opacity duration-300',
+        ])}
+      >
+        <source src='videos/3.mp4' type='video/mp4' />
       </video>
-      <video ref={fourthVideoRef} loop muted
-        className={cc([ { 'opacity-100': activeVideo === 4 },'absolute left-0 top-0 opacity-0 size-full object-cover transition-opacity duration-300 ease'])}>
-        <source src="videos/4.mp4" type="video/mp4" />
+      <video
+        ref={fourthVideoRef}
+        loop
+        muted
+        className={cc([
+          { 'opacity-100': activeVideo === 4 },
+          'ease absolute left-0 top-0 size-full object-cover opacity-0 transition-opacity duration-300',
+        ])}
+      >
+        <source src='videos/4.mp4' type='video/mp4' />
       </video>
-      <div className="fixed flex size-full">
-        {
-          mainRouteItems.map((item, index) => (
-            <div
-              key={index}
-              className="group flex h-full w-1/4 cursor-pointer items-center justify-center border-x-2 border-transparent hover:border-white"
-              data-video={item.video}
-              onClick={() => router.push(item.href)}
-              onMouseEnter={(event) => onMouseEnterHandler(event.target)}
-            >
-              <div className="relative">
-                <h2 className="text-center text-5xl font-bold text-white"> {item.title}</h2>
-                <div
-                  className="invisible absolute left-0 top-24 ml-1 flex flex-col gap-3 text-white group-hover:visible">
-                  {
-                    item.routeList.map((route, index) => (
-                      <Link key={index} className="text-xl hover:underline" href={route.href}>{route.text}</Link>
-                    ))
-                  }
-                </div>
+      <div className='fixed flex size-full'>
+        {mainRouteItems.map((item, index) => (
+          <div
+            key={index}
+            className='group flex h-full w-1/4 cursor-pointer items-center justify-center border-x-2 border-transparent hover:border-white'
+            data-video={item.video}
+            onClick={() => router.push(item.href)}
+            onMouseEnter={(event) => onMouseEnterHandler(event.target)}
+          >
+            <div className='relative'>
+              <Text
+                className='text-center text-5xl font-bold text-white'
+                variant='display-4'
+              >
+                {' '}
+                {item.title}
+              </Text>
+              <div className='invisible absolute left-0 top-24 ml-1 flex flex-col gap-3 text-white group-hover:visible'>
+                {item.routeList.map((route, index) => (
+                  <Link
+                    key={index}
+                    className='text-xl hover:underline'
+                    href={route.href}
+                  >
+                    <Text variant='display-1'>{route.text}</Text>
+                  </Link>
+                ))}
               </div>
             </div>
-          ))
-        }
+          </div>
+        ))}
       </div>
     </>
   );

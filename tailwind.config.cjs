@@ -17,7 +17,7 @@ module.exports = {
         background: 'var(--background)',
         foreground: 'var(--foreground)',
         textColor: 'rgba(7, 7, 7, 1);',
-        hoverColor: '#4b71d6',
+        blueColor: '#4b71d6',
       },
       keyframes: {
         fadeIn: {
