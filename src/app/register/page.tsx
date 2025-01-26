@@ -90,8 +90,8 @@ export default function Page() {
 
                 <Input
                   name='password_confirmation'
-                  placeholder='Подствердите пароль'
-                  rules={vld().required('Подствердите пароль').minLength(6)}
+                  placeholder='Подтвердите пароль'
+                  rules={vld().required('Подтвердите пароль').minLength(6)}
                   size='xl'
                   type='password'
                 />
