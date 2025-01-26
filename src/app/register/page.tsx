@@ -22,9 +22,9 @@ export default function Page() {
   const methods = useForm<AuthRegisterProps>({
     defaultValues: {
       email: '',
-      name: '',
       password: '',
       password_confirmation: '',
+      username: '',
     },
   });
 
@@ -63,8 +63,8 @@ export default function Page() {
                 </Text>
 
                 <Input
-                  autoComplete='name'
-                  name='name'
+                  autoComplete='username'
+                  name='username'
                   placeholder='Имя'
                   rules={vld().required('Имя').minLength(1)}
                   size='xl'

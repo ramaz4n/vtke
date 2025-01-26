@@ -7,9 +7,9 @@ export interface AuthLoginProps {
 
 export interface AuthRegisterProps {
   email: string;
-  name: string;
   password: string;
   password_confirmation: string;
+  username: string;
 }
 
 export interface AuthLoginResponse {
