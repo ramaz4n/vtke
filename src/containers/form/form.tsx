@@ -29,6 +29,7 @@ export const Form = <T extends object>({
 
   const isValid = !Object.values(context.formState.errors).length && dirtyValue;
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const getTabsErrors = (names: Array<Array<keyof T>>) => {
     if (!names) {
       throw new Error('Argument names is required');
@@ -41,8 +42,12 @@ export const Form = <T extends object>({
 
     if (isValid) return errorsMap;
 
-    for (const [i, names_] of names.entries()) {
-      for (const [, part] of names_.entries()) {
+    for (const i in names) {
+      const names_ = names[i];
+
+      for (const j in names_) {
+        const part = names_[j];
+
         if (errorsSet.has(part)) {
           errorsMap[i] = true;
         }
@@ -52,6 +57,7 @@ export const Form = <T extends object>({
     return errorsMap;
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const resetButton = (
     <Button view='flat' onClick={() => context.reset()}>
       Отменить
