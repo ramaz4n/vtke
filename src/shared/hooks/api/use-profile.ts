@@ -1,5 +1,5 @@
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'next/navigation';
 
 import { userApi } from '@/shared/api/user.ts';
 import { QueryKeys } from '@/shared/types/api/query-keys.ts';
