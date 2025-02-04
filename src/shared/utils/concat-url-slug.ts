@@ -1,4 +1,7 @@
-export const concatUrlSlug = (url?: string, slug?: string | undefined) => {
+export const concatUrlSlug = (
+  url?: string,
+  slug?: string | string[] | undefined,
+) => {
   if (!url) return '';
 
   if (slug) {
