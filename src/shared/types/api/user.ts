@@ -1,4 +1,4 @@
-import { PaginationRequest } from '@/shared/types/globals.ts';
+import { PaginationRequest } from '@/shared/types/global.ts';
 
 export type UserRequestProps = PaginationRequest<{
   email?: string;
