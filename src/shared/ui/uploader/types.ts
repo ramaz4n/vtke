@@ -2,7 +2,7 @@ import { InputHTMLAttributes, ReactNode } from 'react';
 
 import { type RegisterOptions } from 'react-hook-form';
 
-import { Slot } from '@/shared/types/globals.ts';
+import { Slot } from '@/shared/types/global.ts';
 import { ButtonProps } from '@/shared/ui/button/button.tsx';
 
 export interface UploaderProps {
