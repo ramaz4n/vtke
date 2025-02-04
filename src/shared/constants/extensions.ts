@@ -37,3 +37,5 @@ export const FILE_EXTENSION_PERMISSION = new Set([
   'ogg',
   'm4a',
 ]);
+
+export const SVG_EXTENSIONS_SET: Set<string> = new Set(['svg', 'svg+xml']);

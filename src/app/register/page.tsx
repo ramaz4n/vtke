@@ -64,7 +64,7 @@ export default function Page() {
 
                 <Input
                   autoComplete='username'
-                  name='username'
+                  name='name'
                   placeholder='Имя'
                   rules={vld().required('Имя').minLength(1)}
                   size='xl'

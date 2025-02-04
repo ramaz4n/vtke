@@ -1,65 +1,45 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-// eslint-disable-next-line import/named
-import { FieldPath, FieldValues, RegisterOptions } from 'react-hook-form';
+import type { Ref } from 'react';
 
-import { FormValidator } from '../utils/form-validator.ts';
-
-export type FetchSlug = string | undefined;
-
-export type ServerFile = {
-  file_id: number;
-  id: number;
-  name: string;
-  publicLink: string;
+export type NonNullableKeys<T> = {
+  [P in keyof T]: NonNullable<T[P]>;
 };
 
-export interface UseFetchListProps<T = undefined> {
-  queryKey: string;
-  params?: T extends undefined
-    ? PaginationRequestProps
-    : FetchPaginationRequest<T>;
-}
-export interface UseFetchViewProps {
-  queryKey: string;
-  id?: string;
-}
+export type Default<
+  Initial,
+  Alternative = undefined,
+> = Alternative extends undefined ? Initial : Alternative;
 
-export interface FormElementsProps<Name extends FieldValues, Value> {
-  name: FieldPath<Name>;
-  handleChange?: (name: FieldPath<Name>, value: Value) => void;
-  rules?: FormValidator | RegisterOptions;
-}
+export type ForwardComponent<Element, Props> = Props & {
+  forwardedRef?: Ref<Element>;
+};
 
-export type FetchPaginationRequest<T> = PaginationRequestProps & T;
+export type Slot<U extends string> = Partial<
+  Record<U, HTMLElement['className']>
+>;
 
-export type DefaultType<I, T = undefined> = T extends undefined ? I : T;
+export type IdModel = { id?: string | number };
+export type FetchResponse<T> = Promise<ApiResponse<T>>;
 
-export interface PaginationRequestProps {
+export type FetchPaginationResponse<T> = Promise<PaginationApiResponse<T>>;
+
+export type PaginationRequest<T> = T & {
   limit?: number;
   page?: number;
   sort?: string;
-}
+};
 
-export type FetchResponse<T> = Promise<ApiResponse<T>>;
+export type ApiResponse<T> = T & {
+  message: string;
+  errors?: Record<string, string[]>;
+};
 
-export type FetchPaginationResponse<Model> = Promise<
-  ApiPaginationResponse<Model>
->;
-
-export interface ApiResponse<T> {
+export interface PaginationApiResponse<T> {
   data: T;
-  error: boolean;
-  status: number;
+  pagination: {
+    last_page: number;
+    per_page: number;
+    total: number;
+  };
 }
-
-export type DefaultApiResponse = FetchResponse<string>;
-
-export type AnyObjectType = Record<string, any>;
-
-export type ApiPaginationResponse<Model> = ApiResponse<{
-  countRecord: number;
-  lastPage: number;
-  models: Model[];
-}>;
 
 export type ApiValidationError = Record<string, string[]> | string;
