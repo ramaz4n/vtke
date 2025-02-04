@@ -18,7 +18,7 @@
     "@typescript-eslint",
     "react-refresh",
     "unused-imports",
-//    "dirs",
+    "dirs",
     "sort-keys-fix",
     "typescript-sort-keys",
     "simple-import-sort",
