@@ -1,11 +1,10 @@
 import { LOGOUT_STORAGE_KEYS } from '../constants/logout-storage-keys.ts';
-import { AnyObjectType } from '../types/global.ts';
 import { parseApiUrl } from '../utils/parse-api-url.ts';
 
 export interface ApiRequestProps extends Omit<RequestInit, 'body'> {
   url: string;
   data?: unknown;
-  params?: AnyObjectType;
+  params?: unknown;
   slug?: string;
 }
 
