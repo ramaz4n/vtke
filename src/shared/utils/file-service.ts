@@ -39,6 +39,7 @@ export class Filer extends Object {
 export function getSvg(file: File) {
   const fileReader = new FileReader();
 
+  // eslint-disable-next-line unicorn/prefer-blob-reading-methods
   fileReader.readAsText(file);
 
   let svg = '';

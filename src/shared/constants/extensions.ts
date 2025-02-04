@@ -1,13 +1,4 @@
-export const IMAGE_EXTENSIONS: Record<string, boolean> = {
-  'image/gif': true,
-  'image/jpeg': true,
-  'image/jpg': true,
-  'image/png': true,
-  'image/psd': true,
-  'image/svg': true,
-  'image/svg+xml': true,
-  'image/webp': true,
-};
+export const SVG_EXTENSIONS_SET: Set<string> = new Set(['svg', 'svg+xml']);
 
 export const IMAGE_EXTENSIONS_SET: Set<string> = new Set([
   'jpeg',
@@ -37,5 +28,3 @@ export const FILE_EXTENSION_PERMISSION = new Set([
   'ogg',
   'm4a',
 ]);
-
-export const SVG_EXTENSIONS_SET: Set<string> = new Set(['svg', 'svg+xml']);
