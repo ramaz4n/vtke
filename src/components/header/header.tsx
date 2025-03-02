@@ -8,6 +8,7 @@ import { FaRegUser } from 'react-icons/fa6';
 import { FiShoppingCart } from 'react-icons/fi';
 import { IoMdSearch } from 'react-icons/io';
 
+import Logo from '@/components/logo/logo.tsx';
 import MainContainer from '@/containers/main-container/main-container.tsx';
 import { LINKS } from '@/shared/constants/links.ts';
 
@@ -24,30 +25,36 @@ export default function Header() {
       <MainContainer>
         <div className='flex h-compact-menu-padding items-center justify-between'>
           <div className='flex items-center gap-24'>
-            <Link href={LINKS.home}>
-              <img alt='logo' className='h-16' src='/images/logo.svg' />
-            </Link>
+            <Logo />
 
             <nav>
               <ul className='flex items-center gap-5'>
                 <li>
                   <Link
+                    className='px-3.5 py-1 text-textColor hover:text-blueColor'
                     href={LINKS.about}
-                    className={cc([
-                      { 'text-blueColor': pathname === '/about' },
-                      'hover:text-blueColor px-3.5 py-1 text-textColor',
-                    ])}
                   >
-                    <Text variant='header-1'>Компания</Text>
-                  </Link>
-                </li>
-                <li>
-                  <Link href={LINKS.products()}>
                     <Text
                       variant='header-1'
                       className={cc([
-                        { 'text-blueColor': pathname === '/products' },
-                        'hover:text-blueColor px-3.5 py-1 text-textColor',
+                        { 'text-blueColor': pathname.includes(LINKS.about) },
+                      ])}
+                    >
+                      Компания
+                    </Text>
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    className='px-3.5 py-1 text-xl text-textColor hover:text-blueColor'
+                    href={LINKS.products()}
+                  >
+                    <Text
+                      variant='header-1'
+                      className={cc([
+                        {
+                          'text-blueColor': pathname.includes(LINKS.products()),
+                        },
                       ])}
                     >
                       Продукты
@@ -56,24 +63,34 @@ export default function Header() {
                 </li>
                 <li>
                   <Link
+                    className='px-3.5 py-1 text-xl text-textColor hover:text-blueColor'
                     href={LINKS.services()}
-                    className={cc([
-                      { 'text-blueColor': pathname === '/services' },
-                      'hover:text-blueColor px-3.5 py-1 text-xl text-textColor',
-                    ])}
                   >
-                    <Text variant='header-1'>Услуги</Text>
+                    <Text
+                      variant='header-1'
+                      className={cc([
+                        {
+                          'text-blueColor': pathname.includes(LINKS.services()),
+                        },
+                      ])}
+                    >
+                      Услуги
+                    </Text>
                   </Link>
                 </li>
                 <li>
                   <Link
+                    className='px-3.5 py-1 text-xl text-textColor hover:text-blueColor'
                     href={LINKS.news()}
-                    className={cc([
-                      { 'text-blueColor': pathname === '/news' },
-                      'hover:text-blueColor px-3.5 py-1 text-xl text-textColor',
-                    ])}
                   >
-                    <Text variant='header-1'>Новости</Text>
+                    <Text
+                      variant='header-1'
+                      className={cc([
+                        { 'text-blueColor': pathname.includes(LINKS.news()) },
+                      ])}
+                    >
+                      Новости
+                    </Text>
                   </Link>
                 </li>
               </ul>

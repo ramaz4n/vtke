@@ -1,15 +1,30 @@
 'use client';
 
-import { PropsWithChildren, ReactNode } from 'react';
+import { PropsWithChildren, ReactNode, useEffect } from 'react';
 
 import { ThemeProvider } from '@gravity-ui/uikit';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { usePathname } from 'next/navigation';
+import NProgress from 'nprogress';
 
 import { Fallback } from '@/components/fallback/fallback.tsx';
 import { useApp } from '@/shared/hooks/use-app.ts';
 
+NProgress.configure({ showSpinner: false });
+
 export function Provider({ children }: PropsWithChildren) {
   const { isAppReady, theme } = useApp();
+  const pathname = usePathname();
+
+  useEffect(() => {
+    NProgress.start();
+
+    const timeout = setTimeout(() => {
+      NProgress.done();
+    }, 300);
+
+    return () => clearTimeout(timeout);
+  }, [pathname]);
 
   if (!isAppReady) {
     return <Fallback />;

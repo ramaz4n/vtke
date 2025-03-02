@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { FaRegUser } from 'react-icons/fa6';
 import { FiShoppingCart } from 'react-icons/fi';
 
+import Logo from '@/components/logo/logo.tsx';
 import MainContainer from '@/containers/main-container/main-container.tsx';
 
 export default function MainHeader() {
@@ -10,9 +11,7 @@ export default function MainHeader() {
     <header className='sticky top-0 z-10 bg-transparent'>
       <MainContainer>
         <div className='flex h-compact-menu-padding items-center justify-between'>
-          <Link href='/'>
-            <img alt='logo' className='h-16' src='/images/logo-white.svg' />
-          </Link>
+          <Logo white />
           <div className='flex items-center justify-center gap-5'>
             <Link className='text-xl text-white' href='/products'>
               <Text variant='header-1'>МАГАЗИН</Text>

@@ -7,7 +7,7 @@ import {
 import {
   FetchPaginationResponse,
   FetchResponse,
-} from '@/shared/types/global.ts';
+} from '@/shared/types/globals.ts';
 import { concatUrlSlug } from '@/shared/utils/concat-url-slug.ts';
 
 export const userApi = {

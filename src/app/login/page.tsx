@@ -46,7 +46,7 @@ export default function Page() {
         <meta content='Форма авторизации пользователя' name='description' />
       </Head>
       <FormProvider {...methods}>
-        <div className='flex size-full items-center justify-center'>
+        <div className='flex size-full items-center justify-center py-8'>
           <Form
             className='mx-auto flex h-fit w-full max-w-2xl flex-col gap-y-3 rounded-3xl p-6 shadow-auth-shadow'
             onSubmit={methods.handleSubmit(onSubmit)}

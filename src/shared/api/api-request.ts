@@ -8,7 +8,17 @@ export interface ApiRequestProps extends Omit<RequestInit, 'body'> {
   slug?: string;
 }
 
-export const BASE_URL = process.env.NEXT_PUBLIC_VTKE_API_DEV;
+export enum HttpErrors {
+  Unauthorized = 401,
+  Forbidden = 403,
+  NotFound = 404,
+  Ok = 200,
+  Validation = 422,
+  InternalServerError = 500,
+}
+
+export const BASE_URL =
+  process.env.NEXT_PUBLIC_VTKE_API_DEV || 'http://89.111.169.139:80';
 
 export const apiRequest = async ({
   url,
@@ -40,12 +50,12 @@ export const apiRequest = async ({
 
     const resJson = await response.json();
 
-    if (resJson.status === 403) {
+    if (resJson.status === HttpErrors.Forbidden) {
       // window.location.replace(LINKS.error403);
       return;
     }
 
-    if (resJson.status === 401) {
+    if (resJson.status === HttpErrors.Unauthorized) {
       for (const key of LOGOUT_STORAGE_KEYS) {
         localStorage.removeItem(key);
       }
@@ -70,18 +80,6 @@ export const apiRequest = async ({
 
     return resJson;
   } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error(error);
-    //
-    // const errorMessage = String(error);
-    //
-    // if (process.env.DEV) {
-    //   showToast({
-    //     errorMessage: errorMessage,
-    //     message: 'Ошибка API запроса' + url,
-    //     options: { duration: 6000 },
-    //     type: 'error',
-    //   });
-    // }
+    console.log(error);
   }
 };

@@ -1,4 +1,4 @@
-import { PaginationRequest } from '@/shared/types/global.ts';
+import { PaginationRequest } from '@/shared/types/globals.ts';
 
 export interface TermCreateProps {
   definition: string;

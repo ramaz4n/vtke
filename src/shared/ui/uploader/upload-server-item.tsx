@@ -1,7 +1,7 @@
 // import { memo } from 'react';
 //
 // import { IMAGE_EXTENSIONS_SET } from '../../constants/extensions.ts';
-// import { ServerFile } from '../../types/global.ts';
+// import { ServerFile } from '../../types/globals.ts';
 // import { Icon } from '../icon/icon.tsx';
 //
 // interface UploadServerFileProps extends ServerFile {
