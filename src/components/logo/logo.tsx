@@ -12,13 +12,14 @@ export interface LogoProps {
 
 export default function Logo({ color, white, width, height, link }: LogoProps) {
   const logoColor = white ? '#ffffff' : (color ?? '#154063');
-  const currentWidth = width ?? '200';
-  const currentHeight = height ?? '54';
+  const currentWidth = width ?? '100';
+  const currentHeight = height ?? '34';
 
   return (
     <div>
       <Link href={link ?? LINKS.home}>
         <svg
+          className='sm:w-[200px]'
           fill='none'
           height={currentHeight}
           viewBox='0 0 1287 272'

@@ -17,7 +17,8 @@ module.exports = {
         background: 'var(--background)',
         foreground: 'var(--foreground)',
         textColor: 'rgba(7, 7, 7, 1);',
-        blueColor: '#4b71d6',
+        mainBlue: '#154063',
+        secondaryBlue: '#4b71d6',
       },
       keyframes: {
         fadeIn: {

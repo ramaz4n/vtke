@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Modal, Text } from '@gravity-ui/uikit';
 import cc from 'classcat';
@@ -6,11 +6,13 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { FaRegUser } from 'react-icons/fa6';
 import { FiShoppingCart } from 'react-icons/fi';
+import { GiHamburgerMenu } from 'react-icons/gi';
 import { IoMdSearch } from 'react-icons/io';
 
 import Logo from '@/components/logo/logo.tsx';
 import MainContainer from '@/containers/main-container/main-container.tsx';
-import { LINKS } from '@/shared/constants/links.ts';
+import { NAVIGATIONS } from '@/shared/constants/navigations.ts';
+import { cn } from '@/shared/utils/cn.ts';
 
 export default function Header() {
   const [searchModalOpen, setSearchModalOpen] = useState(false);
@@ -20,79 +22,62 @@ export default function Header() {
     setSearchModalOpen(true);
   };
 
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      if (currentScrollY > lastScrollY && currentScrollY > 50) {
+        setIsVisible(false); // Скрыть хедер при скролле вниз
+      } else {
+        setIsVisible(true); // Показать хедер при скролле вверх
+      }
+
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [lastScrollY]);
+
   return (
-    <header className='sticky top-0 z-10 bg-white shadow-header-shadow'>
+    <header
+      className={cn(
+        'sticky top-0 z-10 bg-white shadow-header-shadow transition-transform duration-300',
+        { '-translate-y-full': !isVisible },
+      )}
+    >
       <MainContainer>
         <div className='flex h-compact-menu-padding items-center justify-between'>
-          <div className='flex items-center gap-24'>
+          <div className='flex items-center gap-20'>
             <Logo />
 
             <nav>
-              <ul className='flex items-center gap-5'>
-                <li>
-                  <Link
-                    className='px-3.5 py-1 text-textColor hover:text-blueColor'
-                    href={LINKS.about}
-                  >
-                    <Text
-                      variant='header-1'
-                      className={cc([
-                        { 'text-blueColor': pathname.includes(LINKS.about) },
-                      ])}
+              <ul className='hidden items-center gap-2 lg:flex'>
+                {NAVIGATIONS.map((item) => (
+                  <li key={item.id}>
+                    <Link
+                      className='hover:text-secondaryBlue px-3.5 py-1 text-textColor duration-300'
+                      href={item.link}
                     >
-                      Компания
-                    </Text>
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    className='px-3.5 py-1 text-xl text-textColor hover:text-blueColor'
-                    href={LINKS.products()}
-                  >
-                    <Text
-                      variant='header-1'
-                      className={cc([
-                        {
-                          'text-blueColor': pathname.includes(LINKS.products()),
-                        },
-                      ])}
-                    >
-                      Продукты
-                    </Text>
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    className='px-3.5 py-1 text-xl text-textColor hover:text-blueColor'
-                    href={LINKS.services()}
-                  >
-                    <Text
-                      variant='header-1'
-                      className={cc([
-                        {
-                          'text-blueColor': pathname.includes(LINKS.services()),
-                        },
-                      ])}
-                    >
-                      Услуги
-                    </Text>
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    className='px-3.5 py-1 text-xl text-textColor hover:text-blueColor'
-                    href={LINKS.news()}
-                  >
-                    <Text
-                      variant='header-1'
-                      className={cc([
-                        { 'text-blueColor': pathname.includes(LINKS.news()) },
-                      ])}
-                    >
-                      Новости
-                    </Text>
-                  </Link>
-                </li>
+                      <Text
+                        variant='header-1'
+                        className={cc([
+                          {
+                            'text-secondaryBlue': pathname.includes(item.link),
+                          },
+                        ])}
+                      >
+                        {item.title}
+                      </Text>
+                    </Link>
+                  </li>
+                ))}
               </ul>
             </nav>
           </div>
@@ -132,6 +117,10 @@ export default function Header() {
                 Войти
               </Text>
             </Link>
+          </div>
+
+          <div className='bg-mainBlue absolute bottom-[20px] right-[20px] flex size-10 items-center justify-center rounded-[50%] sm:size-16 lg:hidden'>
+            <GiHamburgerMenu className='sm:size-8' color='white' />
           </div>
         </div>
         <Modal

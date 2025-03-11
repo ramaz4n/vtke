@@ -14,7 +14,9 @@ export default function MainHeader() {
           <Logo white />
           <div className='flex items-center justify-center gap-5'>
             <Link className='text-xl text-white' href='/products'>
-              <Text variant='header-1'>МАГАЗИН</Text>
+              <Text>
+                <p className='sm:text-xl'>МАГАЗИН</p>
+              </Text>
             </Link>
             <div className='relative'>
               <Link href='/cart'>

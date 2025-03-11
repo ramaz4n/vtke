@@ -17,7 +17,7 @@ export function Layout({ children }: PropsWithChildren) {
       {pathname === '/' ? (
         children
       ) : (
-        <main className='flex h-full flex-1'>{children}</main>
+        <main className='flex flex-1'>{children}</main>
       )}
 
       {pathname !== '/' && <Footer />}

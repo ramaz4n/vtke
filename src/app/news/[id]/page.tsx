@@ -22,7 +22,6 @@ export default function Page({ params }: { params: { id: string } }) {
     <MainContainer>
       <div className='px-3.5 py-6'>
         <Breadcrumbs
-          enabledStartLink
           items={[
             { href: LINKS.news(), text: 'Новости' },
             { href: LINKS.news(id.toString()), text: id.toString() },
