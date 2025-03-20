@@ -19,19 +19,19 @@ export interface DrawerProps {
   children?: ReactNode;
   onClose?: () => void;
   shouldCloseButton?: boolean;
-  shouldScrollBody?: boolean;
+  shouldScrollContent?: boolean;
 }
 
 export const Drawer = ({
   children,
   shouldCloseButton = true,
-  shouldScrollBody = true,
+  shouldScrollContent = true,
   name,
   onClose,
 }: DrawerProps) => {
   const [store, resetStore] = useUnit([$drawer, hideDrawerEvent]);
 
-  const isVisible = store?.has(name);
+  const isVisible = Boolean(store?.has(name));
 
   function handleClose() {
     onClose?.();
@@ -60,7 +60,7 @@ export const Drawer = ({
               initial={{ x: '100%' }}
               className={cn(
                 'h-full w-10/12 bg-white p-4 shadow-lg sm:w-1/2 lg:w-1/3',
-                { 'overflow-y-auto': shouldScrollBody },
+                { 'overflow-y-auto': shouldScrollContent },
               )}
               transition={{
                 damping: 10,

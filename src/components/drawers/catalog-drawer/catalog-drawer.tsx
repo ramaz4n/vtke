@@ -42,7 +42,7 @@ export const CatalogDrawer = () => {
 
   const Content = () => {
     if (isLoading) {
-      return Array.from({ length: 25 }).map((_, index) => (
+      return Array.from({ length: 20 }).map((_, index) => (
         <Skeleton key={index.toString()} className='h-14 w-full rounded-2xl' />
       ));
     }
@@ -57,7 +57,7 @@ export const CatalogDrawer = () => {
   };
 
   return (
-    <Drawer name='catalog' shouldScrollBody={!isLoading}>
+    <Drawer name='catalog' shouldScrollContent={!isLoading}>
       <div className='sm-gap-3 flex flex-col items-start justify-start gap-1 px-1 py-12 lg:gap-4 lg:px-5'>
         <Content />
       </div>

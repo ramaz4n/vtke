@@ -1,22 +1,25 @@
-import { QueryClient } from '@tanstack/react-query';
+import { QueryClient, QueryKey } from '@tanstack/react-query';
 
 import { QueryKeys } from '@/shared/types/api/query-keys.ts';
 
+/**
+ * Функция для получения всех ключей кеша по единому main ключу
+ * **/
 export const getQueryCacheKeys = (
   queryClient: QueryClient,
-  cacheKey: QueryKeys,
-): Readonly<Array<string | null>> => {
+  cacheKey: QueryKeys | string,
+): Readonly<Array<QueryKey | null>> => {
   const allCache = queryClient.getQueryCache().getAll();
 
-  const productsCache = allCache.find((el) => el.queryKey.includes(cacheKey));
+  const currentCache = allCache.find((el) => el.queryKey.includes(cacheKey));
 
-  if (!productsCache) {
+  if (!currentCache) {
     return [];
   }
 
   return (
-    productsCache?.queryKey.map((el) =>
-      el === undefined ? null : (el as string),
+    currentCache?.queryKey.map((el) =>
+      el === undefined ? null : (el as QueryKey),
     ) || []
   );
 };
