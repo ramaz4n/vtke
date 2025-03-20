@@ -8,7 +8,7 @@ export default function Footer() {
   return (
     <footer className='bg-mainBlue flex w-full items-center justify-between pb-6 pt-14'>
       <MainContainer>
-        <div className='mx-auto grid max-w-7xl gap-8 px-6 text-white md:grid-cols-3'>
+        <div className='mx-auto grid max-w-7xl gap-8 text-white md:grid-cols-3'>
           {/* Контакты */}
           <div>
             <h3 className='mb-3 text-xl font-bold'>КОНТАКТЫ</h3>

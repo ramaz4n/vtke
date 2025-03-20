@@ -1,27 +1,20 @@
-import { Text } from '@gravity-ui/uikit';
-import type { Metadata } from 'next';
-import { useParams } from 'next/navigation';
+'use client';
+import { Skeleton, Text } from '@gravity-ui/uikit';
 
 import MainContainer from '@/containers/main-container/main-container.tsx';
 import { LINKS } from '@/shared/constants/links.ts';
+import { useProduct } from '@/shared/hooks/api/use-product.ts';
 import { Breadcrumbs } from '@/shared/ui/breadcrumbs/breadcrumbs.tsx';
 
-export const metadata: Metadata = {
-  description: 'Каталог товаров',
-  title: 'Кататог товаров',
-};
+// export const metadata: Metadata = {
+//   description: 'Каталог товаров',
+//   title: 'Кататог товаров',
+// };
 
 export default function Page() {
-  const { id } = useParams();
-  // const queries = useQuery({
-  //   placeholderData: keepPreviousData,
-  //   queryFn: () => newsApi.list(),
-  //   queryKey: [QueryKeys.NEWS],
-  // });
-  //
-  // console.log(queries?.data?.data);
+  const { model, id, isLoading } = useProduct();
 
-  console.log(id);
+  console.log(model);
 
   return (
     <MainContainer>
@@ -30,39 +23,34 @@ export default function Page() {
           enabledStartLink
           items={[
             { href: LINKS.products(), text: 'Продукты' },
-            { href: LINKS.products(id.toString()), text: id.toString() },
+            { href: LINKS.products(id.toString()), text: model?.name || '' },
           ]}
         />
       </div>
-      <div className='flex flex-col gap-16 pb-20 pt-7'>
-        <div className='flex items-center gap-16'>
-          <img
-            alt='test'
-            className='size-[500px] rounded-3xl'
-            src='/images/test.png'
-          />
-          <Text variant='display-4'>Тестовая новость и новость и новость</Text>
-        </div>
+      {isLoading ? (
+        <div className='flex flex-col gap-16 pb-20 pt-7'>
+          <div className='flex items-center gap-16'>
+            <Skeleton className='size-[500px] rounded-3xl' />
+            <Skeleton className='h-[20px] w-full'></Skeleton>
+          </div>
 
-        <Text variant='body-3'>
-          Доставили в срок. Хорошая водолазка,швы ровные, нитки не торчат,
-          мягкая и теплая. Мужу понравилась. Не давит. Тянется. Размер подошёл.
-          Доставили в срок. Хорошая водолазка,швы ровные, нитки не торчат,
-          мягкая и теплая. Мужу понравилась. Не давит. Тянется. Размер подошёл.
-          Доставили в срок. Хорошая водолазка,швы ровные, нитки не торчат,
-          мягкая и теплая. Мужу понравилась. Не давит. Тянется. Размер подошёл.
-          Доставили в срок. Хорошая водолазка,швы ровные, нитки не торчат,
-          мягкая и теплая. Мужу понравилась. Не давит. Тянется. Размер подошёл.
-          Доставили в срок. Хорошая водолазка,швы ровные, нитки не торчат,
-          мягкая и теплая. Мужу понравилась. Не давит. Тянется. Размер подошёл.
-          Доставили в срок. Хорошая водолазка,швы ровные, нитки не торчат,
-          мягкая и теплая. Мужу понравилась. Не давит. Тянется. Размер подошёл.
-          Доставили в срок. Хорошая водолазка,швы ровные, нитки не торчат,
-          мягкая и теплая. Мужу понравилась. Не давит. Тянется. Размер подошёл.
-          Доставили в срок. Хорошая водолазка,швы ровные, нитки не торчат,
-          мягкая и теплая. Мужу понравилась. Не давит. Тянется. Размер подошёл.
-        </Text>
-      </div>
+          <Skeleton className='h-[20px] w-full'></Skeleton>
+        </div>
+      ) : (
+        <div className='flex flex-col gap-16 pb-20 pt-7'>
+          <div className='flex items-center gap-16'>
+            <img
+              alt='test'
+              className='size-[500px] rounded-3xl'
+              loading='lazy'
+              src={model?.images[0].path}
+            />
+            <Text variant='display-4'>{model?.name}</Text>
+          </div>
+
+          <Text variant='body-3'>{model?.description}</Text>
+        </div>
+      )}
     </MainContainer>
   );
 }

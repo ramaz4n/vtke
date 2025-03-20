@@ -14,6 +14,7 @@ export const useProduct = () => {
 
   return {
     ...q,
+    id,
     model: q.data?.data,
   };
 };

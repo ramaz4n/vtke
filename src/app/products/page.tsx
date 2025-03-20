@@ -1,12 +1,17 @@
 'use client';
 
-import { Skeleton } from '@gravity-ui/uikit';
+import { Skeleton, Text } from '@gravity-ui/uikit';
+import { useUnit } from 'effector-react';
+import { VscMenu } from 'react-icons/vsc';
 
-import { CategoryItem } from '@/components/category-item/category-item.tsx';
-import NewsCard from '@/components/news/news-card/news-card.tsx';
+import { CatalogDrawer } from '@/components/drawers/catalog-drawer/catalog-drawer.tsx';
+import { ProductItem } from '@/components/product-item/product-item.tsx';
 import MainContainer from '@/containers/main-container/main-container.tsx';
-import { useProductCategories } from '@/shared/hooks/api/use-product-categories.ts';
+import { LINKS } from '@/shared/constants/links.ts';
 import { useProducts } from '@/shared/hooks/api/use-products.ts';
+import { showDrawerEvent } from '@/shared/models/drawer.ts';
+import { Breadcrumbs } from '@/shared/ui/breadcrumbs/breadcrumbs.tsx';
+import { Button } from '@/shared/ui/button/button.tsx';
 
 // export const metadata: Metadata = {
 //   description: 'Каталог товаров',
@@ -14,51 +19,58 @@ import { useProducts } from '@/shared/hooks/api/use-products.ts';
 // };
 
 export default function Page() {
-  const { models, isFetching, isLoading } = useProducts();
-  const { models: categoryModels, isLoading: isLoadingCategories } =
-    useProductCategories();
+  const { models, isLoading } = useProducts();
+
+  const showDrawer = useUnit(showDrawerEvent);
 
   return (
     <MainContainer>
-      <div>
-        {!isLoadingCategories &&
-          categoryModels?.map((model) => (
-            <CategoryItem
-              key={model.id}
-              id={model.id}
-              name={model.name}
-              onClick={() => console.log('clicked')}
-            />
-          ))}
+      <div className='px-3.5 py-6'>
+        <Breadcrumbs items={[{ href: LINKS.products(), text: 'Продукты' }]} />
       </div>
+      <div className='flex w-full flex-col gap-8'>
+        <div className='flex items-center justify-between'>
+          <h1 className='text-xl font-bold'>Продукты</h1>
 
-      <div className='relative grid w-full grid-cols-1 gap-9 py-16'>
-        {isFetching ? (
-          <section className='gap-4 px-4 py-2.5 flex-between'>
-            <div className='inline-flex items-center gap-2'>
-              <Skeleton className='size-8' />
-
-              <div className='flex flex-col gap-1'>
-                <Skeleton className='h-4 w-44' />
-
-                <Skeleton className='h-3 w-32' />
-              </div>
+          <Button
+            className='flex h-[50px] w-fit items-center'
+            size='xl'
+            onClick={() => showDrawer('catalog')}
+          >
+            <div className='flex items-center gap-4'>
+              <VscMenu className='size-8' />
+              <Text className='hidden sm:block' variant='display-1'>
+                Каталог
+              </Text>
             </div>
+          </Button>
+        </div>
 
-            <Skeleton className='size-7' />
-          </section>
+        {isLoading ? (
+          <div className='relative grid w-full grid-cols-1 gap-3 pb-16 sm:grid-cols-2 lg:grid-cols-3 lg:gap-4 xl:grid-cols-4 xl:gap-4 2xl:grid-cols-5 2xl:gap-6'>
+            <Skeleton className='h-[400px] w-[150px] rounded-3xl' />
+            <Skeleton className='h-[400px] w-[150px] rounded-3xl' />;
+            <Skeleton className='h-[400px] w-[150px] rounded-3xl' />;
+            <Skeleton className='h-[400px] w-[150px] rounded-3xl' />;
+            <Skeleton className='h-[400px] w-[150px] rounded-3xl' />;
+          </div>
         ) : (
-          models?.map((model) => (
-            <NewsCard
-              key={model.id}
-              description={model.description}
-              id={model.id}
-              image={model.images[0]?.path}
-              title='Тестовая новость и новость и новость'
-            />
-          ))
+          <div className='relative grid w-full grid-cols-1 gap-3 pb-16 sm:grid-cols-2 lg:grid-cols-3 lg:gap-4 xl:grid-cols-4 xl:gap-4 2xl:grid-cols-5 2xl:gap-6'>
+            {models?.map((model) => (
+              <ProductItem
+                key={model.id}
+                description={model.description}
+                id={model.id}
+                imageSrc={model.images[0]?.path}
+                name={model.name}
+                price={model.price}
+              />
+            ))}
+          </div>
         )}
       </div>
+
+      <CatalogDrawer />
     </MainContainer>
   );
 }

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useRef, useState } from 'react';
 
 import { Modal, Text } from '@gravity-ui/uikit';
 import cc from 'classcat';
@@ -8,49 +8,44 @@ import { FaRegUser } from 'react-icons/fa6';
 import { FiShoppingCart } from 'react-icons/fi';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { IoMdSearch } from 'react-icons/io';
+import { useEventListener } from 'usehooks-ts';
 
 import Logo from '@/components/logo/logo.tsx';
 import MainContainer from '@/containers/main-container/main-container.tsx';
 import { NAVIGATIONS } from '@/shared/constants/navigations.ts';
-import { cn } from '@/shared/utils/cn.ts';
 
 export default function Header() {
   const [searchModalOpen, setSearchModalOpen] = useState(false);
   const pathname = usePathname();
 
+  const headerRef = useRef<HTMLHeadElement>(null);
+  const lastScrollY = useRef(0);
+
   const onSearchOpen = () => {
     setSearchModalOpen(true);
   };
 
-  const [isVisible, setIsVisible] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
+  function onScroll() {
+    const currentScrollY = window.scrollY;
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
+    if (!headerRef.current) return;
 
-      if (currentScrollY > lastScrollY && currentScrollY > 50) {
-        setIsVisible(false); // Скрыть хедер при скролле вниз
-      } else {
-        setIsVisible(true); // Показать хедер при скролле вверх
-      }
+    if (currentScrollY > lastScrollY.current && currentScrollY > 50) {
+      headerRef.current.classList.add('-translate-y-full');
+    } else {
+      headerRef.current.classList.remove('-translate-y-full');
+      // Показать хедер при скролле вверх
+    }
 
-      setLastScrollY(currentScrollY);
-    };
+    lastScrollY.current = currentScrollY;
+  }
 
-    window.addEventListener('scroll', handleScroll);
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, [lastScrollY]);
+  useEventListener('scroll', onScroll);
 
   return (
     <header
-      className={cn(
-        'sticky top-0 z-10 bg-white shadow-header-shadow transition-transform duration-300',
-        { '-translate-y-full': !isVisible },
-      )}
+      ref={headerRef}
+      className='sticky top-0 z-10 bg-white shadow-header-shadow transition-transform duration-300'
     >
       <MainContainer>
         <div className='flex h-compact-menu-padding items-center justify-between'>
@@ -62,7 +57,7 @@ export default function Header() {
                 {NAVIGATIONS.map((item) => (
                   <li key={item.id}>
                     <Link
-                      className='hover:text-secondaryBlue px-3.5 py-1 text-textColor duration-300'
+                      className='px-3.5 py-1 text-textColor duration-300 hover:text-secondaryBlue'
                       href={item.link}
                     >
                       <Text
@@ -119,7 +114,7 @@ export default function Header() {
             </Link>
           </div>
 
-          <div className='bg-mainBlue absolute bottom-[20px] right-[20px] flex size-10 items-center justify-center rounded-[50%] sm:size-16 lg:hidden'>
+          <div className='absolute bottom-[20px] right-[20px] flex size-10 items-center justify-center rounded-[50%] bg-mainBlue sm:size-16 lg:hidden'>
             <GiHamburgerMenu className='sm:size-8' color='white' />
           </div>
         </div>

@@ -41,7 +41,12 @@ export default function Page() {
 
   const onSubmit = (data: AuthRegisterProps) => {
     console.log(data);
-    mutation.mutate(data);
+    mutation.mutate({
+      email: data.email,
+      password: data.password,
+      password_confirmation: data.password_confirmation,
+      username: data.name!,
+    });
   };
 
   return (
@@ -63,7 +68,7 @@ export default function Page() {
                 </Text>
 
                 <Input
-                  autoComplete='username'
+                  autoComplete='name'
                   name='name'
                   placeholder='Имя'
                   rules={vld().required('Имя').minLength(1)}

@@ -10,6 +10,7 @@ export interface AuthRegisterProps {
   password: string;
   password_confirmation: string;
   username: string;
+  name?: string;
 }
 
 export interface AuthLoginResponse {

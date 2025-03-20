@@ -5,6 +5,7 @@ export interface CategoryCreateProps {
 }
 
 export type CategoryUpdateProps = CategoryCreateProps;
+
 export interface CategoryProps {
   created_at: number;
   id: number;
@@ -15,3 +16,7 @@ export interface CategoryProps {
 export type CategoryRequestProps = PaginationRequest<{
   id?: number;
 }>;
+
+export interface CategoryItemProps extends CategoryProps {
+  onClick: () => void;
+}

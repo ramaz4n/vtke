@@ -1,8 +1,6 @@
 import { createEvent, createStore } from 'effector';
 
-export type ModalName =
-  | 'search-products'
-;
+export type ModalName = 'search-products' | 'catalog';
 
 export type ModalStore = Set<ModalName> | null;
 

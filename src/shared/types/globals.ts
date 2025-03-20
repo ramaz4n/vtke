@@ -22,7 +22,7 @@ export type FetchResponse<T> = Promise<ApiResponse<T>>;
 
 export type FetchPaginationResponse<T> = Promise<PaginationApiResponse<T>>;
 
-export type PaginationRequest<T> = T & {
+export type PaginationRequest<T> = Partial<T> & {
   limit?: number;
   page?: number;
   sort?: string;
