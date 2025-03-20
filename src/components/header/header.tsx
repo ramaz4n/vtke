@@ -1,3 +1,4 @@
+'use client';
 import { useRef, useState } from 'react';
 
 import { Modal, Text } from '@gravity-ui/uikit';

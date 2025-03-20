@@ -29,7 +29,11 @@ export const apiRequest = async ({
   ...options
 }: ApiRequestProps) => {
   try {
-    const authToken = window.localStorage.getItem('authToken');
+    let authToken: string | null = '';
+
+    if (typeof window !== 'undefined') {
+      authToken = window.localStorage.getItem('authToken');
+    }
     const fullUrl = parseApiUrl(params, url, slug);
 
     const isFormData = data instanceof FormData;
@@ -59,7 +63,7 @@ export const apiRequest = async ({
       for (const key of LOGOUT_STORAGE_KEYS) {
         localStorage.removeItem(key);
       }
-      window.location.reload();
+      // window.location.reload();
 
       return;
     }
