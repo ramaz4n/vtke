@@ -8,6 +8,7 @@ import { useProductCategories } from '@/shared/hooks/api/use-product-categories.
 import { $drawer, hideDrawerEvent } from '@/shared/models/drawer.ts';
 import { QueryKeys } from '@/shared/types/api/query-keys.ts';
 import { Drawer } from '@/shared/ui/drawer/drawer.tsx';
+import { getQueryCacheKeys } from '@/shared/utils/get-query-cache/get-query-cache-keys.ts';
 import { modalHasName } from '@/shared/utils/modal-has-name.ts';
 
 export const CatalogDrawer = () => {
@@ -21,7 +22,12 @@ export const CatalogDrawer = () => {
   const mutation = useMutation({
     mutationFn: productsApi.list,
     onSuccess: (response) => {
-      queryClient.setQueryData([QueryKeys.PRODUCTS_VIEW, null], response);
+      const queryCacheKeys = getQueryCacheKeys(
+        queryClient,
+        QueryKeys.PRODUCTS_VIEW,
+      );
+
+      queryClient.setQueryData(queryCacheKeys, response);
       onClose();
     },
   });
