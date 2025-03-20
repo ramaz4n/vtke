@@ -5,15 +5,14 @@ import { useUnit } from 'effector-react';
 import { CategoryItem } from '@/components/category-item/category-item.tsx';
 import { productsApi } from '@/shared/api/products.ts';
 import { useProductCategories } from '@/shared/hooks/api/use-product-categories.ts';
-import { $drawer } from '@/shared/models/drawer.ts';
-import { hideAllModalEvent } from '@/shared/models/modal.ts';
+import { $drawer, hideDrawerEvent } from '@/shared/models/drawer.ts';
 import { QueryKeys } from '@/shared/types/api/query-keys.ts';
 import { Drawer } from '@/shared/ui/drawer/drawer.tsx';
 import { modalHasName } from '@/shared/utils/modal-has-name.ts';
 
 export const CatalogDrawer = () => {
-  const store = useUnit($drawer);
-  const isVisible = modalHasName(store, 'catalog');
+  const [drawerStore, resetDrawerStore] = useUnit([$drawer, hideDrawerEvent]);
+  const isVisible = modalHasName(drawerStore, 'catalog');
 
   const { models, isLoading } = useProductCategories({ limit: 50 }, isVisible);
 
@@ -32,7 +31,7 @@ export const CatalogDrawer = () => {
   };
 
   const onClose = () => {
-    hideAllModalEvent();
+    resetDrawerStore('catalog');
   };
 
   const Content = () => {
