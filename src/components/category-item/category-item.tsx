@@ -12,9 +12,8 @@ export const CategoryItem = ({ name, onClick }: CategoryItemProps) => (
     </span>
 
     <IoIosArrowRoundForward
-      className='mr-3 w-[30px] transition-all duration-300 group-hover:mr-0 sm:w-[40px]'
+      className='size-8 -translate-x-3 transition-all duration-300 group-hover:translate-x-0 sm:size-10'
       color='black'
-      size='lg'
     />
   </div>
 );
