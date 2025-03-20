@@ -23,7 +23,7 @@ export default function Page() {
           enabledStartLink
           items={[
             { href: LINKS.products(), text: 'Продукты' },
-            { href: LINKS.products(id.toString()), text: model?.name || '' },
+            { href: '', text: model?.name || '' },
           ]}
         />
       </div>
@@ -48,7 +48,10 @@ export default function Page() {
             <Text variant='display-4'>{model?.name}</Text>
           </div>
 
-          <Text variant='body-3'>{model?.description}</Text>
+          <Text
+            dangerouslySetInnerHTML={{ __html: model?.description || '' }}
+            variant='body-3'
+          />
         </div>
       )}
     </MainContainer>

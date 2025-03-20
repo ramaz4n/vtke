@@ -10,8 +10,10 @@ import { QueryKeys } from '@/shared/types/api/query-keys.ts';
 
 export const useProductCategories = <T extends CategoryRequestProps>(
   params?: T,
+  enabled = true,
 ) => {
   const q = useQuery({
+    enabled,
     placeholderData: keepPreviousData,
     queryFn: () => productCategoriesApi.list(params),
     queryKey: [QueryKeys.PRODUCT_CATEGORIES, params],

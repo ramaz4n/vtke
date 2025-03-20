@@ -10,6 +10,7 @@ module.exports = {
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
     './src/containers/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/shared/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
     extend: {
@@ -34,6 +35,7 @@ module.exports = {
           '100%': { transform: 'scale(1.2)' },
         },
       },
+
       animations: {
         fadeIn: 'fadeIn 0.5s ease',
         fadeOut: 'fadeOut 0.3s ease',
@@ -44,7 +46,10 @@ module.exports = {
         'auth-shadow': '0px 0px 8px 0px rgba(34, 60, 80, 0.2)',
       },
     },
-
+    zIndex: {
+      ...defaultTheme.zIndex,
+      drawer: '999'
+    },
     borderRadius: {
       ...defaultTheme.borderRadius,
       default: '14px',

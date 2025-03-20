@@ -7,7 +7,6 @@ import { VscMenu } from 'react-icons/vsc';
 import { CatalogDrawer } from '@/components/drawers/catalog-drawer/catalog-drawer.tsx';
 import { ProductItem } from '@/components/product-item/product-item.tsx';
 import MainContainer from '@/containers/main-container/main-container.tsx';
-import { LINKS } from '@/shared/constants/links.ts';
 import { useProducts } from '@/shared/hooks/api/use-products.ts';
 import { showDrawerEvent } from '@/shared/models/drawer.ts';
 import { Breadcrumbs } from '@/shared/ui/breadcrumbs/breadcrumbs.tsx';
@@ -26,7 +25,7 @@ export default function Page() {
   return (
     <MainContainer>
       <div className='px-3.5 py-6'>
-        <Breadcrumbs items={[{ href: LINKS.products(), text: 'Продукты' }]} />
+        <Breadcrumbs items={[{ href: '', text: 'Продукты' }]} />
       </div>
       <div className='flex w-full flex-col gap-8'>
         <div className='flex items-center justify-between'>
