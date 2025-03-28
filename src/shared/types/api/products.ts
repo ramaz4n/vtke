@@ -29,6 +29,7 @@ export type ProductRequestProps = PaginationRequest<{
 
 export interface ProductItemProps {
   description: string;
+  firm: string;
   id: number;
   imageSrc: string;
   key: number;
