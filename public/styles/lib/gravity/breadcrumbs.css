@@ -1,0 +1,16 @@
+.g-breadcrumbs__inner {
+    gap: 0.5rem!important;
+}
+
+.g-breadcrumbs__inner a {
+    text-underline-offset: 0.25rem;
+}
+
+.g-breadcrumbs__inner div {
+    color: var(--g-color-text-dark-hint);
+}
+
+.g-breadcrumbs__inner a:hover {
+    color: var(--foreground);
+    text-decoration: underline;
+}

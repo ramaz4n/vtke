@@ -20,6 +20,18 @@ module.exports = {
         textColor: 'rgba(7, 7, 7, 1);',
         mainBlue: '#154063',
         secondaryBlue: '#4b71d6',
+        secondary: {
+          DEFAULT: 'var(--g-color-text-secondary)',
+        },
+        border: 'var(--g-color-line-generic)',
+        hover: 'var(--g-color-base-simple-hover)',
+        primary: {
+          DEFAULT: 'var(--g-color-base-brand)',
+        },
+        danger: {
+          DEFAULT:'var(--g-color-text-danger)',
+          contrast: '#f55123'
+        },
       },
       keyframes: {
         fadeIn: {
@@ -48,7 +60,8 @@ module.exports = {
     },
     zIndex: {
       ...defaultTheme.zIndex,
-      drawer: '999'
+      drawer: '999',
+      layout: '9990'
     },
     borderRadius: {
       ...defaultTheme.borderRadius,
@@ -70,6 +83,7 @@ module.exports = {
       4.5: '18px',
       'menu-padding': '320px',
       'compact-menu-padding': '100px',
+      tiny: '10px',
       menu: '300px',
       'compact-menu': '80px',
     },
@@ -101,6 +115,7 @@ module.exports = {
       addVariant('children', '& > *');
       addVariant('children-after', '& > *:after');
       addVariant('svg', '& > svg');
+      addVariant('span', '& > span');
       addVariant('div', '& > div');
 
       addUtilities({

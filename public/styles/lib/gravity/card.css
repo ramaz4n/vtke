@@ -1,0 +1,8 @@
+.g-card.g-card_size_l {
+    --g-card-border-radius: var(--g-border-radius-3xl);
+    padding: 1.5rem;
+}
+
+.g-card.g-card_view_filled {
+    --g-card-background-color: var(--background);
+}

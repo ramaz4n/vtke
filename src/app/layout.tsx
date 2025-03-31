@@ -1,5 +1,6 @@
 import { PropsWithChildren } from 'react';
 
+import { EffectorNext } from '@effector/next';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import type { Metadata } from 'next';
 
@@ -19,8 +20,10 @@ export default function RootLayout({ children }: PropsWithChildren) {
     <html lang='en'>
       <body>
         <Provider>
-          <Layout>{children}</Layout>
-          <ReactQueryDevtools />
+          <EffectorNext>
+            <Layout>{children}</Layout>
+            <ReactQueryDevtools />
+          </EffectorNext>
         </Provider>
       </body>
     </html>

@@ -1,9 +1,9 @@
 import { ReactNode } from 'react';
 
-import { Portal } from '@gravity-ui/uikit';
+import { Xmark } from '@gravity-ui/icons';
+import { Icon, Portal } from '@gravity-ui/uikit';
 import { useUnit } from 'effector-react/effector-react.umd';
 import { AnimatePresence, motion } from 'framer-motion';
-import { MdOutlineClose } from 'react-icons/md';
 import { useScrollLock } from 'usehooks-ts';
 
 import {
@@ -46,7 +46,7 @@ export const Drawer = ({
     <Portal>
       <motion.div
         className={cn(
-          'z-drawer fixed inset-0 flex justify-end transition-all duration-300',
+          'fixed inset-0 z-drawer flex justify-end transition-all duration-300',
           { 'visible bg-black/50 backdrop-blur-md': isVisible },
           { 'pointer-events-none invisible': !isVisible },
         )}
@@ -76,7 +76,7 @@ export const Drawer = ({
                     view='flat'
                     onClick={handleClose}
                   >
-                    <MdOutlineClose className='text-gray-600' size='40px' />
+                    <Icon className='text-secondary' data={Xmark} />
                   </Button>
                 </div>
               )}

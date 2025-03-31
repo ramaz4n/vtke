@@ -1,27 +1,32 @@
 import { Fragment, MouseEvent } from 'react';
 
-import { Text } from '@gravity-ui/uikit';
+import { ShoppingCart } from '@gravity-ui/icons';
+import { Icon, Text } from '@gravity-ui/uikit';
 import Image from 'next/image';
 import Link from 'next/link';
 
 import { LINKS } from '@/shared/constants/links.ts';
-import { ProductItemProps } from '@/shared/types/api/products.ts';
+import { ProductProps } from '@/shared/types/api/products.ts';
 import { Button } from '@/shared/ui/button/button.tsx';
-import { Cart } from '@/shared/ui/icons/cart.tsx';
+import { cn } from '@/shared/utils/cn.ts';
 import { getFormatSum } from '@/shared/utils/get-format-sum.ts';
 
+export interface ProductItemProps extends ProductProps {
+  isInCart?: boolean;
+  onCartAdd?: (item: ProductProps) => void;
+}
+
 export const ProductItem = ({
-  id,
-  name,
-  imageSrc,
-  price,
-  firm,
-  description,
+  isInCart = false,
+  onCartAdd,
+  ...props
 }: ProductItemProps) => {
+  const { id, name, price, firm, description, images } = props;
   const toCardHandler = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     event.stopPropagation();
-    console.log(firm, 'click');
+
+    onCartAdd?.(props);
   };
 
   return (
@@ -31,17 +36,19 @@ export const ProductItem = ({
     >
       <div className='flex flex-col gap-2'>
         <div className='relative h-72 overflow-hidden rounded-3xl'>
-          <Image fill alt={name} loading='lazy' src={imageSrc} />
+          <Image
+            fill
+            alt={name}
+            loading='lazy'
+            src={images.length ? images[0].path : '/images/test.png'}
+          />
         </div>
 
         <Text className='text-foreground-text font-bold' variant='header-1'>
           {getFormatSum(Number.parseInt(price))}
         </Text>
 
-        <Text
-          className='text-foreground-text line-clamp-2'
-          variant='subheader-1'
-        >
+        <Text className='line-clamp-2' variant='subheader-2'>
           {name}
         </Text>
 
@@ -49,7 +56,8 @@ export const ProductItem = ({
           {firm && (
             <Fragment>
               <Text
-                className='text-foreground-text mb-2 line-clamp-2'
+                className='text-foreground-text mb-2'
+                ellipsisLines={2}
                 variant='subheader-1'
               >
                 {firm}
@@ -65,8 +73,16 @@ export const ProductItem = ({
         </div>
       </div>
 
-      <Button className='mt-1 !text-white' size='l' onClick={toCardHandler}>
-        <Cart />В корзину
+      <Button
+        selected={isInCart}
+        size='l'
+        className={cn('mt-2 !text-white', {
+          'pointer-events-none select-none': isInCart,
+        })}
+        onClick={toCardHandler}
+      >
+        {!isInCart && <Icon data={ShoppingCart} />}В{' '}
+        {isInCart ? 'корзине' : 'корзину'}
       </Button>
     </Link>
   );

@@ -1,19 +1,22 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import {
   Breadcrumbs as BreadcrumbsUI,
   type BreadcrumbsProps as BreadcrumbsPropsUI,
   FirstDisplayedItemsCount,
   LastDisplayedItemsCount,
   Skeleton,
+  Text,
 } from '@gravity-ui/uikit';
+import { useUnit } from 'effector-react';
 import Link from 'next/link';
 
 import { LINKS } from '@/shared/constants/links.ts';
-import { cn } from '@/shared/utils/cn.ts';
+import { $breadcrumbs } from '@/shared/models/breadcrumbs.ts';
 
 export interface BreadcrumbsProps
   extends Omit<
     BreadcrumbsPropsUI,
-    'firstDisplayedItemsCount' | 'lastDisplayedItemsCount'
+    'firstDisplayedItemsCount' | 'lastDisplayedItemsCount' | 'items'
   > {
   enabledStartLink?: boolean;
   isLoading?: boolean;
@@ -21,19 +24,18 @@ export interface BreadcrumbsProps
 }
 
 export const Breadcrumbs = ({
-  items,
   isLoading,
   skeletonCount = 3,
   enabledStartLink,
 }: BreadcrumbsProps) => {
-  if (!items || !items?.length) return null;
+  const breadcrumbs = useUnit($breadcrumbs);
 
   const list = (() => {
     if (enabledStartLink) {
-      return items;
+      return breadcrumbs;
     }
 
-    return [{ href: LINKS.home, text: 'Главная' }, ...items];
+    return [{ href: LINKS.home, text: 'Главная' }, ...breadcrumbs];
   })();
 
   if (isLoading) {
@@ -51,21 +53,16 @@ export const Breadcrumbs = ({
       firstDisplayedItemsCount={FirstDisplayedItemsCount.One}
       items={list}
       lastDisplayedItemsCount={LastDisplayedItemsCount.One}
-      renderItem={({ item, isCurrent }) =>
-        item.href ? (
-          <Link
-            href={item.href}
-            className={cn({
-              'hover:text-primary whitespace-nowrap text-sm animated':
-                !isCurrent,
-            })}
-          >
-            {item.text}
-          </Link>
-        ) : (
-          <span className='whitespace-nowrap text-sm'>{item.text}</span>
-        )
-      }
+      renderItem={({ item }) => (
+        <Text
+          as={item?.href ? Link : 'span'}
+          color='hint'
+          // @ts-ignore
+          href={item?.href}
+        >
+          {item.text}
+        </Text>
+      )}
     />
   );
 };

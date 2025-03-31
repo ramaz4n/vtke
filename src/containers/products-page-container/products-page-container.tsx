@@ -1,30 +1,37 @@
 'use client';
 
+import { Bars } from '@gravity-ui/icons';
 import { Skeleton, Text } from '@gravity-ui/uikit';
 import { useUnit } from 'effector-react';
-import { VscMenu } from 'react-icons/vsc';
 
 import { CatalogDrawer } from '@/components/drawers/catalog-drawer/catalog-drawer.tsx';
 import { ProductItem } from '@/components/product-item/product-item.tsx';
 import MainContainer from '@/containers/main-container/main-container.tsx';
 import { useProducts } from '@/shared/hooks/api/use-products.ts';
+import { useCart } from '@/shared/hooks/use-cart.ts';
 import { showDrawerEvent } from '@/shared/models/drawer.ts';
+import { ProductProps } from '@/shared/types/api/products.ts';
 import { Breadcrumbs } from '@/shared/ui/breadcrumbs/breadcrumbs.tsx';
 import { Button } from '@/shared/ui/button/button.tsx';
 
 export const ProductPage = () => {
   const { models, isLoading } = useProducts();
-
+  const cartApi = useCart();
   const showDrawer = useUnit(showDrawerEvent);
 
+  const onCartAddHandler = (props: ProductProps) => {
+    cartApi.setCartItem(props);
+  };
+
   return (
-    <MainContainer>
-      <div className='px-3.5 py-6'>
-        <Breadcrumbs items={[{ href: '', text: 'Продукты' }]} />
-      </div>
+    <MainContainer className='py-6'>
+      <Breadcrumbs />
+
       <div className='flex w-full flex-col gap-8'>
         <div className='flex items-center justify-between'>
-          <h1 className='text-xl font-bold'>Продукты</h1>
+          <Text as='h1' variant='header-2'>
+            Продукты
+          </Text>
 
           <Button
             className='flex h-[50px] w-fit items-center'
@@ -32,7 +39,7 @@ export const ProductPage = () => {
             onClick={() => showDrawer('catalog')}
           >
             <div className='flex items-center gap-4'>
-              <VscMenu className='size-8' />
+              <Bars className='size-8' />
               <Text className='hidden sm:block' variant='display-1'>
                 Каталог
               </Text>
@@ -53,7 +60,8 @@ export const ProductPage = () => {
             {models?.map((model) => (
               <ProductItem
                 key={model.id}
-                imageSrc={model.images[0]?.path}
+                isInCart={cartApi.isInCart(model.id)}
+                onCartAdd={onCartAddHandler}
                 {...model}
               />
             ))}

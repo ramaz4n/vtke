@@ -1,5 +1,3 @@
-import { IoIosArrowRoundForward } from 'react-icons/io';
-
 import { CategoryItemProps } from '@/shared/types/api/categories.ts';
 
 export const CategoryItem = ({ name, onClick }: CategoryItemProps) => (
@@ -11,9 +9,9 @@ export const CategoryItem = ({ name, onClick }: CategoryItemProps) => (
       {name}
     </span>
 
-    <IoIosArrowRoundForward
-      className='size-8 -translate-x-3 transition-all duration-300 group-hover:translate-x-0 sm:size-10'
-      color='black'
-    />
+    {/*<IoIosArrowRoundForward*/}
+    {/*  className='size-8 -translate-x-3 transition-all duration-300 group-hover:translate-x-0 sm:size-10'*/}
+    {/*  color='black'*/}
+    {/*/>*/}
   </div>
 );

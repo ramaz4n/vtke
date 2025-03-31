@@ -1,8 +1,17 @@
-import { PropsWithChildren } from 'react';
+import { HTMLAttributes } from 'react';
 
-export default function MainContainer({ children }: PropsWithChildren) {
+import { cn } from '@/shared/utils/cn.ts';
+
+export default function MainContainer({
+  children,
+  className,
+  ...props
+}: HTMLAttributes<HTMLElement>) {
   return (
-    <section className='mx-auto w-full max-w-screen-2xl px-6'>
+    <section
+      className={cn('mx-auto w-full max-w-screen-2xl px-6', className)}
+      {...props}
+    >
       {children}
     </section>
   );

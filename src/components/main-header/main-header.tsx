@@ -1,14 +1,13 @@
+import { ShoppingCart } from '@gravity-ui/icons';
 import { Text } from '@gravity-ui/uikit';
 import Link from 'next/link';
-import { FaRegUser } from 'react-icons/fa6';
-import { FiShoppingCart } from 'react-icons/fi';
 
 import Logo from '@/components/logo/logo.tsx';
 import MainContainer from '@/containers/main-container/main-container.tsx';
 
 export default function MainHeader() {
   return (
-    <header className='sticky top-0 z-10 bg-transparent'>
+    <header className='z-layout sticky top-0 bg-transparent'>
       <MainContainer>
         <div className='flex h-compact-menu-padding items-center justify-between'>
           <Logo white />
@@ -20,11 +19,7 @@ export default function MainHeader() {
             </Link>
             <div className='relative'>
               <Link href='/cart'>
-                <FiShoppingCart
-                  className='cursor-pointer'
-                  color='white'
-                  size='1.7em'
-                />
+                <ShoppingCart />
               </Link>
               <Text
                 className='absolute -right-3 -top-4.5 size-5 rounded-full bg-gray-200 p-1 text-gray-500 flex-center'
@@ -33,9 +28,7 @@ export default function MainHeader() {
                 111
               </Text>
             </div>
-            <Link href='/login' rel='stylesheet'>
-              <FaRegUser color='white' size='1.7em' />
-            </Link>
+            <Link href='/login' rel='stylesheet'></Link>
           </div>
         </div>
       </MainContainer>

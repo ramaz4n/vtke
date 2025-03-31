@@ -1,5 +1,6 @@
 export const LINKS = {
   about: '/about',
+  cart: () => '/cart',
   home: '/',
   login: '/login',
   news: (id?: string | number) => buildUrl('/news', id),

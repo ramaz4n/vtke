@@ -1,12 +1,15 @@
+import { EffectorNext } from '@effector/next';
 import {
   dehydrate,
   HydrationBoundary,
   QueryClient,
 } from '@tanstack/react-query';
+import { fork, serialize } from 'effector';
 import { Metadata } from 'next';
 
-import { ProductPage } from '@/components/products-page-container/products-page-container.tsx';
+import { ProductPage } from '@/containers/products-page-container/products-page-container.tsx';
 import { productsApi } from '@/shared/api/products.ts';
+import { $breadcrumbs } from '@/shared/models/breadcrumbs.ts';
 import { QueryKeys } from '@/shared/types/api/query-keys.ts';
 
 export const metadata: Metadata = {
@@ -22,11 +25,18 @@ export default async function Page() {
     queryKey: [QueryKeys.PRODUCTS_VIEW, null],
   });
 
+  const scope = fork({
+    values: [[$breadcrumbs, [{ text: 'Продукты' }]]],
+  });
+
+  const serialized = serialize(scope);
   const dehydratedState = dehydrate(queryClient);
 
   return (
-    <HydrationBoundary state={dehydratedState}>
-      <ProductPage />
-    </HydrationBoundary>
+    <EffectorNext values={serialized}>
+      <HydrationBoundary state={dehydratedState}>
+        <ProductPage />
+      </HydrationBoundary>
+    </EffectorNext>
   );
 }

@@ -1,19 +1,18 @@
 'use client';
 import { useRef, useState } from 'react';
 
+import { Magnifier, Person, ShoppingCart } from '@gravity-ui/icons';
 import { Modal, Text } from '@gravity-ui/uikit';
 import cc from 'classcat';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { FaRegUser } from 'react-icons/fa6';
-import { FiShoppingCart } from 'react-icons/fi';
-import { GiHamburgerMenu } from 'react-icons/gi';
-import { IoMdSearch } from 'react-icons/io';
 import { useEventListener } from 'usehooks-ts';
 
 import Logo from '@/components/logo/logo.tsx';
 import MainContainer from '@/containers/main-container/main-container.tsx';
+import { LINKS } from '@/shared/constants/links.ts';
 import { NAVIGATIONS } from '@/shared/constants/navigations.ts';
+import { useCart } from '@/shared/hooks/use-cart.ts';
 
 export default function Header() {
   const [searchModalOpen, setSearchModalOpen] = useState(false);
@@ -21,6 +20,10 @@ export default function Header() {
 
   const headerRef = useRef<HTMLHeadElement>(null);
   const lastScrollY = useRef(0);
+
+  const cartApi = useCart();
+
+  const cartItemsLength = cartApi.getLength();
 
   const onSearchOpen = () => {
     setSearchModalOpen(true);
@@ -46,7 +49,7 @@ export default function Header() {
   return (
     <header
       ref={headerRef}
-      className='sticky top-0 z-10 bg-white shadow-header-shadow transition-transform duration-300'
+      className='z-layout sticky top-0 bg-white shadow-header-shadow transition-transform duration-300'
     >
       <MainContainer>
         <div className='flex h-compact-menu-padding items-center justify-between'>
@@ -79,45 +82,60 @@ export default function Header() {
           </div>
 
           <div className='flex items-center justify-center gap-6'>
-            <div className='relative cursor-pointer p-1' onClick={onSearchOpen}>
-              <IoMdSearch color='textColor' size={32} />
-            </div>
-            <div className='relative'>
-              <Link
-                className='group flex flex-col items-center justify-between'
-                href='/cart'
-              >
-                <FiShoppingCart
-                  className='cursor-pointer'
-                  color='textColor'
-                  size='1.7em'
-                />
-                <Text className='group-hover:animate-Scale' variant='body-1'>
-                  Корзина
-                </Text>
-              </Link>
+            <button
+              className='flex flex-col items-center gap-0.5'
+              onClick={onSearchOpen}
+            >
+              <Magnifier className='size-7' />
+
               <Text
-                className='absolute -right-1.5 -top-3 size-5 rounded-full bg-textColor text-white flex-center'
-                variant='caption-2'
+                className='text-secondary transition-all duration-300 hover:text-foreground'
+                variant='body-1'
               >
-                111
+                Поиск
               </Text>
-            </div>
+            </button>
+
             <Link
-              className='flex flex-col items-center justify-between'
+              className='relative flex flex-col items-center gap-0.5'
+              href={LINKS.cart()}
+            >
+              <ShoppingCart className='size-7' />
+
+              <Text
+                className='text-secondary transition-all duration-300 hover:text-foreground'
+                variant='body-1'
+              >
+                Корзина
+              </Text>
+
+              {!!cartItemsLength && (
+                <Text
+                  className='text-tiny bg-danger-contrast absolute -top-1.5 right-2.5 size-4 rounded-full text-white flex-center'
+                  variant='caption-2'
+                >
+                  {cartItemsLength}
+                </Text>
+              )}
+            </Link>
+
+            <Link
+              className='flex flex-col items-center gap-0.5'
               href='/login'
               rel='stylesheet'
             >
-              <FaRegUser color='textColor' size='1.7em' />
-              <Text className='text-sm' variant='body-1'>
+              <Person className='size-7' />
+
+              <Text
+                className='text-secondary transition-all duration-300 hover:text-foreground'
+                variant='body-1'
+              >
                 Войти
               </Text>
             </Link>
           </div>
 
-          <div className='absolute bottom-[20px] right-[20px] flex size-10 items-center justify-center rounded-[50%] bg-mainBlue sm:size-16 lg:hidden'>
-            <GiHamburgerMenu className='sm:size-8' color='white' />
-          </div>
+          <div className='absolute bottom-[20px] right-[20px] flex size-10 items-center justify-center rounded-[50%] bg-mainBlue sm:size-16 lg:hidden'></div>
         </div>
         <Modal
           open={searchModalOpen}

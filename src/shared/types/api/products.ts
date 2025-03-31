@@ -14,6 +14,7 @@ export interface ProductProps {
   created_at: number;
   description: string;
   features: string;
+  firm: string;
   id: number;
   images: ProductImage[];
   name: string;
@@ -26,15 +27,3 @@ export type ProductRequestProps = PaginationRequest<{
   category: number;
   id: number;
 }>;
-
-export interface ProductItemProps {
-  description: string;
-  firm: string;
-  id: number;
-  imageSrc: string;
-  key: number;
-  name: string;
-  price: string;
-  createdAt?: string;
-  updatedAt?: string;
-}
