@@ -1,5 +1,5 @@
 import { Minus, Plus } from '@gravity-ui/icons';
-import { Checkbox, Icon, Text } from '@gravity-ui/uikit';
+import { Checkbox, Icon, Label, Text } from '@gravity-ui/uikit';
 import Image from 'next/image';
 
 import { ProductProps } from '@/shared/types/api/products.ts';
@@ -16,6 +16,7 @@ export const ProductCartItem = ({
   images,
   name,
   firm,
+  categories,
   count = 0,
 }: ProductCartItemProps) => (
   <div>
@@ -37,6 +38,18 @@ export const ProductCartItem = ({
         <span className='line-clamp-2 text-base font-medium'>{name}</span>
 
         <Text>{firm || 'OTIS'}</Text>
+
+        <div className='flex flex-wrap items-center gap-2.5'>
+          {categories?.map((category) => (
+            <Label
+              key={category.id}
+              className='pin-circle truncate'
+              theme='unknown'
+            >
+              {category.name}
+            </Label>
+          ))}
+        </div>
 
         <div className='mt-auto flex items-center gap-4'>
           <Button size='l' view='flat'>
