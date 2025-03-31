@@ -60,8 +60,8 @@ module.exports = {
     },
     zIndex: {
       ...defaultTheme.zIndex,
-      drawer: '999',
-      layout: '9990'
+      drawer: '1000',
+      layout: '999'
     },
     borderRadius: {
       ...defaultTheme.borderRadius,
