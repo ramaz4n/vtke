@@ -51,6 +51,8 @@ class CartApi {
           item,
         },
       });
+
+      return;
     }
 
     this.setter({ [item.id]: { count: 1, item } });
