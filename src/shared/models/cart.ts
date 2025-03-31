@@ -63,7 +63,7 @@ export const resetCart = createEvent();
 export const setCartItem = createEvent<ProductProps>();
 
 export const $cart = createStore<CartStore>(new CartApi().getStore())
-  .reset(resetCart)
+  .on(resetCart, () => ({}))
   .on(setCartItem, (store, payload) => {
     const { id } = payload;
 
@@ -78,6 +78,20 @@ export const $cart = createStore<CartStore>(new CartApi().getStore())
 
 const setCartItemFx = createEffect((item: ProductProps) => {
   new CartApi().setItem(item);
+});
+
+sample({
+  source: setCartItem,
+  target: setCartItemFx,
+});
+
+const resetCartFx = createEffect(() => {
+  new CartApi().reset();
+});
+
+sample({
+  source: resetCart,
+  target: resetCartFx,
 });
 
 sample({

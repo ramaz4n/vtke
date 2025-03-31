@@ -3,15 +3,19 @@ import { Card, Checkbox, Text } from '@gravity-ui/uikit';
 import Link from 'next/link';
 import plural from 'plural-ru';
 
+import { ResetCartConfirmModal } from '@/components/modals/reset-cart-confirm-modal/reset-cart-confir-modal.tsx';
 import { ProductCartItem } from '@/components/product-cart-item/product-cart-item.tsx';
 import MainContainer from '@/containers/main-container/main-container.tsx';
 import { LINKS } from '@/shared/constants/links.ts';
 import { useCart } from '@/shared/hooks/use-cart.ts';
+import { useModal } from '@/shared/hooks/use-modal.ts';
 import { Breadcrumbs } from '@/shared/ui/breadcrumbs/breadcrumbs.tsx';
 import { Button } from '@/shared/ui/button/button.tsx';
 
 export const CartPageContainer = () => {
   const cartApi = useCart();
+
+  const modal = useModal();
 
   const totalCountItems = cartApi.getLength();
 
@@ -60,7 +64,11 @@ export const CartPageContainer = () => {
               </Text>
             </div>
 
-            <Button size='l' view='flat-action'>
+            <Button
+              size='l'
+              view='flat-action'
+              onClick={() => modal.show('reset-cart')}
+            >
               Очистить корзину
             </Button>
           </div>
@@ -111,6 +119,8 @@ export const CartPageContainer = () => {
           </div>
         </Card>
       </section>
+
+      <ResetCartConfirmModal />
     </MainContainer>
   );
 };

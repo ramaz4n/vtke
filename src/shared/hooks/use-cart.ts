@@ -2,11 +2,12 @@ import { useCallback } from 'react';
 
 import { useUnit } from 'effector-react';
 
-import { $cart, setCartItem } from '@/shared/models/cart.ts';
+import { $cart, resetCart, setCartItem } from '@/shared/models/cart.ts';
 
 export const useCart = () => {
-  const { cartStore, setCartItemFn } = useUnit({
+  const { cartStore, setCartItemFn, resetCartFn } = useUnit({
     cartStore: $cart,
+    resetCartFn: resetCart,
     setCartItemFn: setCartItem,
   });
 
@@ -28,6 +29,7 @@ export const useCart = () => {
     cartStore,
     getLength,
     isInCart,
+    reset: resetCartFn,
     setCartItem: setCartItemFn,
   };
 };

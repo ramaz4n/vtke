@@ -4,6 +4,7 @@
 @import '../../public/styles/lib/gravity/breadcrumbs.css';
 @import '../../public/styles/lib/gravity/vars.css';
 @import '../../public/styles/lib/gravity/card.css';
+@import '../../public/styles/lib/gravity/modal.css';
 
 @tailwind base;
 @tailwind components;

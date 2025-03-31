@@ -1,6 +1,6 @@
 import { createEvent, createStore } from 'effector';
 
-export type ModalName = 'search-products' | 'catalog';
+export type ModalName = 'search-products' | 'catalog' | 'reset-cart';
 
 export type ModalStore = Set<ModalName> | null;
 
@@ -16,7 +16,9 @@ export const $modal = createStore<ModalStore>(null)
 
     state.add(name);
 
-    return state;
+    const newState = [...state];
+
+    return new Set(newState);
   })
   .on(hideModalEvent, (state, name) => {
     if (!state) {
@@ -26,7 +28,8 @@ export const $modal = createStore<ModalStore>(null)
     if (state.has(name)) {
       state.delete(name);
     }
+    const newState = [...state];
 
-    return state.size === 0 ? null : state;
+    return state.size === 0 ? null : new Set(newState);
   })
   .reset(hideAllModalEvent);
