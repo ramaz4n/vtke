@@ -36,6 +36,14 @@ export const CartPageContainer = () => {
     }
   };
 
+  const onRemoveOutCartSelected = () => {
+    if (cartApi.isAllSelected) {
+      modal.show('reset-cart');
+    } else {
+      cartApi.removeOutCartSelected();
+    }
+  };
+
   useEffect(() => {
     cartApi.initSelectedItems();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -125,7 +133,7 @@ export const CartPageContainer = () => {
               <Button
                 size='s'
                 view='flat-danger'
-                onClick={cartApi.removeOutCartSelected}
+                onClick={onRemoveOutCartSelected}
               >
                 Удалить выбранные
               </Button>
