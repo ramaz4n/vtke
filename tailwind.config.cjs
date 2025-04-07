@@ -18,6 +18,9 @@ module.exports = {
         background: 'var(--background)',
         foreground: 'var(--foreground)',
         textColor: 'rgba(7, 7, 7, 1);',
+        success: {
+          DEFAULT: 'var(--g-color-text-positive)',
+        },
         mainBlue: '#154063',
         secondaryBlue: '#4b71d6',
         secondary: {

@@ -1,5 +1,9 @@
 'use client';
-import { Card, Checkbox, Text } from '@gravity-ui/uikit';
+
+import { useEffect, useState } from 'react';
+
+import { CircleExclamationFill } from '@gravity-ui/icons';
+import { Card, Checkbox, Divider, Icon, Text } from '@gravity-ui/uikit';
 import Link from 'next/link';
 import plural from 'plural-ru';
 
@@ -11,13 +15,31 @@ import { useCart } from '@/shared/hooks/use-cart.ts';
 import { useModal } from '@/shared/hooks/use-modal.ts';
 import { Breadcrumbs } from '@/shared/ui/breadcrumbs/breadcrumbs.tsx';
 import { Button } from '@/shared/ui/button/button.tsx';
+import { getFormatSum } from '@/shared/utils/get-format-sum.ts';
 
 export const CartPageContainer = () => {
   const cartApi = useCart();
 
   const modal = useModal();
 
+  const [acceptTradeRules, setAcceptTradeRules] = useState(false);
+
   const totalCountItems = cartApi.getLength();
+  const totalSum = cartApi.getTotalSum();
+  const totalSelectedItems = cartApi.getTotalSelectedItems();
+
+  const onCheckboxUpdate = (value: boolean) => {
+    if (value) {
+      cartApi.initSelectedItems();
+    } else {
+      cartApi.clearSelectedItems();
+    }
+  };
+
+  useEffect(() => {
+    cartApi.initSelectedItems();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   if (!totalCountItems)
     return (
@@ -73,13 +95,41 @@ export const CartPageContainer = () => {
             </Button>
           </div>
 
-          <div className='inline-flex items-center gap-2.5'>
-            <Checkbox size='l'>Выбрать все</Checkbox>
+          <div className='inline-flex h-6 items-center gap-2.5'>
+            <Checkbox
+              checked={cartApi.isAllSelected}
+              size='l'
+              onUpdate={onCheckboxUpdate}
+            >
+              Выбрать все
+            </Checkbox>
 
-            <Text color='secondary'>
-              {plural(totalCountItems, 'Выбран', 'Выбрано', 'Выбрано')}{' '}
-              {plural(totalCountItems, '%d товар', '%d товара', '%d товаров')}{' '}
-            </Text>
+            {!!cartApi.selectedCartItems?.length && (
+              <Text color='secondary'>
+                {plural(
+                  cartApi.selectedCartItems?.length,
+                  'Выбран',
+                  'Выбрано',
+                  'Выбрано',
+                )}{' '}
+                {plural(
+                  cartApi.selectedCartItems?.length,
+                  '%d товар',
+                  '%d товара',
+                  '%d товаров',
+                )}{' '}
+              </Text>
+            )}
+
+            {!!totalSelectedItems && (
+              <Button
+                size='s'
+                view='flat-danger'
+                onClick={cartApi.removeOutCartSelected}
+              >
+                Удалить выбранные
+              </Button>
+            )}
           </div>
 
           <section className='flex flex-col gap-6'>
@@ -91,22 +141,54 @@ export const CartPageContainer = () => {
 
         <Card className='sticky top-28 h-fit' size='l' view='filled'>
           <div className='flex flex-col gap-4'>
-            <div>
-              <Text variant='subheader-1'>Ваша корзина</Text>
-            </div>
+            {totalSelectedItems ? (
+              <div>
+                <Text className='mb-8 block' variant='subheader-3'>
+                  Ваша корзина
+                </Text>
 
-            <Button size='xl' width='max'>
+                <div className='flex-between'>
+                  <span>Товары ({totalSelectedItems})</span>
+                  <span className='font-bold'>{getFormatSum(totalSum)}</span>
+                </div>
+
+                <Divider className='mb-4 mt-2' />
+
+                <div className='flex-between'>
+                  <span className='text-xl font-bold'>Итого</span>
+                  <span className='text-success text-base font-bold'>
+                    {getFormatSum(totalSum)}
+                  </span>
+                </div>
+              </div>
+            ) : (
+              <div className='flex gap-4 rounded-lg bg-[var(--g-color-private-blue-50-solid)] p-3 text-secondary'>
+                <Icon className='clamp-6' data={CircleExclamationFill} />
+
+                <p>Выберите товары, чтобы перейти к оформлению заказа</p>
+              </div>
+            )}
+
+            <Button
+              disabled={!cartApi.selectedCartItems.length || !acceptTradeRules}
+              size='xl'
+              width='max'
+            >
               К оформлению
             </Button>
 
             <div className='flex items-center gap-2.5'>
-              <Checkbox />
+              <Checkbox
+                checked={acceptTradeRules}
+                disabled={!totalSelectedItems}
+                onUpdate={setAcceptTradeRules}
+              />
 
               <span className='text-xs'>
                 {' '}
                 Соглашаюсь с{' '}
                 <Link
-                  className='hover:text-primary transition-all duration-300'
+                  className='transition-all duration-300 hover:text-primary'
                   href='/'
                   rel='noreferrer'
                   target='_blank'
