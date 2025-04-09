@@ -1,9 +1,19 @@
 .g-breadcrumbs__inner {
     gap: 0.5rem!important;
+    overflow: auto!important;
+}
+
+.g-breadcrumbs__inner::-webkit-scrollbar-thumb {
+    display: none;
 }
 
 .g-breadcrumbs__inner a {
     text-underline-offset: 0.25rem;
+    white-space: nowrap;
+}
+
+.g-breadcrumbs__inner span {
+    white-space: nowrap;
 }
 
 .g-breadcrumbs__inner div {

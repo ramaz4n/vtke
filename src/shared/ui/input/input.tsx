@@ -41,7 +41,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             let currentValue = event.target.value;
 
             if (mask) {
-              currentValue = maskito.format(currentValue);
+              currentValue = maskito.format(currentValue, mask);
             }
 
             controlChangeValue(currentValue);

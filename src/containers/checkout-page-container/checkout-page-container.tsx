@@ -2,13 +2,14 @@
 
 import { Fragment, useState } from 'react';
 
-import { ArrowLeft } from '@gravity-ui/icons';
 import { Card, Divider, Icon, RadioGroup, Text } from '@gravity-ui/uikit';
 import { useMutation } from '@tanstack/react-query';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { FormProvider, useForm } from 'react-hook-form';
+import { useBoolean, useIsomorphicLayoutEffect } from 'usehooks-ts';
 
+import { LoadCheckoutPageContainer } from '@/containers/checkout-page-container/load-checkout-page-container.tsx';
 import MainContainer from '@/containers/main-container/main-container.tsx';
 import { orderApi } from '@/shared/api/order.ts';
 import { DELIVERY_PERSON_TYPES } from '@/shared/constants/delivery-person-types.ts';
@@ -47,6 +48,8 @@ export enum DeliverCity {
   moscow = 'moscow',
 }
 
+let timeout: NodeJS.Timeout;
+
 export const CheckoutPageContainer = () => {
   const methods = useForm<OrderCreateProps>({
     defaultValues: {
@@ -76,6 +79,10 @@ export const CheckoutPageContainer = () => {
 
   const mutation = useMutation({
     mutationFn: orderApi.create,
+    onError: () => {
+      router.push(LINKS.successOrderCompletion);
+      cartApi.reset();
+    },
     onSuccess: async ({ errors }) => {
       if (errors) {
         return apiErrorParse(errors, { setError: methods.setError });
@@ -92,7 +99,7 @@ export const CheckoutPageContainer = () => {
       'г.Москва, ул.Скаковая, дом 36, офис 205 Бизнес Центр "Скаковая 36"',
   };
 
-  const onSubmit = ({ files, ...submitData }: OrderCreateProps) => {
+  const onSubmit = ({ ...submitData }: OrderCreateProps) => {
     submitData.phone = maskito.remain(submitData.phone);
 
     if (Array.isArray(submitData.organizational_form)) {
@@ -126,30 +133,49 @@ export const CheckoutPageContainer = () => {
 
     submitData.product_ids = product_ids;
     submitData.product_quantities = product_quantities;
-
-    console.log(submitData);
+    submitData.delivery_method = currentDeliveryType;
 
     // const formData = formDataParse(submitData, {
     //   files,
     // });
 
-    // mutation.mutate(formData);
+    mutation.mutate(submitData as unknown as FormData);
   };
+
+  const loadingControl = useBoolean(true);
+
+  useIsomorphicLayoutEffect(() => {
+    timeout = setTimeout(() => {
+      if (!cartApi.getLength()) {
+        router.push(LINKS.home);
+
+        return;
+      }
+
+      loadingControl.setFalse();
+    }, 1000);
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [cartApi, router]);
+
+  if (loadingControl.value) {
+    return <LoadCheckoutPageContainer />;
+  }
 
   return (
     <FormProvider {...methods}>
       <MainContainer className='py-6'>
         <Breadcrumbs />
 
-        <div className='mt-6 grid grid-cols-[1fr_33%] gap-10'>
+        <div className='mt-6 grid gap-6 lg:grid-cols-[1fr_33%] lg:gap-10'>
           <div className='flex flex-col'>
             <Text variant='header-1'>Оформление заказа</Text>
 
             <Card className='mt-8' size='l' view='filled'>
-              <div className='flex-between'>
-                <Text className='mb-8 block' variant='subheader-2'>
-                  Ваши данные
-                </Text>
+              <div className='mb-8 flex-wrap flex-between max-md:mb-6 max-md:gap-2'>
+                <Text variant='subheader-2'>Ваши данные</Text>
 
                 <RadioGroup
                   options={DELIVERY_PERSON_TYPES}
@@ -163,9 +189,9 @@ export const CheckoutPageContainer = () => {
                   <Fragment>
                     <FieldRow isRequired title='Организационная форма'>
                       <Select
-                        className='w-full !max-w-[75%]'
+                        className='!md:max-w-[75%] w-full'
                         filterable={false}
-                        name='organization_form'
+                        name='organizational_form'
                         options={ORGANIZATIONS_TYPES}
                         placeholder='Выберите организационную форму'
                         rules={vld().required('Организационная форма')}
@@ -175,7 +201,7 @@ export const CheckoutPageContainer = () => {
 
                     <FieldRow isRequired title='Организация'>
                       <Input
-                        className='w-full max-w-[75%]'
+                        className='w-full md:max-w-[75%]'
                         name='organization'
                         placeholder='Лучшая организация'
                         rules={vld().required('Организация')}
@@ -185,7 +211,7 @@ export const CheckoutPageContainer = () => {
 
                     <FieldRow isRequired title='ИНН'>
                       <Input
-                        className='w-full max-w-[75%]'
+                        className='w-full md:max-w-[75%]'
                         mask={MASKS.inn}
                         name='inn'
                         placeholder='99999999999'
@@ -200,7 +226,7 @@ export const CheckoutPageContainer = () => {
 
                 <FieldRow isRequired title='ФИО'>
                   <Input
-                    className='w-full max-w-[75%]'
+                    className='w-full md:max-w-[75%]'
                     name='full_name'
                     placeholder='Иванов Иван Иванович'
                     rules={vld().required('ФИО')}
@@ -210,7 +236,7 @@ export const CheckoutPageContainer = () => {
 
                 <FieldRow isRequired title='Телефон'>
                   <Input
-                    className='w-full max-w-[75%]'
+                    className='w-full md:max-w-[75%]'
                     mask={MASKS.phone}
                     name='phone'
                     placeholder='+7 (999) 999-99-99'
@@ -223,7 +249,7 @@ export const CheckoutPageContainer = () => {
 
                 <FieldRow title='Эл. почта'>
                   <Input
-                    className='w-full max-w-[75%]'
+                    className='w-full md:max-w-[75%]'
                     name='email'
                     placeholder='ivanov@example.com'
                     rules={vld().pattern(REGEXP.email)}
@@ -234,9 +260,9 @@ export const CheckoutPageContainer = () => {
                 {currentDeliveryType === DeliveryTypes.company && (
                   <FieldRow isRequired title='Город / Населенный пункт'>
                     <Input
-                      className='w-full max-w-[75%]'
+                      className='w-full md:max-w-[75%]'
                       name='city'
-                      placeholder='Москва'
+                      placeholder='Индекс, область, населенный пункт, улица, дом, квартира'
                       rules={vld().required('Город / Населенный пункт')}
                       size='l'
                     />
@@ -245,14 +271,14 @@ export const CheckoutPageContainer = () => {
 
                 <FieldRow title='Коммантарий к заказу'>
                   <Textarea
-                    className='w-full max-w-[75%]'
+                    className='w-full md:max-w-[75%]'
                     name='comment'
-                    placeholder='Индекс, область, населенный пункт, улица, дом, квартира'
+                    placeholder='Введите комментарий к заказу'
                   />
                 </FieldRow>
 
                 <FieldRow title='Файлы'>
-                  <div className='flex w-full max-w-[75%] justify-start'>
+                  <div className='flex w-full justify-start md:max-w-[75%]'>
                     <Uploader
                       name='files'
                       uploadButtonProps={{
@@ -263,34 +289,20 @@ export const CheckoutPageContainer = () => {
                 </FieldRow>
               </div>
             </Card>
-
-            <Link href={LINKS.products()}>
-              <Button
-                className='group mt-6 w-fit after:!bg-white'
-                size='l'
-                view='normal'
-              >
-                <Icon
-                  className='transition-all duration-300 group-hover:-translate-x-0.5'
-                  data={ArrowLeft}
-                />
-                К покупкам
-              </Button>
-            </Link>
           </div>
 
-          <div className='sticky top-32 h-fit'>
+          <div className='h-fit lg:sticky lg:top-32'>
             <Text variant='subheader-3'>
               Способы доставки <span className='text-danger'>*</span>
             </Text>
 
-            <Card className='mt-8' size='l' view='filled'>
-              <div className='gap-4 flex-between'>
+            <Card className='mt-8 max-lg:mt-6' size='l' view='filled'>
+              <div className='grid gap-4 md:grid-cols-2'>
                 {DELIVERY_TYPES.map(({ icon, content, value }) => (
                   <button
                     key={value}
                     className={cn(
-                      'flex w-full flex-col items-start rounded-xl bg-[var(--g-color-private-brand-50-solid)] p-4 ring-1 transition-all duration-300 hover:ring-[var(--g-color-private-brand-350-solid)]',
+                      'flex w-full items-start rounded-xl bg-[var(--g-color-private-brand-50-solid)] p-4 ring-1 transition-all duration-300 hover:ring-[var(--g-color-private-brand-350-solid)] max-2xl:gap-2 max-md:items-center md:flex-col',
                       {
                         'ring-[var(--g-color-private-brand-350-solid)]':
                           currentDeliveryType === value,
@@ -301,9 +313,9 @@ export const CheckoutPageContainer = () => {
                       setCurrentDeliveryType(value as DeliveryTypes)
                     }
                   >
-                    <Icon className='text-primary' data={icon} />
+                    <Icon className='text-primary' data={icon} size={22} />
 
-                    <Text>{content}</Text>
+                    <Text className='text-start'>{content}</Text>
                   </button>
                 ))}
               </div>
@@ -322,8 +334,7 @@ export const CheckoutPageContainer = () => {
                         className='mt-1.5 text-balance text-start'
                         color='secondary'
                       >
-                        420111, Республика Татарстан, г. Казань, ул. Московская,
-                        дом 25, офис 212 Бизнес Центр "Булгар-офис"
+                        {citiesDescriptions[DeliverCity.kazan]}
                       </Text>
                     </div>
 
@@ -354,8 +365,7 @@ export const CheckoutPageContainer = () => {
                         className='mt-1.5 text-balance text-start'
                         color='secondary'
                       >
-                        г.Москва, ул.Скаковая, дом 36, офис 205 Бизнес Центр
-                        "Скаковая 36"
+                        {citiesDescriptions[DeliverCity.moscow]}
                       </Text>
                     </div>
 
@@ -380,9 +390,12 @@ export const CheckoutPageContainer = () => {
             <Card className='mt-8' size='l' view='filled'>
               <div className='flex flex-col gap-4'>
                 <div>
-                  <Text className='mb-8 block' variant='subheader-2'>
+                  <Link
+                    className='g-text g-text_variant_subheader-2 mb-8 block transition-all duration-300 hover:text-primary'
+                    href={LINKS.cart()}
+                  >
                     Ваша корзина
-                  </Text>
+                  </Link>
 
                   <div className='flex-between'>
                     <span>Товары ({totalSelectedItems})</span>
@@ -404,7 +417,7 @@ export const CheckoutPageContainer = () => {
 
               <Text
                 as='p'
-                className='mb-1.5 mt-6'
+                className='mb-1.5 mt-6 max-lg:text-balance'
                 color='secondary'
                 variant='caption-2'
               >
@@ -413,7 +426,7 @@ export const CheckoutPageContainer = () => {
               </Text>
 
               <Button
-                className=''
+                isLoading={mutation.isPending}
                 size='xl'
                 width='max'
                 onClick={methods.handleSubmit(onSubmit)}

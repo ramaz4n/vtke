@@ -55,14 +55,14 @@ export const CartPageContainer = () => {
         <Breadcrumbs />
 
         <Card className='flex-col flex-center' size='l' view='filled'>
-          <Text as='h1' variant='subheader-3'>
+          <Text as='h1' variant='header-1'>
             В корзине сейчас пусто
           </Text>
 
           <Text
             className='mb-8 mt-2 text-center max-md:text-balance md:mb-10'
             color='secondary'
-            variant='subheader-1'
+            variant='body-1'
           >
             Загляните в каталог — собрали там товары, которые могут вам
             понравиться
@@ -78,10 +78,10 @@ export const CartPageContainer = () => {
     );
 
   return (
-    <MainContainer className='space-y-4 bg-[#f6f6f9] py-6'>
+    <MainContainer className='space-y-4 py-6'>
       <Breadcrumbs />
 
-      <section className='relative grid gap-10 xl:grid-cols-[auto_20rem]'>
+      <section className='relative grid gap-10 max-lg:gap-6 xl:grid-cols-[auto_20rem]'>
         <Card className='flex flex-col gap-y-6' size='l' view='filled'>
           <div className='flex h-9 items-start justify-between'>
             <div className='inline-flex items-end gap-2.5'>
@@ -89,8 +89,20 @@ export const CartPageContainer = () => {
                 Корзина
               </Text>
 
-              <Text className='!leading-7' color='secondary' variant='body-2'>
+              <Text
+                className='!leading-7 max-md:hidden'
+                color='secondary'
+                variant='body-2'
+              >
                 {plural(totalCountItems, '%d товар', '%d товара', '%d товаров')}{' '}
+              </Text>
+
+              <Text
+                className='!leading-7 md:hidden'
+                color='secondary'
+                variant='body-2'
+              >
+                ({totalCountItems})
               </Text>
             </div>
 
@@ -99,38 +111,41 @@ export const CartPageContainer = () => {
               view='flat-action'
               onClick={() => modal.show('reset-cart')}
             >
-              Очистить корзину
+              Очистить <span className='max-md:hidden'>корзину</span>
             </Button>
           </div>
 
-          <div className='inline-flex h-6 items-center gap-2.5'>
-            <Checkbox
-              checked={cartApi.isAllSelected}
-              size='l'
-              onUpdate={onCheckboxUpdate}
-            >
-              Выбрать все
-            </Checkbox>
+          <div className='inline-flex gap-2.5 md:h-6 md:items-center'>
+            <div className='inline-flex gap-2.5 max-md:flex-col max-md:gap-1.5 md:items-center'>
+              <Checkbox
+                checked={cartApi.isAllSelected}
+                size='l'
+                onUpdate={onCheckboxUpdate}
+              >
+                Выбрать все
+              </Checkbox>
 
-            {!!cartApi.selectedCartItems?.length && (
-              <Text color='secondary'>
-                {plural(
-                  cartApi.selectedCartItems?.length,
-                  'Выбран',
-                  'Выбрано',
-                  'Выбрано',
-                )}{' '}
-                {plural(
-                  cartApi.selectedCartItems?.length,
-                  '%d товар',
-                  '%d товара',
-                  '%d товаров',
-                )}{' '}
-              </Text>
-            )}
+              {!!cartApi.selectedCartItems?.length && (
+                <Text color='secondary'>
+                  {plural(
+                    cartApi.selectedCartItems?.length,
+                    'Выбран',
+                    'Выбрано',
+                    'Выбрано',
+                  )}{' '}
+                  {plural(
+                    cartApi.selectedCartItems?.length,
+                    '%d товар',
+                    '%d товара',
+                    '%d товаров',
+                  )}{' '}
+                </Text>
+              )}
+            </div>
 
             {!!totalSelectedItems && (
               <Button
+                className='max-lg:ml-auto'
                 size='s'
                 view='flat-danger'
                 onClick={onRemoveOutCartSelected}
@@ -140,7 +155,7 @@ export const CartPageContainer = () => {
             )}
           </div>
 
-          <section className='flex flex-col gap-6'>
+          <section className='flex flex-col gap-6 max-md:mt-4'>
             {Object.entries(cartApi.cartStore).map(([id, { item, count }]) => (
               <ProductCartItem count={count} {...item} key={id} />
             ))}

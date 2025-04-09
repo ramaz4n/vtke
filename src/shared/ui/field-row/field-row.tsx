@@ -15,10 +15,13 @@ export const FieldRow = ({
   ...props
 }: FieldRowProps) => (
   <div
-    className={cn('flex items-center justify-between gap-4', className)}
+    className={cn(
+      'flex justify-between gap-4 max-md:flex-col max-md:gap-2 md:items-center',
+      className,
+    )}
     {...props}
   >
-    <span className='font-semibold'>
+    <span className='font-semibold max-md:px-1.5'>
       {title}
       {isRequired && <span className='text-danger'>*</span>}
     </span>

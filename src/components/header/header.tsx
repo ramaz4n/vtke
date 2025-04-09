@@ -49,10 +49,10 @@ export default function Header() {
   return (
     <header
       ref={headerRef}
-      className='z-layout sticky top-0 bg-white shadow-header-shadow transition-transform duration-300'
+      className='sticky top-0 z-layout bg-white shadow-header-shadow transition-transform duration-300'
     >
       <MainContainer>
-        <div className='flex h-compact-menu-padding items-center justify-between'>
+        <div className='flex items-center justify-between max-lg:py-2.5 lg:h-compact-menu-padding'>
           <div className='flex items-center gap-20'>
             <Logo />
 
@@ -81,7 +81,7 @@ export default function Header() {
             </nav>
           </div>
 
-          <div className='flex items-center justify-center gap-6'>
+          <div className='flex items-center justify-center gap-6 max-lg:hidden'>
             <button
               className='flex flex-col items-center gap-0.5'
               onClick={onSearchOpen}
@@ -111,7 +111,7 @@ export default function Header() {
 
               {!!cartItemsLength && (
                 <Text
-                  className='text-tiny bg-danger-contrast absolute -top-1.5 right-2.5 size-4 rounded-full text-white flex-center'
+                  className='text-tiny absolute -top-1.5 right-2.5 size-4 rounded-full bg-danger-contrast text-white flex-center'
                   variant='caption-2'
                 >
                   {cartItemsLength}
@@ -135,7 +135,7 @@ export default function Header() {
             </Link>
           </div>
 
-          <div className='absolute bottom-[20px] right-[20px] flex size-10 items-center justify-center rounded-[50%] bg-mainBlue sm:size-16 lg:hidden'></div>
+          <div className='flex size-9 items-center justify-center rounded-full bg-mainBlue lg:hidden'></div>
         </div>
         <Modal
           open={searchModalOpen}

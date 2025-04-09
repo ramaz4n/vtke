@@ -24,14 +24,14 @@ export const ResetCartConfirmModal = ({
       <div className='mt-4 flex items-center justify-end gap-4'>
         <Button
           className='w-full'
-          size='l'
+          size='xl'
           view='flat'
           onClick={() => modal.hide('reset-cart')}
         >
           Оставить
         </Button>
 
-        <Button className='w-full' size='l' onClick={onReset}>
+        <Button className='w-full' size='xl' onClick={onReset}>
           Да, очистить
         </Button>
       </div>

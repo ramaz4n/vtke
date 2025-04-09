@@ -9,7 +9,10 @@ export default function MainContainer({
 }: HTMLAttributes<HTMLElement>) {
   return (
     <section
-      className={cn('mx-auto w-full max-w-screen-2xl px-6', className)}
+      className={cn(
+        'mx-auto w-full max-w-screen-2xl px-2.5 md:px-6',
+        className,
+      )}
       {...props}
     >
       {children}
