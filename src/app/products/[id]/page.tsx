@@ -1,59 +1,69 @@
-'use client';
-import { Skeleton, Text } from '@gravity-ui/uikit';
+import { EffectorNext } from '@effector/next';
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from '@tanstack/react-query';
+import { fork, serialize } from 'effector';
+import { Metadata } from 'next';
 
-import MainContainer from '@/containers/main-container/main-container.tsx';
-import { LINKS } from '@/shared/constants/links.ts';
-import { useProduct } from '@/shared/hooks/api/use-product.ts';
-import { Breadcrumbs } from '@/shared/ui/breadcrumbs/breadcrumbs.tsx';
+import { ProductPage } from '@/containers/product-page-container/product-page-container.tsx';
+import { productsApi } from '@/shared/api/products.ts';
+import { $breadcrumbs } from '@/shared/models/breadcrumbs.ts';
+import { QueryKeys } from '@/shared/types/api/query-keys.ts';
 
-// export const metadata: Metadata = {
-//   description: 'Каталог товаров',
-//   title: 'Кататог товаров',
-// };
+// динамическое обновления метаданных
+export async function generateMetadata({
+  params,
+}: {
+  params: { id: string };
+}): Promise<Metadata> {
+  const { data } = await productsApi.view(params.id);
 
-export default function Page() {
-  const { model, id, isLoading } = useProduct();
+  return {
+    description: data.description,
+    openGraph: {
+      description: data.description,
+      // images: [
+      //   {
+      //     height: 600,
+      //     url: product.image,
+      //     // Картинка для OpenGraph
+      //     width: 800,
+      //   },
+      // ],
+      title: data.name,
+    },
+    title: data.name,
+  };
+}
 
-  console.log(model);
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string };
+}) {
+  const id = searchParams.id;
+
+  const queryClient = new QueryClient();
+
+  await queryClient.prefetchQuery({
+    queryFn: () => productsApi.view(id as string),
+    queryKey: [QueryKeys.PRODUCT_VIEW, id],
+  });
+
+  const scope = fork({
+    values: [[$breadcrumbs, [{ text: id }]]],
+  });
+
+  const serialized = serialize(scope);
+  const dehydratedState = dehydrate(queryClient);
 
   return (
-    <MainContainer>
-      <div className='px-3.5 py-6'>
-        <Breadcrumbs
-          enabledStartLink
-          items={[
-            { href: LINKS.products(), text: 'Продукты' },
-            { href: '', text: model?.name || '' },
-          ]}
-        />
-      </div>
-      {isLoading ? (
-        <div className='flex flex-col gap-16 pb-20 pt-7'>
-          <div className='flex items-center gap-16'>
-            <Skeleton className='size-[500px] rounded-3xl' />
-            <Skeleton className='h-[20px] w-full'></Skeleton>
-          </div>
-
-          <Skeleton className='h-[20px] w-full'></Skeleton>
-        </div>
-      ) : (
-        <div className='flex flex-col gap-16 pb-20 pt-7'>
-          <div className='flex items-center gap-16'>
-            <img
-              alt='test'
-              className='size-[500px] rounded-3xl'
-              loading='lazy'
-              src={model?.images[0].path}
-            />
-            <Text variant='display-4'>{model?.name}</Text>
-          </div>
-
-          <Text
-            dangerouslySetInnerHTML={{ __html: model?.description || '' }}
-            variant='body-3'
-          />
-        </div>
-      )}
-    </MainContainer>
+    <EffectorNext values={serialized}>
+      <HydrationBoundary state={dehydratedState}>
+        <ProductPage />
+      </HydrationBoundary>
+    </EffectorNext>
   );
 }

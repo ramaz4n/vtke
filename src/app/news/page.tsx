@@ -14,21 +14,13 @@ export default function Page() {
   return (
     <MainContainer>
       <div className='px-3.5 py-6'>
-        <Breadcrumbs items={[{ href: LINKS.news(), text: 'Новости' }]} />
+        <Breadcrumbs items={{ href: LINKS.news(), text: 'Новости' }} />
       </div>
       <div className='grid w-full grid-cols-1 gap-9 py-16'>
         <NewsCard
           key={12}
           description={desk}
           id={1}
-          image={logo}
-          title='Тестовая новость и новость и новость'
-        />
-
-        <NewsCard
-          key={1}
-          description={desk}
-          id={2}
           image={logo}
           title='Тестовая новость и новость и новость'
         />

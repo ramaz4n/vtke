@@ -7,7 +7,7 @@ import {
 import { fork, serialize } from 'effector';
 import { Metadata } from 'next';
 
-import { ProductPage } from '@/containers/products-page-container/products-page-container.tsx';
+import { ProductsPage } from '@/containers/products-page-container/products-page-container.tsx';
 import { productsApi } from '@/shared/api/products.ts';
 import { $breadcrumbs } from '@/shared/models/breadcrumbs.ts';
 import { QueryKeys } from '@/shared/types/api/query-keys.ts';
@@ -35,7 +35,7 @@ export default async function Page() {
   return (
     <EffectorNext values={serialized}>
       <HydrationBoundary state={dehydratedState}>
-        <ProductPage />
+        <ProductsPage />
       </HydrationBoundary>
     </EffectorNext>
   );

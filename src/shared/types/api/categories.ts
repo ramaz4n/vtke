@@ -7,10 +7,10 @@ export interface CategoryCreateProps {
 export type CategoryUpdateProps = CategoryCreateProps;
 
 export interface CategoryProps {
-  created_at: number;
   id: number;
   name: string;
-  updated_at: number;
+  created_at?: number;
+  updated_at?: number;
 }
 
 export type CategoryRequestProps = PaginationRequest<{

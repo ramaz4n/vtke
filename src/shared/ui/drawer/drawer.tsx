@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 
 import { Xmark } from '@gravity-ui/icons';
 import { Icon, Portal } from '@gravity-ui/uikit';
-import { useUnit } from 'effector-react/effector-react.umd';
+import { useUnit } from 'effector-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useScrollLock } from 'usehooks-ts';
 
@@ -16,7 +16,19 @@ import { cn } from '@/shared/utils/cn.ts';
 
 export interface DrawerProps {
   name: DrawerName;
+  animate?: {
+    x?: number;
+    y?: number;
+  };
   children?: ReactNode;
+  exit?: {
+    x?: string;
+    y?: string;
+  };
+  initial?: {
+    x?: string;
+    y?: string;
+  };
   onClose?: () => void;
   shouldCloseButton?: boolean;
   shouldScrollContent?: boolean;
@@ -28,8 +40,14 @@ export const Drawer = ({
   shouldScrollContent = true,
   name,
   onClose,
+  animate,
+  initial,
+  exit,
 }: DrawerProps) => {
-  const [store, resetStore] = useUnit([$drawer, hideDrawerEvent]);
+  const { store, resetStore } = useUnit({
+    resetStore: hideDrawerEvent,
+    store: $drawer,
+  });
 
   const isVisible = Boolean(store?.has(name));
 
@@ -55,11 +73,11 @@ export const Drawer = ({
         <AnimatePresence>
           {isVisible && (
             <motion.div
-              animate={{ x: 0 }}
-              exit={{ x: '100%' }}
-              initial={{ x: '100%' }}
+              animate={animate ?? { x: 0 }}
+              exit={exit ?? { x: '100%' }}
+              initial={initial ?? { x: '100%' }}
               className={cn(
-                'h-full w-10/12 bg-white p-4 shadow-lg sm:w-1/2 lg:w-1/3',
+                'h-full w-10/12 bg-white p-4 shadow-lg sm:w-1/2 xl:w-1/3',
                 { 'overflow-y-auto': shouldScrollContent },
               )}
               transition={{

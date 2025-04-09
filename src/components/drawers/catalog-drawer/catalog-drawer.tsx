@@ -9,11 +9,10 @@ import { $drawer, hideDrawerEvent } from '@/shared/models/drawer.ts';
 import { QueryKeys } from '@/shared/types/api/query-keys.ts';
 import { Drawer } from '@/shared/ui/drawer/drawer.tsx';
 import { getQueryCacheKeys } from '@/shared/utils/get-query-cache/get-query-cache-keys.ts';
-import { modalHasName } from '@/shared/utils/modal-has-name.ts';
 
 export const CatalogDrawer = () => {
   const [drawerStore, resetDrawerStore] = useUnit([$drawer, hideDrawerEvent]);
-  const isVisible = modalHasName(drawerStore, 'catalog');
+  const isVisible = drawerStore ? drawerStore.has('catalog') : false;
 
   const { models, isLoading } = useProductCategories({ limit: 50 }, isVisible);
 
@@ -34,6 +33,10 @@ export const CatalogDrawer = () => {
 
   const onCategoryClick = (id: number) => {
     mutation.mutate({ category: id });
+  };
+
+  const getAllProducts = () => {
+    mutation.mutate({});
   };
 
   const onClose = () => {
@@ -57,8 +60,19 @@ export const CatalogDrawer = () => {
   };
 
   return (
-    <Drawer name='catalog' shouldScrollContent={!isLoading}>
-      <div className='sm-gap-3 flex flex-col items-start justify-start gap-1 px-1 py-12 lg:gap-4 lg:px-5'>
+    <Drawer
+      animate={{ x: 0 }}
+      exit={{ x: '100%' }}
+      initial={{ x: '100%' }}
+      name='catalog'
+      shouldScrollContent={!isLoading}
+    >
+      <div className='sm-gap-3 flex flex-col items-start justify-start gap-1 px-1 py-12 lg:px-5'>
+        <CategoryItem
+          id={1}
+          name='Все товары'
+          onClick={() => getAllProducts()}
+        />
         <Content />
       </div>
     </Drawer>

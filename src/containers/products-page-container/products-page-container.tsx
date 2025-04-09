@@ -14,7 +14,7 @@ import { ProductProps } from '@/shared/types/api/products.ts';
 import { Breadcrumbs } from '@/shared/ui/breadcrumbs/breadcrumbs.tsx';
 import { Button } from '@/shared/ui/button/button.tsx';
 
-export const ProductPage = () => {
+export const ProductsPage = () => {
   const { models, isLoading } = useProducts();
   const cartApi = useCart();
   const showDrawer = useUnit(showDrawerEvent);
