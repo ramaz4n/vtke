@@ -274,13 +274,16 @@ export const CheckoutPageContainer = () => {
 
               {currentDeliveryType === DeliveryTypes.self && (
                 <div className='mt-4 flex flex-col gap-4'>
-                  <div className='flex-between'>
-                    <div className='flex flex-col'>
+                  <button
+                    className='block rounded-2xl p-2.5 transition-all duration-300 flex-between hover:bg-zinc-100'
+                    onClick={() => setCurrentDeliverCity(DeliverCity.kazan)}
+                  >
+                    <div className='flex flex-col items-start'>
                       <Text variant='subheader-1'>Центральный офис:</Text>
 
                       <Text
                         as='p'
-                        className='mt-1.5 text-balance'
+                        className='mt-1.5 text-balance text-start'
                         color='secondary'
                       >
                         420111, Республика Татарстан, г. Казань, ул. Московская,
@@ -288,7 +291,7 @@ export const CheckoutPageContainer = () => {
                       </Text>
                     </div>
 
-                    <button
+                    <div
                       className={cn(
                         'relative rounded-full border border-transparent bg-primary text-primary clamp-4 before:rounded-full before:bg-background before:transition-all before:duration-300 before:clamp-1 before:pos-abs before:[content:""]',
                         {
@@ -300,17 +303,19 @@ export const CheckoutPageContainer = () => {
                             DeliverCity.kazan !== currentDeliverCity,
                         },
                       )}
-                      onClick={() => setCurrentDeliverCity(DeliverCity.kazan)}
                     />
-                  </div>
+                  </button>
 
-                  <div className='flex-between'>
-                    <div className='flex flex-col'>
+                  <button
+                    className='block rounded-2xl p-2.5 transition-all duration-300 flex-between hover:bg-zinc-100'
+                    onClick={() => setCurrentDeliverCity(DeliverCity.moscow)}
+                  >
+                    <div className='flex flex-col items-start'>
                       <Text variant='subheader-1'>Московский офис:</Text>
 
                       <Text
                         as='p'
-                        className='mt-1.5 text-balance'
+                        className='mt-1.5 text-balance text-start'
                         color='secondary'
                       >
                         г.Москва, ул.Скаковая, дом 36, офис 205 Бизнес Центр
@@ -318,7 +323,7 @@ export const CheckoutPageContainer = () => {
                       </Text>
                     </div>
 
-                    <button
+                    <div
                       className={cn(
                         'relative rounded-full border border-transparent bg-primary text-primary clamp-4 before:rounded-full before:bg-background before:transition-all before:duration-300 before:clamp-1 before:pos-abs before:[content:""]',
                         {
@@ -330,9 +335,8 @@ export const CheckoutPageContainer = () => {
                             DeliverCity.moscow !== currentDeliverCity,
                         },
                       )}
-                      onClick={() => setCurrentDeliverCity(DeliverCity.moscow)}
                     />
-                  </div>
+                  </button>
                 </div>
               )}
             </Card>
