@@ -20,8 +20,8 @@ export const ProductCartItem = (props: ProductCartItemProps) => {
   const cartApi = useCart();
 
   const isSelected = !!cartApi.selectedCartItems?.find(
-    (item) => item.id === id,
-  );
+    ({ item }) => item.id === id,
+  )?.isActive;
 
   const onRemove = () => cartApi.remove(id);
 
@@ -32,7 +32,7 @@ export const ProductCartItem = (props: ProductCartItemProps) => {
           <div className='absolute left-0 top-0 z-10 size-6 rounded-md bg-white flex-center before:absolute before:-right-2 before:top-0 before:size-2 before:rounded-tl-lg before:shadow-[-3.5px_-3.5px_0_2px_#fff] after:absolute after:-bottom-2 after:left-0 after:size-2 after:rounded-tl-lg after:shadow-[-3.5px_-3.5px_0_2px_#fff]'>
             <Checkbox
               checked={isSelected}
-              onUpdate={() => cartApi.toggleSelectedCartItem(props)}
+              onUpdate={() => cartApi.toggleSelectedCartItem(id)}
             />
           </div>
 

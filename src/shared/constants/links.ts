@@ -12,6 +12,7 @@ export const LINKS = {
   profile: '/profile',
   register: '/register',
   services: (id?: string | number) => buildUrl('/services', id),
+  successOrderCompletion: '/success-order-completion',
 };
 
 function buildUrl(path: string, id?: string | number) {

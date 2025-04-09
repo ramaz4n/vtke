@@ -4,7 +4,7 @@ import { useUnit } from 'effector-react';
 
 import {
   $cart,
-  $selectedCartItems,
+  CartModel,
   clearSelectedCartItems,
   decrementCartItem,
   incrementCartItem,
@@ -14,13 +14,13 @@ import {
   setCartItem,
   toggleSelectedCartItems,
 } from '@/shared/models/cart.ts';
+import { ProductProps } from '@/shared/types/api/products.ts';
 
 export const useCart = () => {
   const {
     cartStore,
     setCartItemFn,
     resetCartFn,
-    selectedCartItems,
     selectAllCartItemsFn,
     clearSelectedItemsFn,
     removeCartItemFn,
@@ -35,14 +35,33 @@ export const useCart = () => {
     removeCartItemFn: removeCartItem,
     resetCartFn: resetCart,
     selectAllCartItemsFn: selectAllCartItems,
-    selectedCartItems: $selectedCartItems,
     setCartItemFn: setCartItem,
     toggleSelectedCartItem: toggleSelectedCartItems,
   });
 
-  console.log(selectedCartItems, 'selectedCartItems');
+  const { arrayItems = [], selectedCartItems = [] } = Object.values(
+    cartStore,
+  ).reduce(
+    (
+      acc: {
+        arrayItems: ProductProps[];
+        selectedCartItems: CartModel[];
+      },
+      el,
+    ) => {
+      if (el.isActive) {
+        acc?.selectedCartItems?.push(el);
+      }
 
-  const arrayItems = Object.values(cartStore).map((el) => el.item);
+      arrayItems?.push(el.item);
+
+      return acc;
+    },
+    {
+      arrayItems: [],
+      selectedCartItems: [],
+    },
+  );
 
   const isInCart = useCallback(
     (id: number) => Boolean(cartStore?.[id]),
@@ -52,26 +71,22 @@ export const useCart = () => {
   const getTotalSum = useCallback(() => {
     const values = Object.values(cartStore);
 
-    const ids = new Set(selectedCartItems.map((el) => el.id));
-
-    const selectedValues = values.filter((el) => ids.has(el.item.id));
+    const selectedValues = values.filter((el) => el.isActive);
 
     return selectedValues.reduce((acc, { item, count }) => {
       acc += Number.isNaN(item.price) ? 0 : Number(item.price) * count;
 
       return acc;
     }, 0);
-  }, [cartStore, selectedCartItems]);
+  }, [cartStore]);
 
   const getTotalSelectedItems = useCallback(() => {
     const values = Object.values(cartStore);
 
-    const ids = new Set(selectedCartItems.map((el) => el.id));
-
-    const selectedValues = values.filter((el) => ids.has(el.item.id));
+    const selectedValues = values.filter((el) => el.isActive);
 
     return selectedValues.reduce((acc, { count }) => acc + count, 0);
-  }, [cartStore, selectedCartItems]);
+  }, [cartStore]);
 
   const removeItem = useCallback(removeCartItemFn, [removeCartItemFn]);
 
@@ -84,17 +99,19 @@ export const useCart = () => {
     [cartStore],
   );
 
-  const initSelectedItems = () => {
-    selectAllCartItemsFn(arrayItems);
-  };
-
   const removeOutCartSelected = () => {
-    for (const { id } of selectedCartItems) {
-      removeCartItemFn(id);
+    const selectedCartItems = Object.values(cartStore).filter(
+      ({ isActive }) => isActive,
+    );
+
+    for (const { item } of selectedCartItems) {
+      removeCartItemFn(item.id);
     }
   };
 
-  const isAllSelected = arrayItems.length === selectedCartItems.length;
+  const isAllSelected = Object.values(cartStore).every(
+    ({ isActive }) => isActive,
+  );
 
   return {
     cartStore,
@@ -104,7 +121,7 @@ export const useCart = () => {
     getTotalSelectedItems,
     getTotalSum,
     incrementCartItem: incrementCartItemFn,
-    initSelectedItems,
+    initSelectedItems: selectAllCartItemsFn,
     isAllSelected,
     isInCart,
     remove: removeItem,

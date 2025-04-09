@@ -1,14 +1,15 @@
+import { toaster } from '@gravity-ui/uikit/toaster-singleton-react-18';
 import { createEffect, createEvent, createStore, sample } from 'effector';
 
 import { ProductProps } from '@/shared/types/api/products.ts';
 
-export type CartStore = Record<
-  number,
-  {
-    count: number;
-    item: ProductProps;
-  }
->;
+export type CartModel = {
+  count: number;
+  isActive: boolean;
+  item: ProductProps;
+};
+
+export type CartStore = Record<number, CartModel>;
 
 class CartApi {
   toString(store: CartStore) {
@@ -48,6 +49,7 @@ class CartApi {
         ...store,
         [item.id]: {
           count: 1,
+          isActive: true,
           item,
         },
       });
@@ -55,7 +57,7 @@ class CartApi {
       return;
     }
 
-    this.setter({ [item.id]: { count: 1, item } });
+    this.setter({ [item.id]: { count: 1, isActive: true, item } });
   }
 
   removeItem(id: number) {
@@ -63,7 +65,7 @@ class CartApi {
 
     delete store[id];
 
-    this.setter(store);
+    this.setter({ ...store });
   }
 
   incrementCartItem(id: number) {
@@ -85,41 +87,82 @@ class CartApi {
 
     this.setter({ ...store, [id]: { ...current, count: current.count - 1 } });
   }
+
+  clearSelectedCartItems() {
+    const store = this.toStore(localStorage.getItem('CART') || '{}');
+
+    this.setter(
+      Object.fromEntries(
+        Object.entries(store).map(([id, model]) => [
+          id,
+          { ...model, isActive: false },
+        ]),
+      ),
+    );
+  }
+
+  selectAllCartItems() {
+    const store = this.toStore(localStorage.getItem('CART') || '{}');
+
+    this.setter(
+      Object.fromEntries(
+        Object.entries(store).map(([id, model]) => [
+          id,
+          { ...model, isActive: true },
+        ]),
+      ),
+    );
+  }
+
+  toggleSelectedCartItems(payload: number) {
+    const store = this.toStore(localStorage.getItem('CART') || '{}');
+
+    this.setter(
+      Object.fromEntries(
+        Object.entries(store).map(([id, model]) => {
+          if (id === payload.toString()) {
+            return [id, { ...model, isActive: !model.isActive }];
+          }
+
+          return [id, model];
+        }),
+      ),
+    );
+  }
+
+  removeSelectedCartItems(payload: number) {
+    const store = this.toStore(localStorage.getItem('CART') || '{}');
+
+    this.setter(
+      Object.fromEntries(
+        Object.entries(store).map(([id, model]) => {
+          if (id === payload.toString()) {
+            return [id, { ...model, isActive: false }];
+          }
+
+          return [id, model];
+        }),
+      ),
+    );
+  }
 }
-
-export const clearSelectedCartItems = createEvent();
-export const toggleSelectedCartItems = createEvent<ProductProps>();
-export const removeSelectedCartItems = createEvent<number>();
-export const selectAllCartItems = createEvent<ProductProps[]>();
-
-export const $selectedCartItems = createStore<ProductProps[]>([])
-  .on(selectAllCartItems, (_, payload) => payload)
-  .on(removeSelectedCartItems, (store, payload) =>
-    store.filter(({ id }) => id !== payload),
-  )
-  .on(toggleSelectedCartItems, (store, payload) => {
-    const ids = new Set(store.map(({ id }) => id));
-
-    if (ids.has(payload.id)) {
-      return store.filter(({ id }) => id !== payload.id);
-    }
-
-    return [...store, payload];
-  })
-  .on(clearSelectedCartItems, () => []);
 
 export const resetCart = createEvent();
 export const setCartItem = createEvent<ProductProps>();
 export const removeCartItem = createEvent<number>();
 export const incrementCartItem = createEvent<number>();
 export const decrementCartItem = createEvent<number>();
+export const clearSelectedCartItems = createEvent();
+export const selectAllCartItems = createEvent();
+export const toggleSelectedCartItems = createEvent<number>();
+export const removeSelectedCartItems = createEvent<number>();
 
 export const $cart = createStore<CartStore>(new CartApi().getStore())
   .on(resetCart, () => ({}))
   .on(removeCartItem, (state, payload) => {
     delete state[payload];
 
-    return state;
+    return { ...state };
   })
   .on(incrementCartItem, (state, payload) => {
     const current = state[payload];
@@ -138,13 +181,59 @@ export const $cart = createStore<CartStore>(new CartApi().getStore())
       ...store,
       [id]: {
         count: 1,
+        isActive: true,
         item: payload,
       },
     };
-  });
+  })
+  .on(clearSelectedCartItems, (store) =>
+    Object.fromEntries(
+      Object.entries(store).map(([id, model]) => [
+        id,
+        { ...model, isActive: false },
+      ]),
+    ),
+  )
+  .on(selectAllCartItems, (store) =>
+    Object.fromEntries(
+      Object.entries(store).map(([id, model]) => [
+        id,
+        { ...model, isActive: true },
+      ]),
+    ),
+  )
+  .on(toggleSelectedCartItems, (store, payload) =>
+    Object.fromEntries(
+      Object.entries(store).map(([id, model]) => {
+        if (id === payload.toString()) {
+          return [id, { ...model, isActive: !model.isActive }];
+        }
+
+        return [id, model];
+      }),
+    ),
+  )
+  .on(removeSelectedCartItems, (store, payload) =>
+    Object.fromEntries(
+      Object.entries(store).map(([id, model]) => {
+        if (id === payload.toString()) {
+          return [id, { ...model, isActive: false }];
+        }
+
+        return [id, model];
+      }),
+    ),
+  );
 
 const setCartItemFx = createEffect((item: ProductProps) => {
   new CartApi().setItem(item);
+
+  toaster.add({
+    isClosable: false,
+    name: 'set-to-cart-item',
+    theme: 'success',
+    title: `${item.name} успешно добавлен в корзину.`,
+  });
 });
 
 sample({
@@ -154,12 +243,10 @@ sample({
 
 const resetCartFx = createEffect(() => {
   new CartApi().reset();
-  clearSelectedCartItems();
 });
 
 const removeCartItemFx = createEffect((id: number) => {
   new CartApi().removeItem(id);
-  removeSelectedCartItems(id);
 });
 
 const incrementCartItemFx = createEffect((id: number) => {
@@ -174,6 +261,8 @@ sample({
 const decrementCartItemFx = createEffect((id: number) => {
   new CartApi().decrementCartItem(id);
 });
+
+//SAMPLES
 
 sample({
   source: decrementCartItem,
@@ -193,4 +282,28 @@ sample({
 sample({
   source: setCartItem,
   target: setCartItemFx,
+});
+
+sample({
+  source: clearSelectedCartItems,
+  target: createEffect(() => new CartApi().clearSelectedCartItems()),
+});
+
+sample({
+  source: selectAllCartItems,
+  target: createEffect(() => new CartApi().selectAllCartItems()),
+});
+
+sample({
+  source: toggleSelectedCartItems,
+  target: createEffect((id: number) =>
+    new CartApi().toggleSelectedCartItems(id),
+  ),
+});
+
+sample({
+  source: removeSelectedCartItems,
+  target: createEffect((id: number) =>
+    new CartApi().removeSelectedCartItems(id),
+  ),
 });

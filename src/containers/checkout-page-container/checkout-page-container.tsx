@@ -2,22 +2,35 @@
 
 import { Fragment, useState } from 'react';
 
+import { ArrowLeft } from '@gravity-ui/icons';
 import { Card, Divider, Icon, RadioGroup, Text } from '@gravity-ui/uikit';
+import { useMutation } from '@tanstack/react-query';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import MainContainer from '@/containers/main-container/main-container.tsx';
+import { orderApi } from '@/shared/api/order.ts';
+import { DELIVERY_PERSON_TYPES } from '@/shared/constants/delivery-person-types.ts';
+import { DELIVERY_TYPES } from '@/shared/constants/delivery-types.ts';
+import { LINKS } from '@/shared/constants/links.ts';
 import { MASKS } from '@/shared/constants/masks.ts';
+import { ORGANIZATIONS_TYPES } from '@/shared/constants/organizations-types.ts';
+import { REGEXP } from '@/shared/constants/regex.ts';
 import { useCart } from '@/shared/hooks/use-cart.ts';
+import { OrderCreateProps } from '@/shared/types/api/orders.ts';
 import { Breadcrumbs } from '@/shared/ui/breadcrumbs/breadcrumbs.tsx';
 import { Button } from '@/shared/ui/button/button.tsx';
-import { LocationAlt } from '@/shared/ui/icons/location-alt.tsx';
-import { TrackSide } from '@/shared/ui/icons/track-side.tsx';
+import { FieldRow } from '@/shared/ui/field-row/field-row.tsx';
 import { Input } from '@/shared/ui/input/input.tsx';
 import { Select } from '@/shared/ui/select/select.tsx';
 import { Textarea } from '@/shared/ui/textarea/textarea.tsx';
 import { Uploader } from '@/shared/ui/uploader/uploader.tsx';
+import { apiErrorParse } from '@/shared/utils/api-error-parse.ts';
 import { cn } from '@/shared/utils/cn.ts';
+import { vld } from '@/shared/utils/form-validator.ts';
 import { getFormatSum } from '@/shared/utils/get-format-sum.ts';
+import { maskito } from '@/shared/utils/maskito.ts';
 
 export enum DeliveryTypes {
   company = 'company',
@@ -35,11 +48,16 @@ export enum DeliverCity {
 }
 
 export const CheckoutPageContainer = () => {
-  const methods = useForm({
-    defaultValues: {},
+  const methods = useForm<OrderCreateProps>({
+    defaultValues: {
+      email: 'tester@mail.ru',
+      full_name: 'Тестов Тест',
+      phone: '+7 (999) 999-99-99',
+    },
   });
 
   const cartApi = useCart();
+  const router = useRouter();
 
   const [currentDeliveryType, setCurrentDeliveryType] = useState(
     DeliveryTypes.self,
@@ -56,40 +74,67 @@ export const CheckoutPageContainer = () => {
   const totalSum = cartApi.getTotalSum();
   const totalSelectedItems = cartApi.getTotalSelectedItems();
 
-  const personTypes = [
-    {
-      content: 'Физ.лицо',
-      value: 'person',
-    },
-    {
-      content: 'Юр.лицо',
-      value: 'organization',
-    },
-  ];
+  const mutation = useMutation({
+    mutationFn: orderApi.create,
+    onSuccess: async ({ errors }) => {
+      if (errors) {
+        return apiErrorParse(errors, { setError: methods.setError });
+      }
 
-  const deliveryTypes = [
-    {
-      content: 'Самовывоз',
-      icon: LocationAlt,
-      value: 'self',
+      router.push(LINKS.successOrderCompletion);
     },
-    {
-      content: 'Транспортная компания',
-      icon: TrackSide,
-      value: 'company',
-    },
-  ];
+  });
 
-  const organizations = [
-    { children: 'ООО', value: '1' },
-    { children: 'ИП', value: '2' },
-    { children: 'ОАО', value: '3' },
-    { children: 'ЗАО', value: '4' },
-    { children: 'НП', value: '5' },
-    { children: 'ТОО', value: '6' },
-    { children: 'АО', value: '7' },
-    { children: 'ЧН', value: '8' },
-  ];
+  const citiesDescriptions = {
+    [DeliverCity.kazan]:
+      '420111, Республика Татарстан, г. Казань, ул. Московская, дом 25, офис 212 Бизнес Центр "Булгар-офис"',
+    [DeliverCity.moscow]:
+      'г.Москва, ул.Скаковая, дом 36, офис 205 Бизнес Центр "Скаковая 36"',
+  };
+
+  const onSubmit = ({ files, ...submitData }: OrderCreateProps) => {
+    submitData.phone = maskito.remain(submitData.phone);
+
+    if (Array.isArray(submitData.organizational_form)) {
+      submitData.organizational_form = submitData.organizational_form[0];
+    }
+
+    if (currentDeliveryType === DeliveryTypes.self) {
+      submitData.city = citiesDescriptions[currentDeliverCity];
+    }
+
+    const selectedItems = cartApi.selectedCartItems;
+
+    const { product_ids, product_quantities } = selectedItems.reduce(
+      (
+        acc: {
+          product_ids: number[];
+          product_quantities: number[];
+        },
+        { item, count },
+      ) => {
+        acc.product_ids.push(item.id);
+        acc.product_quantities.push(count);
+
+        return acc;
+      },
+      {
+        product_ids: [],
+        product_quantities: [],
+      },
+    );
+
+    submitData.product_ids = product_ids;
+    submitData.product_quantities = product_quantities;
+
+    console.log(submitData);
+
+    // const formData = formDataParse(submitData, {
+    //   files,
+    // });
+
+    // mutation.mutate(formData);
+  };
 
   return (
     <FormProvider {...methods}>
@@ -107,129 +152,106 @@ export const CheckoutPageContainer = () => {
                 </Text>
 
                 <RadioGroup
-                  options={personTypes}
+                  options={DELIVERY_PERSON_TYPES}
                   value={currentClientType}
-                  onUpdate={(v) => {
-                    console.log(v);
-                    setCurrentClientType(v as ClientTypes);
-                  }}
+                  onUpdate={(v) => setCurrentClientType(v as ClientTypes)}
                 />
               </div>
 
               <div className='flex flex-col gap-4'>
                 {currentClientType === ClientTypes.organization && (
                   <Fragment>
-                    <div className='flex items-center justify-between gap-4'>
-                      <span className='font-semibold'>
-                        Организационная форма
-                        <span className='text-danger'>*</span>
-                      </span>
-
+                    <FieldRow isRequired title='Организационная форма'>
                       <Select
                         className='w-full !max-w-[75%]'
                         filterable={false}
                         name='organization_form'
-                        options={organizations}
+                        options={ORGANIZATIONS_TYPES}
                         placeholder='Выберите организационную форму'
+                        rules={vld().required('Организационная форма')}
                         size='l'
                       />
-                    </div>
+                    </FieldRow>
 
-                    <div className='flex items-center justify-between gap-4'>
-                      <span className='font-semibold'>
-                        Организация<span className='text-danger'>*</span>
-                      </span>
-
+                    <FieldRow isRequired title='Организация'>
                       <Input
                         className='w-full max-w-[75%]'
-                        name='full_name'
+                        name='organization'
                         placeholder='Лучшая организация'
+                        rules={vld().required('Организация')}
                         size='l'
                       />
-                    </div>
+                    </FieldRow>
 
-                    <div className='flex items-center justify-between gap-4'>
-                      <span className='font-semibold'>
-                        ИНН<span className='text-danger'>*</span>
-                      </span>
-
+                    <FieldRow isRequired title='ИНН'>
                       <Input
                         className='w-full max-w-[75%]'
                         mask={MASKS.inn}
-                        name='full_name'
+                        name='inn'
                         placeholder='99999999999'
                         size='l'
+                        rules={vld()
+                          .required('ИНН')
+                          .minLength(MASKS.inn.length, 'Не корректный ИНН')}
                       />
-                    </div>
+                    </FieldRow>
                   </Fragment>
                 )}
 
-                <div className='flex items-center justify-between gap-4'>
-                  <span className='font-semibold'>
-                    ФИО<span className='text-danger'>*</span>
-                  </span>
-
+                <FieldRow isRequired title='ФИО'>
                   <Input
                     className='w-full max-w-[75%]'
                     name='full_name'
                     placeholder='Иванов Иван Иванович'
+                    rules={vld().required('ФИО')}
                     size='l'
                   />
-                </div>
+                </FieldRow>
 
-                <div className='flex items-center justify-between gap-4'>
-                  <span className='font-semibold'>
-                    Телефон<span className='text-danger'>*</span>
-                  </span>
-
+                <FieldRow isRequired title='Телефон'>
                   <Input
                     className='w-full max-w-[75%]'
                     mask={MASKS.phone}
                     name='phone'
                     placeholder='+7 (999) 999-99-99'
                     size='l'
+                    rules={vld()
+                      .required('Телефон')
+                      .minLength(MASKS.phone.length, 'Не корректный телефон')}
                   />
-                </div>
+                </FieldRow>
 
-                <div className='flex items-center justify-between gap-4'>
-                  <span className='font-semibold'>Эл. почта</span>
-
+                <FieldRow title='Эл. почта'>
                   <Input
                     className='w-full max-w-[75%]'
                     name='email'
                     placeholder='ivanov@example.com'
+                    rules={vld().pattern(REGEXP.email)}
                     size='l'
                   />
-                </div>
+                </FieldRow>
 
                 {currentDeliveryType === DeliveryTypes.company && (
-                  <div className='flex items-center justify-between gap-4'>
-                    <span className='font-semibold'>
-                      Город / Населенный пункт
-                    </span>
-
+                  <FieldRow isRequired title='Город / Населенный пункт'>
                     <Input
                       className='w-full max-w-[75%]'
                       name='city'
                       placeholder='Москва'
+                      rules={vld().required('Город / Населенный пункт')}
                       size='l'
                     />
-                  </div>
+                  </FieldRow>
                 )}
 
-                <div className='flex items-start justify-between gap-4'>
-                  <span className='font-semibold'>Коммантарий к заказу</span>
-
+                <FieldRow title='Коммантарий к заказу'>
                   <Textarea
                     className='w-full max-w-[75%]'
                     name='comment'
-                    placeholder='Введите комментарий'
+                    placeholder='Индекс, область, населенный пункт, улица, дом, квартира'
                   />
-                </div>
+                </FieldRow>
 
-                <div className='flex items-start justify-between gap-4'>
-                  <span className='font-semibold'>Файлы</span>
-
+                <FieldRow title='Файлы'>
                   <div className='flex w-full max-w-[75%] justify-start'>
                     <Uploader
                       name='files'
@@ -238,9 +260,23 @@ export const CheckoutPageContainer = () => {
                       }}
                     />
                   </div>
-                </div>
+                </FieldRow>
               </div>
             </Card>
+
+            <Link href={LINKS.products()}>
+              <Button
+                className='group mt-6 w-fit after:!bg-white'
+                size='l'
+                view='normal'
+              >
+                <Icon
+                  className='transition-all duration-300 group-hover:-translate-x-0.5'
+                  data={ArrowLeft}
+                />
+                К покупкам
+              </Button>
+            </Link>
           </div>
 
           <div className='sticky top-32 h-fit'>
@@ -249,12 +285,12 @@ export const CheckoutPageContainer = () => {
             </Text>
 
             <Card className='mt-8' size='l' view='filled'>
-              <div className='flex items-center gap-4'>
-                {deliveryTypes.map(({ icon, content, value }) => (
+              <div className='gap-4 flex-between'>
+                {DELIVERY_TYPES.map(({ icon, content, value }) => (
                   <button
                     key={value}
                     className={cn(
-                      'flex w-full max-w-48 flex-col items-start rounded-xl bg-[var(--g-color-private-brand-50-solid)] p-4 ring-1 transition-all duration-300 hover:ring-[var(--g-color-private-brand-350-solid)]',
+                      'flex w-full flex-col items-start rounded-xl bg-[var(--g-color-private-brand-50-solid)] p-4 ring-1 transition-all duration-300 hover:ring-[var(--g-color-private-brand-350-solid)]',
                       {
                         'ring-[var(--g-color-private-brand-350-solid)]':
                           currentDeliveryType === value,
@@ -366,7 +402,22 @@ export const CheckoutPageContainer = () => {
                 </div>
               </div>
 
-              <Button className='mt-6' size='xl' width='max'>
+              <Text
+                as='p'
+                className='mb-1.5 mt-6'
+                color='secondary'
+                variant='caption-2'
+              >
+                Перед оформлением заказа, пожалуйста, проверьте правильность
+                всех данных.
+              </Text>
+
+              <Button
+                className=''
+                size='xl'
+                width='max'
+                onClick={methods.handleSubmit(onSubmit)}
+              >
                 Оформить
               </Button>
             </Card>
