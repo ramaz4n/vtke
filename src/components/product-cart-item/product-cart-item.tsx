@@ -1,7 +1,9 @@
 import { Minus, Plus } from '@gravity-ui/icons';
 import { Checkbox, Icon, Label, Text } from '@gravity-ui/uikit';
 import Image from 'next/image';
+import Link from 'next/link';
 
+import { LINKS } from '@/shared/constants/links.ts';
 import { useCart } from '@/shared/hooks/use-cart.ts';
 import { ProductProps } from '@/shared/types/api/products.ts';
 import { Button } from '@/shared/ui/button/button.tsx';
@@ -43,7 +45,12 @@ export const ProductCartItem = (props: ProductCartItemProps) => {
         </div>
 
         <div className='flex grow flex-col gap-2'>
-          <span className='line-clamp-2 text-base font-medium'>{name}</span>
+          <Link
+            className='line-clamp-2 w-fit text-base font-medium hover:underline'
+            href={LINKS.products(id)}
+          >
+            {name}
+          </Link>
 
           <Text>{firm || 'OTIS'}</Text>
 

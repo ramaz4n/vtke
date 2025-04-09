@@ -34,7 +34,6 @@ export const Modal = ({
   children,
   onClose,
   size = 'm',
-  contentClassName,
   ...props
 }: ModalProps) => {
   const modalControl = useModal();
@@ -48,14 +47,13 @@ export const Modal = ({
   return (
     <ModalUI
       className={cn(ModalSize[size], className)}
-      contentClassName={cn('p-4 w-full', contentClassName)}
       open={isVisible}
       onClose={onCloseModal}
       onOutsideClick={onCloseModal}
       {...props}
     >
       <div className='mb-2.5 flex-between'>
-        <Text variant='subheader-3'>{title}</Text>
+        <Text variant='header-1'>{title}</Text>
 
         <Button
           className='clamp-7 flex-center'

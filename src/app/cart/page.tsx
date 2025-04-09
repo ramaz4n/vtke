@@ -11,6 +11,7 @@ import { CartPageContainer } from '@/containers/cart-page-container/cart-page-co
 import { productsApi } from '@/shared/api/products.ts';
 import { LINKS } from '@/shared/constants/links.ts';
 import { $breadcrumbs } from '@/shared/models/breadcrumbs.ts';
+import { $modal } from '@/shared/models/modal.ts';
 import { QueryKeys } from '@/shared/types/api/query-keys.ts';
 
 export const metadata: Metadata = {
@@ -35,6 +36,7 @@ export default async function Page() {
         $breadcrumbs,
         [{ href: LINKS.products(), text: 'Каталог' }, { text: 'Корзина' }],
       ],
+      [$modal, new Set(['create-order'])],
     ],
   });
 

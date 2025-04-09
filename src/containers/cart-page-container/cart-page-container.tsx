@@ -22,7 +22,7 @@ export const CartPageContainer = () => {
 
   const modal = useModal();
 
-  const [acceptTradeRules, setAcceptTradeRules] = useState(false);
+  const [acceptTradeRules, setAcceptTradeRules] = useState(true);
 
   const totalCountItems = cartApi.getLength();
   const totalSum = cartApi.getTotalSum();
@@ -51,7 +51,7 @@ export const CartPageContainer = () => {
 
   if (!totalCountItems)
     return (
-      <MainContainer className='space-y-4 bg-[#f6f6f9] py-6'>
+      <MainContainer className='space-y-4 py-6'>
         <Breadcrumbs />
 
         <Card className='flex-col flex-center' size='l' view='filled'>
@@ -177,13 +177,17 @@ export const CartPageContainer = () => {
               </div>
             )}
 
-            <Button
-              disabled={!cartApi.selectedCartItems.length || !acceptTradeRules}
-              size='xl'
-              width='max'
-            >
-              К оформлению
-            </Button>
+            <Link href={LINKS.checkout}>
+              <Button
+                size='xl'
+                width='max'
+                disabled={
+                  !cartApi.selectedCartItems.length || !acceptTradeRules
+                }
+              >
+                К оформлению
+              </Button>
+            </Link>
 
             <div className='flex items-center gap-2.5'>
               <Checkbox
@@ -197,7 +201,7 @@ export const CartPageContainer = () => {
                 Соглашаюсь с{' '}
                 <Link
                   className='transition-all duration-300 hover:text-primary'
-                  href='/'
+                  href={LINKS.privacyPolicy}
                   rel='noreferrer'
                   target='_blank'
                 >

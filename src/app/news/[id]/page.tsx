@@ -3,10 +3,9 @@ import { Text } from '@gravity-ui/uikit';
 import { useParams } from 'next/navigation';
 
 import MainContainer from '@/containers/main-container/main-container.tsx';
-import { LINKS } from '@/shared/constants/links.ts';
 import { Breadcrumbs } from '@/shared/ui/breadcrumbs/breadcrumbs.tsx';
 
-export default function Page({ params }: { params: { id: string } }) {
+export default function Page() {
   const { id } = useParams();
   // const queries = useQuery({
   //   placeholderData: keepPreviousData,
@@ -22,10 +21,10 @@ export default function Page({ params }: { params: { id: string } }) {
     <MainContainer>
       <div className='px-3.5 py-6'>
         <Breadcrumbs
-          items={[
-            { href: LINKS.news(), text: 'Новости' },
-            { href: LINKS.news(id.toString()), text: id.toString() },
-          ]}
+        // items={[
+        //   { href: LINKS.news(), text: 'Новости' },
+        //   { href: LINKS.news(id.toString()), text: id.toString() },
+        // ]}
         />
       </div>
       <div className='flex flex-col gap-16 pb-20 pt-7'>
