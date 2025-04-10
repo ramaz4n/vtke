@@ -5,10 +5,10 @@ import { productsApi } from '@/shared/api/products.ts';
 import { QueryKeys } from '@/shared/types/api/query-keys.ts';
 
 export const useProduct = () => {
-  const { id } = useParams();
+  const id = useParams()?.id?.toString();
   const q = useQuery({
     placeholderData: keepPreviousData,
-    queryFn: () => productsApi.view(id as string),
+    queryFn: () => productsApi.view(id),
     queryKey: [QueryKeys.PRODUCT_VIEW, id],
   });
 

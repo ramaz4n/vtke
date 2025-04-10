@@ -52,7 +52,6 @@ export const apiRequest = async ({
       ...options,
     });
 
-    console.log(response, 'response');
     const resJson = await response.json();
 
     if (resJson.status === HttpErrors.Forbidden) {

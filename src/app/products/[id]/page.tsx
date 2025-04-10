@@ -6,18 +6,23 @@ import {
 } from '@tanstack/react-query';
 import { fork, serialize } from 'effector';
 import { Metadata } from 'next';
+import { redirect } from 'next/navigation';
 
 import { ProductPage } from '@/containers/product-page-container/product-page-container.tsx';
 import { productsApi } from '@/shared/api/products.ts';
+import { LINKS } from '@/shared/constants/links.ts';
 import { $breadcrumbs } from '@/shared/models/breadcrumbs.ts';
+import { ProductProps } from '@/shared/types/api/products.ts';
 import { QueryKeys } from '@/shared/types/api/query-keys.ts';
+import {
+  ServerMetadataGenerate,
+  ServerPageProps,
+} from '@/shared/types/globals.ts';
 
 // динамическое обновления метаданных
 export async function generateMetadata({
   params,
-}: {
-  params: { id: string };
-}): Promise<Metadata> {
+}: ServerMetadataGenerate): Promise<Metadata> {
   const { data } = await productsApi.view(params.id);
 
   return {
@@ -38,24 +43,46 @@ export async function generateMetadata({
   };
 }
 
-export default async function Page({
-  searchParams,
-}: {
-  searchParams: { [key: string]: string };
-}) {
-  const id = searchParams.id;
+export default async function Page({ params }: ServerPageProps) {
+  const { id } = await params;
+
+  if (!id) {
+    return redirect(LINKS.notFound);
+  }
 
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
-    queryFn: () => productsApi.view(id as string),
+    queryFn: () => productsApi.view(id),
     queryKey: [QueryKeys.PRODUCT_VIEW, id],
   });
 
-  const scope = fork({
-    values: [[$breadcrumbs, [{ text: id }]]],
-  });
+  const fetchedQueryData: { data: ProductProps } | undefined =
+    queryClient.getQueryData([QueryKeys.PRODUCT_VIEW, id]);
 
+  if (!fetchedQueryData?.data?.id) {
+    return redirect(LINKS.notFound);
+  }
+
+  const breadcrumbs = [];
+
+  const category = fetchedQueryData?.data?.categories.at(0);
+  const name = fetchedQueryData?.data?.name;
+
+  if (category) {
+    breadcrumbs.push({
+      href: LINKS.products(),
+      text: category.name,
+    });
+  }
+
+  if (name) {
+    breadcrumbs.push({
+      text: name,
+    });
+  }
+
+  const scope = fork({ values: [[$breadcrumbs, breadcrumbs]] });
   const serialized = serialize(scope);
   const dehydratedState = dehydrate(queryClient);
 

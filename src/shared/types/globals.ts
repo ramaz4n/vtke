@@ -43,3 +43,11 @@ export interface PaginationApiResponse<T> {
 }
 
 export type ApiValidationError = Record<string, string[]> | string;
+
+export type ServerPageProps<T extends string | undefined = undefined> = {
+  params: Promise<Record<T extends string ? T : 'id' | 'slug', string>>;
+};
+
+export type ServerMetadataGenerate<T extends string | undefined = undefined> = {
+  params: Record<T extends string ? T : 'id' | 'slug', string>;
+};

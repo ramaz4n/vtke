@@ -7,6 +7,8 @@
 @import '../../public/styles/lib/gravity/modal.css';
 @import '../../public/styles/lib/gravity/label.css';
 
+@import '../../public/styles/lib/swiper/index.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

@@ -153,7 +153,7 @@ export const CheckoutPageContainer = () => {
       }
 
       loadingControl.setFalse();
-    }, 1000);
+    }, 250);
 
     return () => {
       clearTimeout(timeout);
