@@ -1,5 +1,5 @@
 import { Portal } from '@gravity-ui/uikit';
-import { useUnit } from 'effector-react/effector-react.umd';
+import { useUnit } from 'effector-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useScrollLock } from 'usehooks-ts';
 
@@ -24,7 +24,7 @@ export const MobileMenu = () => {
     <Portal>
       <motion.div
         className={cn(
-          'z-drawer fixed inset-0 flex justify-center py-8 transition-all duration-300',
+          'fixed inset-0 z-drawer flex justify-center py-8 transition-all duration-300',
           { 'visible bg-black/50 backdrop-blur-md': isVisible },
           { 'pointer-events-none invisible': !isVisible },
         )}

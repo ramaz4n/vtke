@@ -23,7 +23,7 @@ export const ProductCartItem = (props: ProductCartItemProps) => {
     ({ item }) => item.id === id,
   )?.isActive;
 
-  const onRemove = () => cartApi.remove(id);
+  const onRemove = () => cartApi.removeItem(id);
 
   return (
     <div>

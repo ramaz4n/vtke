@@ -81,7 +81,7 @@ export const CheckoutPageContainer = () => {
     mutationFn: orderApi.create,
     onError: () => {
       router.push(LINKS.successOrderCompletion);
-      cartApi.reset();
+      cartApi.removeOutCartSelected();
     },
     onSuccess: async ({ errors }) => {
       if (errors) {
@@ -408,7 +408,7 @@ export const CheckoutPageContainer = () => {
                   <div className='flex-between'>
                     <span className='text-xl font-bold'>Итого</span>
 
-                    <span className='text-success text-base font-bold'>
+                    <span className='text-base font-bold text-success'>
                       {getFormatSum(totalSum)}
                     </span>
                   </div>

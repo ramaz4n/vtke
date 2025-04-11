@@ -69,6 +69,13 @@ export default async function Page({ params }: ServerPageProps) {
   const category = fetchedQueryData?.data?.categories.at(0);
   const name = fetchedQueryData?.data?.name;
 
+  const listParams = { category: category?.id };
+
+  await queryClient.prefetchQuery({
+    queryFn: () => productsApi.list(listParams),
+    queryKey: [QueryKeys.PRODUCTS_VIEW, listParams, id],
+  });
+
   if (category) {
     breadcrumbs.push({
       href: LINKS.products(),

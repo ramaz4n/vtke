@@ -20,6 +20,7 @@ module.exports = {
         textColor: 'rgba(7, 7, 7, 1);',
         success: {
           DEFAULT: 'var(--g-color-text-positive)',
+          glow: 'var(--g-color-success-glow)'
         },
         mainBlue: '#154063',
         secondaryBlue: '#4b71d6',
@@ -30,6 +31,7 @@ module.exports = {
         hover: 'var(--g-color-base-simple-hover)',
         primary: {
           DEFAULT: 'var(--g-color-base-brand)',
+          light: 'var(--g-color-base-brand-light)',
         },
         danger: {
           DEFAULT:'var(--g-color-text-danger)',
@@ -78,6 +80,7 @@ module.exports = {
     fontSize: {
       ...defaultTheme.fontSize,
       10: '10px',
+      '2.5xl': '1.75rem',
       xsm: '0.813rem',
       'pre-base': '0.938rem',
     },

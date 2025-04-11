@@ -124,7 +124,7 @@ export const useCart = () => {
     initSelectedItems: selectAllCartItemsFn,
     isAllSelected,
     isInCart,
-    remove: removeItem,
+    removeItem,
     removeOutCartSelected,
     reset: resetCartFn,
     selectedCartItems,

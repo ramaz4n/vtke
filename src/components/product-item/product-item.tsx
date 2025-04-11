@@ -31,11 +31,11 @@ export const ProductItem = ({
 
   return (
     <Link
-      className='flex flex-col justify-between rounded-2xl px-3 py-2 duration-300 hover:shadow-lg'
+      className='flex flex-col justify-between rounded-2xl px-3 duration-300 hover:shadow-lg max-md:px-1 md:py-2'
       href={LINKS.products(id)}
     >
-      <div className='flex flex-col gap-2'>
-        <div className='relative h-72 overflow-hidden rounded-3xl'>
+      <div className='flex flex-col'>
+        <div className='relative mb-4 overflow-hidden rounded-3xl max-sm:aspect-square max-sm:max-h-48 sm:h-72'>
           <Image
             fill
             alt={name}
@@ -44,19 +44,19 @@ export const ProductItem = ({
           />
         </div>
 
-        <Text className='text-foreground-text font-bold' variant='header-1'>
+        <span className='text-foreground-text block text-lg font-bold max-md:text-base'>
           {getFormatSum(Number.parseInt(price))}
-        </Text>
+        </span>
 
-        <Text className='line-clamp-2' variant='subheader-2'>
+        <p className='line-clamp-2 text-base font-medium max-md:text-sm'>
           {name}
-        </Text>
+        </p>
 
         <div className='flex gap-1.5'>
           {firm && (
             <Fragment>
               <Text
-                className='text-foreground-text mb-2'
+                className='text-foreground-text mb-2 max-md:!text-xs'
                 ellipsisLines={2}
                 variant='subheader-1'
               >
@@ -67,7 +67,7 @@ export const ProductItem = ({
           )}
 
           <div
-            className='g-color-text_color_secondary line-clamp-1 whitespace-nowrap'
+            className='g-color-text_color_secondary line-clamp-1 whitespace-nowrap max-md:text-xs'
             dangerouslySetInnerHTML={{ __html: description }}
           />
         </div>

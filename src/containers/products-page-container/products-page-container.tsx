@@ -50,13 +50,13 @@ export const ProductsPage = () => {
         {isLoading ? (
           <div className='relative grid w-full grid-cols-1 gap-3 pb-16 sm:grid-cols-2 lg:grid-cols-3 lg:gap-4 xl:grid-cols-4 xl:gap-4 2xl:grid-cols-5 2xl:gap-6'>
             <Skeleton className='h-[400px] rounded-3xl' />
-            <Skeleton className='h-[400px] rounded-3xl' />;
-            <Skeleton className='h-[400px] rounded-3xl' />;
-            <Skeleton className='h-[400px] rounded-3xl' />;
-            <Skeleton className='h-[400px] rounded-3xl' />;
+            <Skeleton className='h-[400px] rounded-3xl' />
+            <Skeleton className='h-[400px] rounded-3xl' />
+            <Skeleton className='h-[400px] rounded-3xl' />
+            <Skeleton className='h-[400px] rounded-3xl' />
           </div>
         ) : (
-          <div className='relative grid w-full grid-cols-1 gap-3 pb-16 sm:grid-cols-2 lg:grid-cols-3 lg:gap-4 xl:grid-cols-4 xl:gap-4 2xl:grid-cols-5 2xl:gap-6'>
+          <div className='relative grid w-full grid-cols-2 pb-16 max-md:gap-y-4 md:gap-x-3 lg:grid-cols-3 lg:gap-4 xl:grid-cols-4 xl:gap-4 2xl:grid-cols-5 2xl:gap-6'>
             {models?.map((model) => (
               <ProductItem
                 key={model.id}
