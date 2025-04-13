@@ -189,6 +189,9 @@ const FloatPanel = (model: ProductProps) => {
   const cartCount = cartApi.cartStore?.[id]?.count || 0;
 
   const onBuyNow = () => {
+    if (!cartApi.isInCart(id)) {
+      cartApi.setCartItem(model);
+    }
     cartApi.clearSelectedItems();
     cartApi.toggleSelectedCartItem(id);
 
@@ -577,7 +580,7 @@ const ImagesPreview = ({ images = [] }: ProductProps) => {
           </button>
 
           <ShareButton
-            className='absolute right-3 top-3 z-10'
+            className='absolute right-3 top-3 z-10 lg:opacity-0'
             textClassName='!text-foreground'
             iconProps={{
               data: NodesRight,

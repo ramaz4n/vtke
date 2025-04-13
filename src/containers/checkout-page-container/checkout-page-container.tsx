@@ -189,7 +189,7 @@ export const CheckoutPageContainer = () => {
                   <Fragment>
                     <FieldRow isRequired title='Организационная форма'>
                       <Select
-                        className='!md:max-w-[75%] w-full'
+                        className='w-full md:!max-w-[75%]'
                         filterable={false}
                         name='organizational_form'
                         options={ORGANIZATIONS_TYPES}
