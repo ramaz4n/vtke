@@ -222,7 +222,7 @@ const FloatPanel = (model: ProductProps) => {
       {cartApi.isInCart(id) ? (
         <div className='flex gap-4 max-xl:grid max-xl:grid-cols-2 xl:items-center'>
           <Link
-            className='bg-success-glow h-12 flex-col rounded-lg px-6 text-white flex-center xl:w-fit'
+            className='h-12 flex-col rounded-lg bg-success-glow px-6 text-white flex-center xl:w-fit'
             href={LINKS.cart()}
           >
             <span className='block whitespace-nowrap text-sm font-semibold'>
@@ -262,7 +262,7 @@ const FloatPanel = (model: ProductProps) => {
       )}
 
       <Button
-        className='after:bg-primary-light mt-2 span:font-bold'
+        className='mt-2 after:bg-primary-light span:font-bold'
         size='xl'
         view='flat-action'
         width='max'
@@ -536,14 +536,7 @@ const ImagesPreview = ({ images = [] }: ProductProps) => {
           //@ts-ignore
           onSwiper={(swiper) => (swiperRef.current = swiper)}
         >
-          {[
-            { id: '1', name: '1', path: '/images/about/lift.png' },
-            {
-              id: '2',
-              name: '2',
-              path: '/images/about/assortment.png',
-            },
-          ].map((image) => (
+          {images.map((image) => (
             <SwiperSlide key={image.id} className='max-h-28 min-h-28 w-full'>
               <div className='size-full p-0.5'>
                 <button

@@ -1,7 +1,8 @@
-import { Minus, Plus } from '@gravity-ui/icons';
+import { Minus, Plus, Thunderbolt } from '@gravity-ui/icons';
 import { Checkbox, Icon, Label, Text } from '@gravity-ui/uikit';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 import { LINKS } from '@/shared/constants/links.ts';
 import { useCart } from '@/shared/hooks/use-cart.ts';
@@ -18,12 +19,20 @@ export const ProductCartItem = (props: ProductCartItemProps) => {
   const { price, images, name, firm, id, categories, count = 0 } = props;
 
   const cartApi = useCart();
+  const router = useRouter();
 
   const isSelected = !!cartApi.selectedCartItems?.find(
     ({ item }) => item.id === id,
   )?.isActive;
 
   const onRemove = () => cartApi.removeItem(id);
+
+  const onBuyNow = () => {
+    cartApi.clearSelectedItems();
+    cartApi.toggleSelectedCartItem(id);
+
+    router.push(LINKS.checkout);
+  };
 
   return (
     <div>
@@ -67,9 +76,19 @@ export const ProductCartItem = (props: ProductCartItemProps) => {
               ))}
             </div>
 
-            <div className='mt-auto flex items-center gap-4'>
+            <div className='mt-auto flex items-center gap-2'>
               <Button size='l' view='flat' onClick={onRemove}>
                 <Trash className='text-secondary' />
+              </Button>
+
+              <Button
+                className='text-secondary'
+                size='l'
+                view='flat'
+                onClick={onBuyNow}
+              >
+                <Icon className='text-secondary' data={Thunderbolt} size={18} />{' '}
+                Купить
               </Button>
             </div>
           </div>
