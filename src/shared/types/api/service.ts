@@ -5,7 +5,7 @@ export interface ServiceProps {
   description: string;
   id: number;
   name: string;
-  price: number;
+  price: string;
 }
 
 export interface CreateServiceProps {
