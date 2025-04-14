@@ -580,7 +580,7 @@ const ImagesPreview = ({ images = [] }: ProductProps) => {
           </button>
 
           <ShareButton
-            className='absolute right-3 top-3 z-10 lg:opacity-0'
+            className='absolute right-3 top-3 z-10 lg:!hidden'
             textClassName='!text-foreground'
             iconProps={{
               data: NodesRight,

@@ -49,5 +49,5 @@ export type ServerPageProps<T extends string | undefined = undefined> = {
 };
 
 export type ServerMetadataGenerate<T extends string | undefined = undefined> = {
-  params: Record<T extends string ? T : 'id' | 'slug', string>;
+  params: Promise<Record<T extends string ? T : 'id' | 'slug', string>>;
 };

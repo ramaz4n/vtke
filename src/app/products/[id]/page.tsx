@@ -23,7 +23,9 @@ import {
 export async function generateMetadata({
   params,
 }: ServerMetadataGenerate): Promise<Metadata> {
-  const { data } = await productsApi.view(params.id);
+  const { id } = await params;
+
+  const { data } = await productsApi.view(id);
 
   return {
     description: data.description,
