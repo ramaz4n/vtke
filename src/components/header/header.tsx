@@ -1,8 +1,14 @@
 'use client';
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 
-import { Magnifier, Person, ShoppingCart } from '@gravity-ui/icons';
-import { Modal, Text } from '@gravity-ui/uikit';
+import {
+  ClockArrowRotateLeft,
+  Magnifier,
+  Person,
+  ShoppingCart,
+  Xmark,
+} from '@gravity-ui/icons';
+import { Button, Icon, Text } from '@gravity-ui/uikit';
 import cc from 'classcat';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -13,21 +19,19 @@ import MainContainer from '@/containers/main-container/main-container.tsx';
 import { LINKS } from '@/shared/constants/links.ts';
 import { NAVIGATIONS } from '@/shared/constants/navigations.ts';
 import { useCart } from '@/shared/hooks/use-cart.ts';
+import { useModal } from '@/shared/hooks/use-modal.ts';
+import { Modal } from '@/shared/ui/modal/modal.tsx';
 
 export default function Header() {
-  const [searchModalOpen, setSearchModalOpen] = useState(false);
   const pathname = usePathname();
 
   const headerRef = useRef<HTMLHeadElement>(null);
   const lastScrollY = useRef(0);
 
   const cartApi = useCart();
+  const modal = useModal();
 
   const cartItemsLength = cartApi.getLength();
-
-  const onSearchOpen = () => {
-    setSearchModalOpen(true);
-  };
 
   function onScroll() {
     const currentScrollY = window.scrollY;
@@ -84,7 +88,7 @@ export default function Header() {
           <div className='flex items-center justify-center gap-6 max-lg:hidden'>
             <button
               className='flex flex-col items-center gap-0.5'
-              onClick={onSearchOpen}
+              onClick={() => modal.show('global-search')}
             >
               <Magnifier className='size-7' />
 
@@ -121,8 +125,7 @@ export default function Header() {
 
             <Link
               className='flex flex-col items-center gap-0.5'
-              href='/login'
-              rel='stylesheet'
+              href={LINKS.login}
             >
               <Person className='size-7' />
 
@@ -137,16 +140,75 @@ export default function Header() {
 
           <div className='flex size-9 items-center justify-center rounded-full bg-mainBlue lg:hidden'></div>
         </div>
+
         <Modal
-          open={searchModalOpen}
-          style={{
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-          }}
-          onClose={() => setSearchModalOpen(false)}
+          className='g-modal-align__start g-modal-without-header'
+          name='global-search'
+          size='xl'
         >
-          <div className='top-20 flex min-h-compact-menu-padding w-full min-w-3.5 max-w-screen-xl items-center justify-center rounded-2xl bg-white pos-abs-x'>
-            content
-          </div>
+          <form className='flex flex-col gap-4'>
+            <div className='flex items-center gap-2 overflow-hidden rounded-lg bg-zinc-100 px-2.5 transition-all duration-300 hover:bg-zinc-50'>
+              <Icon className='text-secondary' data={Magnifier} size={20} />
+
+              <input
+                autoFocus
+                className='h-10 w-full cursor-pointer bg-transparent focus:cursor-text focus:outline-none'
+                maxLength={128}
+                placeholder='Что искать?'
+              />
+
+              <Button type='button'>
+                <Icon className='text-secondary' data={Xmark} />
+              </Button>
+            </div>
+
+            <section>
+              <div className='inline-flex items-end gap-4'>
+                <Text variant='subheader-2'>История</Text>
+
+                <button
+                  className='font-semibold text-primary transition-all duration-300 hover:opacity-75'
+                  type='button'
+                >
+                  Очистить
+                </button>
+              </div>
+
+              <div className='mt-4 flex flex-col gap-1.5'>
+                <div className='flex items-center gap-2'>
+                  <div>
+                    <span className='size-8 rounded-md bg-zinc-100 flex-center'>
+                    <Icon
+                        className='text-secondary'
+                        data={ClockArrowRotateLeft}
+                        size={18}
+                    />
+                  </span>
+
+                    <span className='truncate font-medium'>Катушка топлива</span>
+                  </div>
+
+                  <Button>
+                    <Icon
+                  </Button>
+                </div>
+
+                <div className='flex items-center gap-2'>
+                  <span className='size-8 rounded-md bg-zinc-100 flex-center'>
+                    <Icon
+                      className='text-secondary'
+                      data={ClockArrowRotateLeft}
+                      size={18}
+                    />
+                  </span>
+
+                  <span className='truncate font-medium'>
+                    Шестерня переключения
+                  </span>
+                </div>
+              </div>
+            </section>
+          </form>
         </Modal>
       </MainContainer>
     </header>

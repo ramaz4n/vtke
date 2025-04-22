@@ -52,7 +52,7 @@ export const Modal = ({
       onOutsideClick={onCloseModal}
       {...props}
     >
-      <div className='mb-2.5 flex-between'>
+      <header className='mb-2.5 flex-between'>
         <Text variant='header-1'>{title}</Text>
 
         <Button
@@ -63,7 +63,7 @@ export const Modal = ({
         >
           <Xmark />
         </Button>
-      </div>
+      </header>
 
       <section className='space-y-2.5'>{children}</section>
     </ModalUI>

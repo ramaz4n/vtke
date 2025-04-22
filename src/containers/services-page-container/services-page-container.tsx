@@ -20,7 +20,7 @@ export const ServicesPageContainer = () => {
               {category.name}
             </Text>
 
-            <div className='relative grid w-full grid-cols-2 pb-16 max-md:gap-y-4 md:gap-x-3 lg:grid-cols-3 lg:gap-4 xl:grid-cols-4 xl:gap-4 2xl:grid-cols-5 2xl:gap-6'>
+            <div className='relative grid w-full grid-cols-2 pb-8 max-md:gap-y-4 md:gap-x-3 lg:grid-cols-3 lg:gap-4 xl:grid-cols-4 xl:gap-4 2xl:grid-cols-5 2xl:gap-6'>
               {services?.map((model) => (
                 <ServiceItem key={model.id} {...model} />
               ))}

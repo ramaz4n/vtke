@@ -34,6 +34,6 @@ export const serviceApi = {
       url: concatUrlSlug('/api/service', slug),
     }),
 
-  view: (slug?: string): FetchResponse<{ data: ServiceProps }> =>
+  view: (slug?: string): FetchResponse<ServiceProps> =>
     apiRequest({ url: concatUrlSlug('/api/service', slug) }),
 };

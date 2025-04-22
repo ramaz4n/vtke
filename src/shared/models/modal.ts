@@ -4,7 +4,8 @@ export type ModalName =
   | 'search-products'
   | 'catalog'
   | 'reset-cart'
-  | 'mobile-menu';
+  | 'mobile-menu'
+  | 'global-search';
 
 export type ModalStore = Set<ModalName> | null;
 

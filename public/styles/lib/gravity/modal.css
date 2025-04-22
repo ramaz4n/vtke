@@ -32,3 +32,16 @@
     padding: 24px;
     width: 100%;
 }
+
+.g-modal-align__start .g-modal__content-aligner {
+    align-items: start;
+}
+
+
+.g-modal-without-header header {
+    display: none;
+}
+
+.g-modal-without-header .g-modal-header {
+    display: none;
+}
