@@ -2,6 +2,7 @@ export const LS_KEYS = {
   accessToken: 'ACCESS_TOKEN',
   aside: 'APP_ASIDE',
   drafts: 'DRAFTS',
+  globalSearch: 'GLOBAL_SEARCH',
   refreshToken: 'REFRESH_TOKEN',
   saveDrafts: 'SAVE_DRAFTS',
   theme: 'APP_THEME',

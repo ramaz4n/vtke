@@ -29,7 +29,8 @@
 
 
 .g-modal__content {
-    padding: 24px;
+    --modal-padding: 24px;
+    padding: var(--modal-padding);
     width: 100%;
 }
 
@@ -44,4 +45,9 @@
 
 .g-modal-without-header .g-modal-header {
     display: none;
+}
+
+.g-modal-tiny-container .g-modal__content {
+    --modal-padding: 14px;
+    --g-modal-border-radius: 18px
 }

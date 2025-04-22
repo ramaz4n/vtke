@@ -18,9 +18,11 @@ import Logo from '@/components/logo/logo.tsx';
 import MainContainer from '@/containers/main-container/main-container.tsx';
 import { LINKS } from '@/shared/constants/links.ts';
 import { NAVIGATIONS } from '@/shared/constants/navigations.ts';
+import { useGlobalSearch } from '@/shared/hooks/api/use-global-search.ts';
 import { useCart } from '@/shared/hooks/use-cart.ts';
 import { useModal } from '@/shared/hooks/use-modal.ts';
 import { Modal } from '@/shared/ui/modal/modal.tsx';
+import { Spinner } from '@/shared/ui/spinner/spinner.tsx';
 
 export default function Header() {
   const pathname = usePathname();
@@ -29,6 +31,7 @@ export default function Header() {
   const lastScrollY = useRef(0);
 
   const cartApi = useCart();
+  const globalSearchApi = useGlobalSearch();
   const modal = useModal();
 
   const cartItemsLength = cartApi.getLength();
@@ -142,22 +145,34 @@ export default function Header() {
         </div>
 
         <Modal
-          className='g-modal-align__start g-modal-without-header'
+          className='g-modal-align__start g-modal-without-header g-modal-tiny-container'
           name='global-search'
           size='xl'
         >
-          <form className='flex flex-col gap-4'>
+          <section className='flex flex-col gap-4'>
             <div className='flex items-center gap-2 overflow-hidden rounded-lg bg-zinc-100 px-2.5 transition-all duration-300 hover:bg-zinc-50'>
-              <Icon className='text-secondary' data={Magnifier} size={20} />
+              {globalSearchApi.searchMutation.isPending ? (
+                <Spinner size={20} />
+              ) : (
+                <Icon className='text-secondary' data={Magnifier} size={20} />
+              )}
 
               <input
+                ref={globalSearchApi.inputRef}
                 autoFocus
-                className='h-10 w-full cursor-pointer bg-transparent focus:cursor-text focus:outline-none'
+                className='peer h-10 w-full cursor-pointer bg-transparent focus:cursor-text focus:outline-none'
                 maxLength={128}
                 placeholder='Что искать?'
+                onChange={(event) =>
+                  globalSearchApi.onSearch(event.target.value, event)
+                }
               />
 
-              <Button type='button'>
+              <Button
+                className='transition-all duration-300 peer-placeholder-shown:invisible peer-placeholder-shown:opacity-0'
+                type='button'
+                onClick={globalSearchApi.clearInputValue}
+              >
                 <Icon className='text-secondary' data={Xmark} />
               </Button>
             </div>
@@ -166,49 +181,63 @@ export default function Header() {
               <div className='inline-flex items-end gap-4'>
                 <Text variant='subheader-2'>История</Text>
 
-                <button
-                  className='font-semibold text-primary transition-all duration-300 hover:opacity-75'
-                  type='button'
-                >
-                  Очистить
-                </button>
+                {!!globalSearchApi.storage.length && (
+                  <button
+                    className='font-semibold text-primary transition-all duration-300 hover:opacity-75'
+                    type='button'
+                    onClick={globalSearchApi.clearHistory}
+                  >
+                    Очистить
+                  </button>
+                )}
               </div>
 
-              <div className='mt-4 flex flex-col gap-1.5'>
-                <div className='flex items-center gap-2'>
-                  <div>
-                    <span className='size-8 rounded-md bg-zinc-100 flex-center'>
-                    <Icon
-                        className='text-secondary'
-                        data={ClockArrowRotateLeft}
-                        size={18}
-                    />
-                  </span>
+              {globalSearchApi.storage.length ? (
+                <div className='mt-4 flex flex-col gap-1.5'>
+                  {globalSearchApi.storage.map((item) => (
+                    <div
+                      key={item.id.toString()}
+                      className='group flex cursor-pointer items-center justify-between gap-2 rounded-xl p-1 transition-all duration-300 hover:bg-zinc-50'
+                      onClick={() => globalSearchApi.onSearch(item.query)}
+                    >
+                      <div className='flex items-center gap-2'>
+                        <span className='size-8 rounded-lg bg-zinc-100 flex-center'>
+                          <Icon
+                            className='text-secondary'
+                            data={ClockArrowRotateLeft}
+                            size={18}
+                          />
+                        </span>
 
-                    <span className='truncate font-medium'>Катушка топлива</span>
-                  </div>
+                        <span className='truncate font-medium'>
+                          {item.query}
+                        </span>
+                      </div>
 
-                  <Button>
-                    <Icon
-                  </Button>
+                      <Button
+                        className='mr-1 transition-all duration-300 group-hover:visible group-hover:opacity-100 xl:invisible xl:opacity-0'
+                        size='s'
+                        type='button'
+                        view='flat'
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          globalSearchApi.deleteHistoryItem(item.id);
+                        }}
+                      >
+                        <Icon data={Xmark} />
+                      </Button>
+                    </div>
+                  ))}
                 </div>
-
-                <div className='flex items-center gap-2'>
-                  <span className='size-8 rounded-md bg-zinc-100 flex-center'>
-                    <Icon
-                      className='text-secondary'
-                      data={ClockArrowRotateLeft}
-                      size={18}
-                    />
-                  </span>
-
-                  <span className='truncate font-medium'>
-                    Шестерня переключения
+              ) : (
+                <div className='mt-4 pb-2 flex-center'>
+                  <span className='text-xs font-semibold text-secondary'>
+                    История пуста
                   </span>
                 </div>
-              </div>
+              )}
             </section>
-          </form>
+          </section>
         </Modal>
       </MainContainer>
     </header>
