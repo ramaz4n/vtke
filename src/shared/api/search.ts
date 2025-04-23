@@ -1,7 +1,7 @@
 import { apiRequest } from '@/shared/api/api-request.ts';
-import { FetchResponse } from '@/shared/types/globals.ts';
+import { SearchCoreProps } from '@/shared/types/api/search.ts';
 
 export const searchApi = {
-  search: (params: { q: string }): FetchResponse<any> =>
+  search: (params: { q: string }): Promise<SearchCoreProps[]> =>
     apiRequest({ method: 'GET', params, url: '/api/search' }),
 };

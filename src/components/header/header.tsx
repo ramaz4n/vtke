@@ -21,6 +21,7 @@ import { NAVIGATIONS } from '@/shared/constants/navigations.ts';
 import { useGlobalSearch } from '@/shared/hooks/api/use-global-search.ts';
 import { useCart } from '@/shared/hooks/use-cart.ts';
 import { useModal } from '@/shared/hooks/use-modal.ts';
+import { SearchType, SearchTypeRu } from '@/shared/types/api/search.ts';
 import { Modal } from '@/shared/ui/modal/modal.tsx';
 import { Spinner } from '@/shared/ui/spinner/spinner.tsx';
 
@@ -162,9 +163,9 @@ export default function Header() {
                 autoFocus
                 className='peer h-10 w-full cursor-pointer bg-transparent focus:cursor-text focus:outline-none'
                 maxLength={128}
-                placeholder='Что искать?'
+                placeholder='Искать на VTK ПРОМТЕХ'
                 onChange={(event) =>
-                  globalSearchApi.onSearch(event.target.value, event)
+                  globalSearchApi.onSearch(event.target.value)
                 }
               />
 
@@ -177,31 +178,47 @@ export default function Header() {
               </Button>
             </div>
 
-            <section>
-              <div className='inline-flex items-end gap-4'>
-                <Text variant='subheader-2'>История</Text>
-
-                {!!globalSearchApi.storage.length && (
-                  <button
-                    className='font-semibold text-primary transition-all duration-300 hover:opacity-75'
-                    type='button'
-                    onClick={globalSearchApi.clearHistory}
-                  >
-                    Очистить
-                  </button>
+            <section className='max-h-96 overflow-y-auto empty:hidden'>
+              {!!globalSearchApi.queryInputValue.length &&
+                !globalSearchApi.queryResponse?.length && (
+                  <div className='flex-center'>
+                    <Text
+                      className='text-balance'
+                      color='secondary'
+                      variant='subheader-1'
+                    >
+                      По запросу "{globalSearchApi.queryInputValue}" ничего не
+                      найдено.
+                    </Text>
+                  </div>
                 )}
-              </div>
 
-              {globalSearchApi.storage.length ? (
+              {!!globalSearchApi.storage.length &&
+                !globalSearchApi.queryResponse?.length && (
+                  <div className='inline-flex items-end gap-4'>
+                    <Text variant='subheader-2'>История</Text>
+                    <button
+                      className='font-semibold text-primary transition-all duration-300 hover:opacity-75'
+                      type='button'
+                      onClick={globalSearchApi.clearHistory}
+                    >
+                      Очистить
+                    </button>
+                  </div>
+                )}
+
+              {!!globalSearchApi.filteredStorage.length && (
                 <div className='mt-4 flex flex-col gap-1.5'>
-                  {globalSearchApi.storage.map((item) => (
+                  {globalSearchApi.filteredStorage.map((item) => (
                     <div
                       key={item.id.toString()}
                       className='group flex cursor-pointer items-center justify-between gap-2 rounded-xl p-1 transition-all duration-300 hover:bg-zinc-50'
-                      onClick={() => globalSearchApi.onSearch(item.query)}
+                      onClick={() =>
+                        globalSearchApi.onHistoryItemClick(item.title)
+                      }
                     >
                       <div className='flex items-center gap-2'>
-                        <span className='size-8 rounded-lg bg-zinc-100 flex-center'>
+                        <span className='rounded-lg bg-zinc-100 clamp-8 flex-center'>
                           <Icon
                             className='text-secondary'
                             data={ClockArrowRotateLeft}
@@ -209,8 +226,8 @@ export default function Header() {
                           />
                         </span>
 
-                        <span className='truncate font-medium'>
-                          {item.query}
+                        <span className='line-clamp-1 break-all font-medium'>
+                          {item.title}
                         </span>
                       </div>
 
@@ -229,11 +246,41 @@ export default function Header() {
                     </div>
                   ))}
                 </div>
-              ) : (
-                <div className='mt-4 pb-2 flex-center'>
-                  <span className='text-xs font-semibold text-secondary'>
-                    История пуста
-                  </span>
+              )}
+
+              {!!globalSearchApi.queryResponse?.length && (
+                <div className='mt-4 flex flex-col gap-1.5'>
+                  {globalSearchApi.queryGroupResponse.map(([type, items]) => (
+                    <div key={type}>
+                      <Text as='h6' className='mb-2.5' variant='subheader-2'>
+                        {SearchTypeRu[type as SearchType]}
+                      </Text>
+
+                      {items.map((item) => (
+                        <Link
+                          key={item.id}
+                          className='group flex cursor-pointer items-center gap-2 rounded-xl p-1 transition-all duration-300 hover:bg-zinc-50'
+                          href={globalSearchApi.getHref(
+                            item.type,
+                            item.id.toString(),
+                          )}
+                          onClick={() => globalSearchApi.onSelectItem(item)}
+                        >
+                          <span className='rounded-lg bg-zinc-100 clamp-8 flex-center'>
+                            <Icon
+                              className='text-secondary'
+                              data={Magnifier}
+                              size={18}
+                            />
+                          </span>
+
+                          <span className='line-clamp-1 break-all font-medium'>
+                            {item.title}
+                          </span>
+                        </Link>
+                      ))}
+                    </div>
+                  ))}
                 </div>
               )}
             </section>
