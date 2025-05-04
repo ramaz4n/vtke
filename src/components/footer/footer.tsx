@@ -5,7 +5,7 @@ import { NAVIGATIONS } from '@/shared/constants/navigations.ts';
 
 export default function Footer() {
   return (
-    <footer className='flex w-full items-center justify-between bg-mainBlue pb-6 pt-14'>
+    <footer className='flex w-full items-center justify-between bg-mainBlue pb-[74px] pt-14 lg:pb-[24px]'>
       <MainContainer>
         <div className='flex flex-col items-start justify-between gap-8 text-white sm:flex-row'>
           <div>
@@ -28,10 +28,6 @@ export default function Footer() {
 
           <div>
             <h3 className='mb-3 text-xl font-bold uppercase'>Адреса</h3>
-            <p className='text-sm'>
-              г. Москва, ул. Скаковая, дом 36, офис 205 Бизнес Центр "Скаковая
-              36"
-            </p>
             <p className='mt-2 text-sm'>
               г. Казань, ул. Московская, дом 25, офис 212 Бизнес Центр
               "Булгар-офис"
@@ -61,7 +57,7 @@ export default function Footer() {
         </div>
 
         <div className='mt-12 text-center text-xsm text-gray-300'>
-          Copyright © 2020-2023 ООО "ВНЕШНЕТОРГОВАЯ КОМПАНИЯ "ПРОМТЕХ"
+          Copyright © 2020-2023 ООО "ВНЕШНЕТОРГОВАЯ КОМПАНИЯ"
         </div>
       </MainContainer>
     </footer>

@@ -89,7 +89,7 @@ export default function Header() {
             </nav>
           </div>
 
-          <div className='flex items-center justify-center gap-6 max-lg:hidden'>
+          <div className='flex items-center justify-center gap-6'>
             <button
               className='flex flex-col items-center gap-0.5'
               onClick={() => modal.show('global-search')}
@@ -97,7 +97,7 @@ export default function Header() {
               <Magnifier className='size-7' />
 
               <Text
-                className='text-secondary transition-all duration-300 hover:text-foreground'
+                className='hidden text-secondary transition-all duration-300 hover:text-foreground lg:block'
                 variant='body-1'
               >
                 Поиск
@@ -111,7 +111,7 @@ export default function Header() {
               <ShoppingCart className='size-7' />
 
               <Text
-                className='text-secondary transition-all duration-300 hover:text-foreground'
+                className='hidden text-secondary transition-all duration-300 hover:text-foreground lg:block'
                 variant='body-1'
               >
                 Корзина
@@ -119,7 +119,7 @@ export default function Header() {
 
               {!!cartItemsLength && (
                 <Text
-                  className='text-tiny absolute -top-1.5 right-2.5 size-4 rounded-full bg-danger-contrast text-white flex-center'
+                  className='text-tiny absolute -right-1 -top-1.5 size-4 rounded-full bg-danger-contrast text-white flex-center lg:right-1'
                   variant='caption-2'
                 >
                   {cartItemsLength}
@@ -134,15 +134,13 @@ export default function Header() {
               <Person className='size-7' />
 
               <Text
-                className='text-secondary transition-all duration-300 hover:text-foreground'
+                className='hidden text-secondary transition-all duration-300 hover:text-foreground lg:block'
                 variant='body-1'
               >
                 Войти
               </Text>
             </Link>
           </div>
-
-          <div className='flex size-9 items-center justify-center rounded-full bg-mainBlue lg:hidden'></div>
         </div>
 
         <Modal
@@ -163,7 +161,7 @@ export default function Header() {
                 autoFocus
                 className='peer h-10 w-full cursor-pointer bg-transparent focus:cursor-text focus:outline-none'
                 maxLength={128}
-                placeholder='Искать на VTK ПРОМТЕХ'
+                placeholder='Искать на VTK'
                 onChange={(event) =>
                   globalSearchApi.onSearch(event.target.value)
                 }

@@ -2,6 +2,7 @@
 
 import { Text } from '@gravity-ui/uikit';
 import { motion } from 'framer-motion';
+import Link from 'next/link';
 
 import MainContainer from '@/containers/main-container/main-container.tsx';
 import { Button } from '@/shared/ui/button/button.tsx';
@@ -9,40 +10,39 @@ import { Button } from '@/shared/ui/button/button.tsx';
 export default function Page() {
   return (
     <div className='w-full pb-16'>
-      <div className='relative overflow-hidden py-20'>
+      <div className='relative overflow-hidden py-8 sm:py-compact-menu-padding'>
         <img
           alt='main'
-          className='absolute inset-0 -z-10 h-full bg-center bg-no-repeat object-cover'
+          className='absolute inset-0 size-full bg-center bg-no-repeat object-cover'
           src='/images/about/lift.png'
         />
         <div className='-z-5 absolute inset-0 size-full bg-black opacity-70'></div>
         <MainContainer>
           <motion.h1
             animate={{ opacity: 1, y: 0 }}
-            className='mb-6 text-center text-5xl font-bold text-white'
+            className='mb-2.5 text-center text-2xl font-bold text-white sm:mb-6 sm:text-5xl'
             initial={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.6 }}
           >
             {/* eslint-disable-next-line react/no-unescaped-entities */}
-            ВТК "ПРОМТЕХ"
+            ВТК
           </motion.h1>
 
           <motion.div
             animate={{ opacity: 1, scale: 1 }}
-            className='rounded-2xl p-6 shadow-md'
+            className='rounded-2xl p-4 shadow-md sm:p-6'
             initial={{ opacity: 0, scale: 0.9 }}
             transition={{ duration: 0.6 }}
           >
-            <div className='flex flex-col gap-4 text-xl text-white'>
+            <div className='flex flex-col gap-4 text-[14px] text-white sm:text-[16px] lg:text-xl'>
               <p>
                 Общество с ограниченной ответственностью «Внешнеторговая
-                компания «ПРОМТЕХ» специализируется на импорте в Российскую
-                Федерацию запасных частей и узлов для лифтов турецких
-                производителей.
+                компания» специализируется на импорте в Российскую Федерацию
+                запасных частей и узлов для лифтов турецких производителей.
               </p>
 
               <p>
-                ООО «ВТК «ПРОМТЕХ» сотрудничает непосредственно с заводами
+                ООО «ВТК» сотрудничает непосредственно с заводами
                 производителями лифтового оборудования, и имеет отлаженные
                 каналы поставки продукции из Турецкой республики в Россию.
                 Благодаря тесному сотрудничеству с производителями, мы имеем
@@ -71,7 +71,7 @@ export default function Page() {
       </div>
 
       <MainContainer>
-        <div className='mx-auto flex flex-col gap-16'>
+        <div className='mx-auto mt-6 flex flex-col gap-16 sm:mt-10'>
           <motion.div
             animate={{ opacity: 1, y: 0 }}
             className='mt-10'
@@ -81,16 +81,17 @@ export default function Page() {
             <h2 className='mb-4 text-center text-3xl font-semibold'>
               Наши ценности
             </h2>
-            <div className='grid gap-6 md:grid-cols-2'>
+
+            <div className='mt-6 grid gap-6 sm:mt-10 md:grid-cols-2'>
               <motion.div
-                className='rounded-xl bg-white p-5 text-center shadow-lg'
-                whileHover={{ scale: 1.05 }}
+                className='rounded-2xl bg-white p-5 text-center shadow-lg'
+                whileHover={{ scale: 1.005 }}
               >
                 <h3 className='text-xl font-semibold'>Широкий ассортимент</h3>
 
                 <img
                   alt='assortment'
-                  className='mt-6 h-menu w-full lg:h-[440px]'
+                  className='mt-6 h-menu w-full rounded-2xl lg:h-[440px]'
                   src='/images/about/assortment.png'
                 />
 
@@ -121,14 +122,14 @@ export default function Page() {
               </motion.div>
 
               <motion.div
-                className='rounded-xl bg-white p-5 text-center shadow-lg'
-                whileHover={{ scale: 1.05 }}
+                className='rounded-2xl bg-white p-5 text-center shadow-lg'
+                whileHover={{ scale: 1.005 }}
               >
                 <h3 className='text-xl font-semibold'>Индивидуальный подход</h3>
 
                 <img
                   alt='assortment'
-                  className='mt-6 h-menu w-full lg:h-[440px]'
+                  className='mt-6 h-menu w-full rounded-2xl lg:h-[440px]'
                   src='/images/about/individuals.webp'
                 />
 
@@ -166,38 +167,18 @@ export default function Page() {
 
           <motion.div
             animate={{ opacity: 1, y: 0 }}
-            className='mt-10'
-            initial={{ opacity: 0, y: 30 }}
-            transition={{ duration: 0.6 }}
-          >
-            <h2 className='mb-4 text-center text-3xl font-semibold'>
-              Наша команда
-            </h2>
-            <div className='grid gap-6 md:grid-cols-3'>
-              {['Рамазан', 'Глеб', 'Константин'].map((name, index) => (
-                <motion.div
-                  key={index}
-                  className='rounded-xl bg-gray-100 p-5 text-center shadow-md'
-                  whileHover={{ scale: 1.05 }}
-                >
-                  <h3 className='text-xl font-semibold'>{name}</h3>
-                  <p className='text-gray-600'>Разработчик</p>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-
-          <motion.div
-            animate={{ opacity: 1, y: 0 }}
             className='mt-10 text-center'
             initial={{ opacity: 0, y: 30 }}
             transition={{ duration: 0.6 }}
           >
             <h2 className='mb-4 text-3xl font-semibold'>Свяжитесь с нами</h2>
             <p className='mb-4 text-lg text-gray-700'>
-              Email: contact@company.com
+              Email: info@vtk-lift.ru
             </p>
-            <Button>Написать нам</Button>
+
+            <Link href='mailto:info@vtk-lift.ru'>
+              <Button size='xl'>Написать нам</Button>
+            </Link>
           </motion.div>
         </div>
       </MainContainer>

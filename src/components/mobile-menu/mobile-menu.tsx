@@ -1,54 +1,34 @@
-import { Portal } from '@gravity-ui/uikit';
-import { useUnit } from 'effector-react';
-import { AnimatePresence, motion } from 'framer-motion';
-import { useScrollLock } from 'usehooks-ts';
+import cc from 'classcat';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
-import { $modal, hideModalEvent } from '@/shared/models/modal.ts';
-import { cn } from '@/shared/utils/cn.ts';
+import { NAVIGATIONS } from '@/shared/constants/navigations.ts';
 
 export const MobileMenu = () => {
-  const [store, resetStore] = useUnit([$modal, hideModalEvent]);
-  const name = 'mobile-menu';
-
-  const isVisible = Boolean(store?.has(name));
-
-  function handleClose() {
-    resetStore(name);
-  }
-
-  useScrollLock({
-    autoLock: isVisible,
-  });
+  const pathname = usePathname();
 
   return (
-    <Portal>
-      <motion.div
-        className={cn(
-          'fixed inset-0 z-drawer flex justify-center py-8 transition-all duration-300',
-          { 'visible bg-black/50 backdrop-blur-md': isVisible },
-          { 'pointer-events-none invisible': !isVisible },
-        )}
-        onClick={handleClose}
-      >
-        <AnimatePresence>
-          {isVisible && (
-            <motion.div
-              animate={{ x: 0 }}
-              exit={{ x: '100%' }}
-              initial={{ x: '100%' }}
-              className={cn(
-                'h-full w-10/12 bg-white p-4 shadow-lg sm:w-1/2 xl:w-1/3',
-              )}
-              transition={{
-                damping: 10,
-                stiffness: 10_000,
-                type: 'keyframes',
-              }}
-              onClick={(e) => e.stopPropagation()}
-            ></motion.div>
-          )}
-        </AnimatePresence>
-      </motion.div>
-    </Portal>
+    <nav className='fixed bottom-0 left-0 z-layout h-[50px] w-full bg-white shadow-2xl lg:hidden'>
+      <ul className='flex h-full items-center justify-between gap-2'>
+        {NAVIGATIONS.map((item) => (
+          <li key={item.id}>
+            <Link
+              className='px-3.5 py-1 text-10 font-bold text-textColor duration-300 hover:text-secondaryBlue sm:text-[16px]'
+              href={item.link}
+            >
+              <span
+                className={cc([
+                  {
+                    'text-secondaryBlue': pathname.includes(item.link),
+                  },
+                ])}
+              >
+                {item.title}
+              </span>
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </nav>
   );
 };

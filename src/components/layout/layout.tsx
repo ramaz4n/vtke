@@ -26,13 +26,6 @@ export function Layout({ children }: PropsWithChildren) {
       ) : (
         <main className='flex flex-1'>
           {children}
-          <div className='z-total fixed bottom-[20px] right-[20px] flex size-14 items-center justify-center rounded-[50%] bg-mainBlue sm:size-16 lg:hidden'>
-            {/*<GiHamburgerMenu*/}
-            {/*  className='z-total size-8 sm:size-8'*/}
-            {/*  color='white'*/}
-            {/*  onClick={() => showMobileMenu('mobile-menu')}*/}
-            {/*/>*/}
-          </div>
           <MobileMenu />
         </main>
       )}
