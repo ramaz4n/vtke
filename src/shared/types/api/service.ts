@@ -4,6 +4,7 @@ export interface ServiceProps {
   category: CategoryProps;
   description: string;
   id: number;
+  image: string;
   name: string;
   price: string;
 }

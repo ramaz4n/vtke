@@ -24,6 +24,7 @@ module.exports = {
         },
         mainBlue: '#154063',
         secondaryBlue: '#4b71d6',
+        secondaryBlue: '#7691da',
         secondary: {
           DEFAULT: 'var(--g-color-text-secondary)',
         },

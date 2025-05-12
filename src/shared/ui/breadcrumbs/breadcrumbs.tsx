@@ -57,8 +57,9 @@ export const Breadcrumbs = ({
         <Text
           as={item?.href ? Link : 'span'}
           color='hint'
-          // @ts-ignore
-          href={item?.href}
+          {...(item?.href && {
+            href: item.href,
+          })}
         >
           {item.text}
         </Text>

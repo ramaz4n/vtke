@@ -66,7 +66,7 @@ export const ProductPage = () => {
                 className='inline-flex items-center gap-1 rounded-md bg-zinc-200 px-2.5 py-0.5 transition-all duration-300 hover:bg-zinc-200/50'
                 href={LINKS.products()}
               >
-                {model.firm || 'FIRMA'}
+                {model.firm}
 
                 <Icon data={ChevronRight} size={14} />
               </Link>
@@ -113,7 +113,7 @@ export const ProductPage = () => {
                     </span>
 
                     <span className='font-medium transition-all duration-300'>
-                      {model.firm || 'FIRMA'}
+                      {model.firm}
                     </span>
                   </div>
 

@@ -68,20 +68,18 @@ export default async function Page({ params }: ServerPageProps) {
     return redirect(LINKS.notFound);
   }
 
-  const breadcrumbs = [];
+  const breadcrumbs = [
+    {
+      href: LINKS.services(),
+      text: 'Услуги',
+    },
+  ];
 
-  const category = fetchedQueryData?.category;
   const name = fetchedQueryData?.name;
-
-  if (category) {
-    breadcrumbs.push({
-      href: LINKS.products(),
-      text: category.name,
-    });
-  }
 
   if (name) {
     breadcrumbs.push({
+      href: '',
       text: name,
     });
   }

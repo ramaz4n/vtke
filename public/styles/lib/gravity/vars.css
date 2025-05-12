@@ -14,6 +14,16 @@
     --yfm-green: var(--yfm-color-text-green);
     --yfm-blue: var(--yfm-color-text-blue);
     --yfm-violet: var(--yfm-color-text-violet);
+
+
+    --gil-color-object-base: rgb(103, 205, 92);
+    --gil-color-object-accent-heavy: rgb(89, 170, 80);
+    --gil-color-object-hightlight: rgb(164, 225, 157);
+    --gil-color-shadow-over-object: rgb(89, 170, 80);
+    --gil-color-background-lines: rgb(140, 140, 140);
+    --gil-color-background-shapes: rgb(242, 242, 242);
+    --gil-color-object-accent-light: rgb(255, 255, 255);
+    --gil-color-object-danger: rgb(255, 4, 1);
 }
 
 .g-root_theme_light {

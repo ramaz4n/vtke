@@ -2,6 +2,7 @@ import { MouseEvent } from 'react';
 
 import { Circles3Plus } from '@gravity-ui/icons';
 import { Icon } from '@gravity-ui/uikit';
+import Image from 'next/image';
 import Link from 'next/link';
 
 import { LINKS } from '@/shared/constants/links.ts';
@@ -20,7 +21,7 @@ export const ServiceItem = ({
   onCartAdd,
   ...props
 }: ServiceItemProps) => {
-  const { id, name, price } = props;
+  const { id, name, price, image } = props;
   const toCardHandler = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     event.stopPropagation();
@@ -33,6 +34,12 @@ export const ServiceItem = ({
       className='flex flex-col justify-between rounded-2xl px-3 shadow-lg duration-300 max-md:px-1 md:py-2'
       href={LINKS.services(id)}
     >
+      {image && (
+        <div className='relative mb-2.5 h-72 overflow-hidden rounded-2xl'>
+          <Image fill alt={name} objectFit='cover' src={image} />
+        </div>
+      )}
+
       <div className='flex flex-col'>
         <p className='line-clamp-2 text-balance text-lg font-semibold leading-snug max-md:text-sm'>
           {name}
