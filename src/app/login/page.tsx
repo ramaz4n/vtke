@@ -6,6 +6,7 @@ import { Text } from '@gravity-ui/uikit';
 import { useMutation } from '@tanstack/react-query';
 import Head from 'next/head';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { Form } from '@/containers/form/form.tsx';
@@ -26,6 +27,8 @@ export default function Page() {
     },
   });
 
+  const router = useRouter();
+
   const mutation = useMutation({
     mutationFn: authApi.login,
     onSuccess: (res) => {
@@ -33,6 +36,9 @@ export default function Page() {
       //   return apiErrorParse(res.data, { setError: methods.setError });
       // }
 
+      if (res.access_token) {
+        router.replace(LINKS.profile);
+      }
       console.log(res);
     },
   });
